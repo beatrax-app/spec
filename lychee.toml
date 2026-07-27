@@ -1,0 +1,13 @@
+# Link-check configuration. The spec is prose-heavy and cross-links itself
+# constantly, so a broken link is a real defect (GOV-R11).
+exclude = [
+  # Product-repo-local documentation paths. They resolve inside beatrax-app/beatrax,
+  # not inside this repo.
+  "\\.docs/",
+  # Discord rejects unauthenticated invite HEAD requests; the invite is verified
+  # by hand, not by CI.
+  "^https://discord\\.gg/",
+]
+exclude_loopback = true
+max_retries = 2
+accept = ["200", "206", "429"]

@@ -1,0 +1,115 @@
+# v2.0 — the promotion of the former v1.4 development line.
+#
+# Two things force a major rather than a minor (see 00-overview/roadmap.md and
+# ADR-0017): category-linked savings pots are retired in favour of envelope
+# budgeting, which changes what a user's data means and requires them to
+# re-assign released balances by hand; and the product gained a multi-device,
+# end-to-end-encrypted, peer-to-peer sync stack with its own identity,
+# transport, and at-rest-encryption layers.
+#
+# The bulk of these goals are already SATISFIED by work that has landed on the
+# development line and has not yet appeared in a tagged release. The latest
+# released tag is v1.3.0 (2026-06-14). See the roadmap's three buckets.
+#
+# OUTSTANDING at the time of writing:
+#   E5-R23, E5-R24, E5-R25  — the mobile peer's real-device acceptance and the
+#                             backup-exclusion bridge
+#   app-store distribution  — not yet scoped; no requirements exist to cite,
+#                             which is why none appear below. See the roadmap's
+#                             open questions.
+#
+# Carry-over release-readiness items (A6-R20, A6-R21, F1-R18, F3-R33) are
+# recorded as unsatisfied in their own feature docs. They are deliberately NOT
+# goals of v2.0: v2.0 ships single-user with one bank connection, under which
+# each is a documented limitation rather than a defect.
+
+version = "2.0.0"
+status  = "staged"
+repos   = ["beatrax"]
+
+goals = [
+  # ── Sync: change capture and CRDT merge (landed) ────────────────────────────
+  "E1-R1", "E1-R2", "E1-R3", "E1-R4", "E1-R5", "E1-R6", "E1-R7", "E1-R8",
+  "E1-R9", "E1-R10", "E1-R11", "E1-R12", "E1-R13", "E1-R14", "E1-R15",
+  "E1-R16", "E1-R17", "E1-R18", "E1-R19", "E1-R20", "E1-R21", "E1-R22",
+
+  # ── Sync: device identity and pairing (landed) ──────────────────────────────
+  "E2-R1", "E2-R2", "E2-R3", "E2-R4", "E2-R5", "E2-R6", "E2-R7", "E2-R8",
+  "E2-R9", "E2-R10", "E2-R11", "E2-R12", "E2-R13", "E2-R14", "E2-R15",
+  "E2-R16", "E2-R17",
+
+  # ── Sync: encrypted transport, LAN-direct and relay (landed) ────────────────
+  "E3-R1", "E3-R2", "E3-R3", "E3-R4", "E3-R5", "E3-R6", "E3-R7", "E3-R8",
+  "E3-R9", "E3-R10", "E3-R11", "E3-R12", "E3-R13", "E3-R14", "E3-R15",
+  "E3-R16", "E3-R17", "E3-R18", "E3-R19", "E3-R20",
+
+  # ── Sync: at-rest encryption, revocation and rekey (landed) ─────────────────
+  "E4-R1", "E4-R2", "E4-R3", "E4-R4", "E4-R5", "E4-R6", "E4-R7", "E4-R8",
+  "E4-R9", "E4-R10", "E4-R11", "E4-R12", "E4-R13", "E4-R14", "E4-R15",
+  "E4-R16", "E4-R17", "E4-R18", "E4-R19", "E4-R20", "E4-R21", "E4-R22",
+  "E4-R23", "E4-R24",
+
+  # ── Sync: mobile peer (10 of 11 plans landed; R23–R25 outstanding) ──────────
+  "E5-R1", "E5-R2", "E5-R3", "E5-R4", "E5-R5", "E5-R6", "E5-R7", "E5-R8",
+  "E5-R9", "E5-R10", "E5-R11", "E5-R12", "E5-R13", "E5-R14", "E5-R15",
+  "E5-R16", "E5-R17", "E5-R18", "E5-R19", "E5-R20", "E5-R21", "E5-R22",
+  "E5-R23", "E5-R24", "E5-R25",
+
+  # ── Sync: status and health (landed) ────────────────────────────────────────
+  "E6-R1", "E6-R2", "E6-R3", "E6-R4", "E6-R5", "E6-R6", "E6-R7", "E6-R8",
+  "E6-R9", "E6-R10", "E6-R11", "E6-R12",
+
+  # ── Envelope budgeting — the breaking change (landed) ───────────────────────
+  "D1-R1", "D1-R2", "D1-R3", "D1-R4", "D1-R5", "D1-R6", "D1-R7", "D1-R8",
+  "D1-R9", "D1-R10", "D1-R11", "D1-R12", "D1-R13", "D1-R14", "D1-R15",
+  "D1-R16", "D1-R17", "D1-R18", "D1-R19", "D1-R20", "D1-R21", "D1-R22",
+  "D1-R23", "D1-R24", "D1-R25", "D1-R26", "D1-R27", "D1-R28",
+
+  # ── Pots: category-link retirement (landed) ─────────────────────────────────
+  "D3-R12", "D3-R16",
+
+  # ── Split transactions — the envelope prerequisite (landed) ─────────────────
+  "B7-R1", "B7-R2", "B7-R3", "B7-R4", "B7-R5", "B7-R6", "B7-R7", "B7-R8",
+  "B7-R9", "B7-R10", "B7-R11", "B7-R12", "B7-R13", "B7-R14", "B7-R15",
+  "B7-R16", "B7-R17",
+
+  # ── Reconciliation and cleared status (landed) ──────────────────────────────
+  "B8-R1", "B8-R2", "B8-R3", "B8-R4", "B8-R5", "B8-R6", "B8-R7", "B8-R8",
+  "B8-R9", "B8-R10", "B8-R11", "B8-R12", "B8-R13", "B8-R14", "B8-R15",
+
+  # ── The general-purpose rules engine (landed) ───────────────────────────────
+  "B3-R1", "B3-R2", "B3-R3", "B3-R4", "B3-R5", "B3-R6", "B3-R7", "B3-R8",
+  "B3-R9", "B3-R10", "B3-R11", "B3-R12", "B3-R13", "B3-R14", "B3-R15",
+  "B3-R16", "B3-R17", "B3-R18", "B3-R19", "B3-R20", "B3-R21", "B3-R22",
+  "B3-R23", "B3-R24", "B3-R25",
+
+  # ── Migration importers (landed) ────────────────────────────────────────────
+  "A8-R1", "A8-R2", "A8-R3", "A8-R4", "A8-R5", "A8-R6", "A8-R7", "A8-R8",
+  "A8-R9", "A8-R10", "A8-R11", "A8-R12", "A8-R13", "A8-R14", "A8-R15",
+  "A8-R16", "A8-R17", "A8-R18", "A8-R19", "A8-R20", "A8-R21", "A8-R22",
+  "A8-R23", "A8-R24", "A8-R25",
+
+  # ── Notifications and reminders (landed) ────────────────────────────────────
+  "C8-R1", "C8-R2", "C8-R3", "C8-R4", "C8-R5", "C8-R6", "C8-R7", "C8-R8",
+  "C8-R9", "C8-R10", "C8-R11", "C8-R12", "C8-R13", "C8-R14", "C8-R15",
+  "C8-R16", "C8-R17", "C8-R18", "C8-R19", "C8-R20", "C8-R21",
+
+  # ── Open-banking connector (landed; R20/R21 excluded, see header) ───────────
+  "A6-R1", "A6-R2", "A6-R3", "A6-R4", "A6-R5", "A6-R6", "A6-R7", "A6-R8",
+  "A6-R9", "A6-R10", "A6-R11", "A6-R12", "A6-R13", "A6-R14", "A6-R15",
+  "A6-R16", "A6-R17", "A6-R18", "A6-R19",
+
+  # ── Report builder and saved reports (landed) ───────────────────────────────
+  "C7-R1", "C7-R2", "C7-R3", "C7-R4", "C7-R5", "C7-R6", "C7-R7", "C7-R8",
+  "C7-R9", "C7-R10", "C7-R11", "C7-R12", "C7-R13", "C7-R14", "C7-R15",
+  "C7-R16", "C7-R17", "C7-R18", "C7-R19", "C7-R20",
+
+  # ── The single position definition (landed) ─────────────────────────────────
+  "C1-R8", "C1-R9", "C1-R10", "C1-R11", "C1-R12", "C1-R13", "C1-R14",
+
+  # ── Comment policy enforcement (landed) ─────────────────────────────────────
+  "Q-R11", "Q-R12",
+
+  # ── Org move and release-train mechanics ────────────────────────────────────
+  "REPO-R37", "OPS-R12", "OPS-R18",
+]

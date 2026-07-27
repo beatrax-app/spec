@@ -1,0 +1,14 @@
+[book]
+title = "beatrax specification"
+description = "The canonical specification for the beatrax project."
+authors = ["NightWorks.io"]
+language = "en"
+src = "src"
+
+[build]
+build-dir = "book"
+
+[output.html]
+default-theme = "rust"
+git-repository-url = "https://github.com/beatrax-app/spec"
+edit-url-template = "https://github.com/beatrax-app/spec/edit/main/{path}"

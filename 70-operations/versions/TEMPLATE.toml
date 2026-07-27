@@ -1,0 +1,9 @@
+# Copy to <version>.toml and fill in. See README.md for the contract.
+version = "0.0.0"          # the release; matches the eventual tag v<version>
+status  = "planned"        # planned → staged → releasable → released → yanked
+repos   = ["beatrax"]      # streams this version cuts
+goals   = []               # locked requirement identifiers (OPS-R13, OPS-R14)
+
+# Every goal must be an identifier the spec defines. Validation refuses a
+# manifest that cites one it cannot resolve, and refuses to stage a version
+# while another is already staged or releasable (OPS-R15).

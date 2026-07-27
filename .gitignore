@@ -1,0 +1,11 @@
+# mdBook
+/book/
+/src/
+# Python
+__pycache__/
+*.pyc
+.coverage
+# OS
+.DS_Store
+# scratch
+*.tmp

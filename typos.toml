@@ -1,0 +1,34 @@
+[default]
+# Ignore hotkey mockup notation like [e]rror, [s]earch in keyboard-shortcut examples.
+extend-ignore-re = ["\\[[a-z]\\][a-zA-Z]+"]
+
+[default.extend-words]
+beatrax = "beatrax"
+Beatrax = "Beatrax"
+# Dutch statement vocabulary that appears verbatim in parser examples.
+Betaalautomaat = "Betaalautomaat"
+Geldautomaat = "Geldautomaat"
+Bankstorting = "Bankstorting"
+Incasso = "Incasso"
+Overboeking = "Overboeking"
+Saldo = "Saldo"
+aangifte = "aangifte"
+Afschriftnummer = "Afschriftnummer"
+Volgnummer = "Volgnummer"
+Omschrijving = "Omschrijving"
+Categorie = "Categorie"
+# Library and protocol names the dictionary does not carry.
+Livewire = "Livewire"
+NativePHP = "NativePHP"
+Larastan = "Larastan"
+Volt = "Volt"
+Flux = "Flux"
+genkgo = "genkgo"
+nwidart = "nwidart"
+Argon2id = "Argon2id"
+XChaCha20 = "XChaCha20"
+BLAKE2b = "BLAKE2b"
+mDNS = "mDNS"
+iDEAL = "iDEAL"
+YNAB = "YNAB"
+nYNAB = "nYNAB"

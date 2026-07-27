@@ -1,0 +1,91 @@
+# Reusable: post or update a sticky PR comment linking each cited spec
+# identifier to its defining file, with the requirement text. Companion to the
+# governance gate — spec-check *enforces* that citations exist; this *surfaces*
+# them. GOV-R22.
+#
+# Every implementation repo calls this:
+#
+#   jobs:
+#     spec-references:
+#       if: github.event.pull_request.head.repo.full_name == github.repository
+#       permissions:
+#         contents: read
+#         pull-requests: write
+#       uses: beatrax-app/spec/.github/workflows/spec-references.yml@main
+#
+# `workflow_call` only. This repo is the source of citations rather than a
+# consumer of them, so it does not self-trigger.
+name: spec-references
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  refs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Check out the calling repo (PR)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Check out the canonical spec
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          repository: beatrax-app/spec
+          ref: main
+          path: .spec-canonical
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+
+      - name: Gather PR body and commit messages
+        # Untrusted event data is passed via env, never interpolated into the
+        # shell. base/head are SHAs and are shape-checked before use (OPS-R24).
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          {
+            printf '%s\n' "$PR_BODY"
+            if printf '%s' "$BASE_SHA" | grep -Eq '^[0-9a-f]{40}$' \
+               && printf '%s' "$HEAD_SHA" | grep -Eq '^[0-9a-f]{40}$'; then
+              git log --format='%B' "${BASE_SHA}..${HEAD_SHA}" 2>/dev/null || true
+            fi
+          } > .pr-text.txt
+
+      - name: Build the comment
+        run: |
+          python3 .spec-canonical/scripts/spec_refs.py \
+            --spec-dir .spec-canonical \
+            --text-file .pr-text.txt \
+            --spec-url https://github.com/beatrax-app/spec/blob/main \
+            > .spec-refs.md
+
+      - name: Post or update the sticky comment
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          marker='<!-- spec-references -->'
+          existing=$(gh api "repos/$GH_REPO/issues/$PR_NUMBER/comments" \
+            --jq "[.[] | select(.body | startswith(\"$marker\"))][0].id" 2>/dev/null || true)
+          if [ -n "$existing" ] && [ "$existing" != "null" ]; then
+            gh api -X PATCH "repos/$GH_REPO/issues/comments/$existing" \
+              -F body=@.spec-refs.md >/dev/null
+          else
+            gh api -X POST "repos/$GH_REPO/issues/$PR_NUMBER/comments" \
+              -F body=@.spec-refs.md >/dev/null
+          fi

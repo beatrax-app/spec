@@ -1,0 +1,21 @@
+documentation:
+  - changed-files:
+      - any-glob-to-any-file: ['**/*.md']
+ci:
+  - changed-files:
+      - any-glob-to-any-file: ['.github/workflows/**', 'scripts/**']
+dependencies:
+  - changed-files:
+      - any-glob-to-any-file: ['renovate.json']
+governance:
+  - changed-files:
+      - any-glob-to-any-file: ['50-governance/**']
+architecture:
+  - changed-files:
+      - any-glob-to-any-file: ['20-architecture/**', '00-overview/decisions/**']
+functional:
+  - changed-files:
+      - any-glob-to-any-file: ['10-functional/**']
+operations:
+  - changed-files:
+      - any-glob-to-any-file: ['70-operations/**']

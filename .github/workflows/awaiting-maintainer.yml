@@ -1,0 +1,76 @@
+# A PR that passes CI with no review, from a non-maintainer, is flagged for a
+# maintainer; the flag clears when a review lands or the PR closes. Repos call it;
+# the spec repo self-triggers. OPS-R25, OPS-R22.
+name: awaiting-maintainer
+on:
+  workflow_call:
+    secrets:
+      # Named for the repo secret rather than for the input, so the same
+      # reference typechecks whether a caller passed it or this repo self-triggered.
+      DISCORD_MAINTAINERS_WEBHOOK:
+        required: false
+  workflow_run:
+    workflows: [integrity]
+    types: [completed]
+  pull_request_review:
+    types: [submitted]
+  # Fork PRs carry a read-only token under `pull_request`, so the close event has
+  # to run in the base repo's context to be able to edit a label at all.
+  pull_request_target:
+    types: [closed]
+permissions:
+  contents: read
+jobs:
+  toggle:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    outputs:
+      flagged: ${{ steps.act.outputs.flagged }}
+      pr: ${{ steps.act.outputs.pr }}
+    steps:
+      - name: Toggle label
+        id: act
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          EVENT: ${{ github.event_name }}
+          CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          REVIEW_STATE: ${{ github.event.review.state }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          if [ "$EVENT" = "pull_request_target" ]; then
+            gh pr edit "$PR_NUMBER" --remove-label awaiting-maintainer 2>/dev/null || true
+            exit 0
+          fi
+          if [ "$EVENT" = "pull_request_review" ]; then
+            case "$REVIEW_STATE" in
+              approved|changes_requested)
+                gh pr edit "$PR_NUMBER" --remove-label awaiting-maintainer 2>/dev/null || true ;;
+            esac
+            exit 0
+          fi
+          [ "$CONCLUSION" = "success" ] || exit 0
+          pr=$(gh api "repos/$GH_REPO/commits/$HEAD_SHA/pulls" --jq '.[0].number' 2>/dev/null || true)
+          [ -n "$pr" ] && [ "$pr" != "null" ] || exit 0
+          assoc=$(gh api "repos/$GH_REPO/pulls/$pr" --jq '.author_association' 2>/dev/null || echo "")
+          case "$assoc" in OWNER|MEMBER|COLLABORATOR) echo "maintainer-authored; skip"; exit 0 ;; esac
+          approved=$(gh api "repos/$GH_REPO/pulls/$pr/reviews" --jq '[.[] | select(.state=="APPROVED")] | length' 2>/dev/null || echo 0)
+          [ "${approved:-0}" -gt 0 ] && exit 0
+          gh pr edit "$pr" --add-label awaiting-maintainer 2>/dev/null || true
+          { echo "flagged=true"; echo "pr=$pr"; } >> "$GITHUB_OUTPUT"
+  notify:
+    needs: toggle
+    if: needs.toggle.outputs.flagged == 'true'
+    uses: beatrax-app/spec/.github/workflows/discord-notify.yml@main
+    with:
+      title: "🔔 Awaiting review · ${{ github.event.repository.name }} #${{ needs.toggle.outputs.pr }}"
+      body: "Passed CI with no review — a maintainer needs to take a look."
+      url: "https://github.com/${{ github.repository }}/pull/${{ needs.toggle.outputs.pr }}"
+      color: "14235678"
+    secrets:
+      # Empty when a caller passes nothing; discord-notify no-ops on an absent
+      # webhook rather than failing the run.
+      webhook: ${{ secrets.DISCORD_MAINTAINERS_WEBHOOK }}
