@@ -1,7 +1,13 @@
 # ADR-0012: Third-party actions SHA-pinned; first-party reusable workflows on `@main`
 
-**Status:** Accepted
+**Status:** Accepted; second rule superseded by [ADR-0021](0021-reusable-workflow-version-tags.md)
 **Date:** 2026-07-27
+
+> **The second rule below no longer holds.** First-party reusable workflows are
+> referenced by moving major-version tag, not `@main`
+> ([ADR-0021](0021-reusable-workflow-version-tags.md)). The first rule —
+> full-SHA pinning for third-party actions — stands unchanged, and is the
+> reason this record is still load-bearing.
 
 ## Context
 

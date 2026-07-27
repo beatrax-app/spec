@@ -28,7 +28,7 @@ jobs:
           if [ -n "$owners" ]; then gh issue edit "$NUM" --add-assignee "$owners" || true; fi
   notify:
     needs: triage
-    uses: beatrax-app/spec/.github/workflows/discord-notify.yml@c834e5e03d5ece45462cfe2f5896451abf5b55ca # main
+    uses: beatrax-app/spec/.github/workflows/discord-notify.yml@v1
     with:
       title: "📥 Needs triage · ${{ github.event.repository.name }} #${{ github.event.issue.number }}"
       body: ${{ github.event.issue.title }}

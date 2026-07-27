@@ -116,8 +116,8 @@ not merge.
 
 ## AI-assisted contributions
 
-Welcome, held to the same standard, and **disclosed**. See
-[ai-contributors.md](ai-contributors.md).
+Welcome, held to the same standard as every other contribution, and nothing
+to declare. See [ai-contributors.md](ai-contributors.md).
 
 ## Code of conduct
 

@@ -36,7 +36,7 @@ never true.**
 - Every requirement traces to something real in the product repository — its
   code, its documentation, its planning corpus, or its history.
 - Where a source is silent or two sources disagree, say so under an explicit
-  **open question** heading (`GOV-R26`) and add it to
+  **open question** heading (`GOV-R25`) and add it to
   [90-appendix/open-questions.md](90-appendix/open-questions.md).
 - Where something is not yet satisfied, mark the requirement *(Open)* and say so
   plainly. Several already are.

@@ -90,7 +90,7 @@ The next release is cut from the default branch inside the new organisation
 | **REPO-R28** | Every platform build MUST succeed before the publish step runs. |
 | **REPO-R29** | Each platform bundle MUST be smoke-tested — launched and asked for its health endpoint — before upload. |
 | **REPO-R30** | Release manifests MUST be signed, and every binary hash MUST be recorded in the signed manifest. |
-| **REPO-R31** | A stable tag MUST publish as a draft; a release-candidate tag MUST publish immediately as a prerelease. |
+| **REPO-R31** | A stable tag MUST publish as a draft; a tag carrying any semver prerelease identifier MUST publish immediately as a prerelease. |
 | **REPO-R32** | The release body MUST be generated from the commit history at tag time; no hand-maintained changelog file may be the release-note source. |
 | **REPO-R33** | A user-visible change MUST carry a conventional commit subject written as release-note copy; a subject written for the implementer MUST read that way in the release. |
 | **REPO-R34** | The bundled environment template MUST contain only placeholders, and the application key MUST be minted on first launch behind a sentinel. |

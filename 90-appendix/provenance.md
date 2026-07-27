@@ -85,7 +85,7 @@ Recorded rather than silently resolved:
 Every unresolved question found in the sources, or created by this
 specification's own scope, is recorded under an explicit heading in the document
 it belongs to — never smoothed over
-([GOV-R26](../50-governance/README.md#the-gov-r-namespace)).
+([GOV-R25](../50-governance/README.md#the-gov-r-namespace)).
 
 They are indexed in [open-questions.md](open-questions.md).
 

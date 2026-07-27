@@ -46,9 +46,8 @@ from.
 | **GOV-R21** | A specification change that alters a released version's locked goals MUST be reviewed as a goals change. |
 | **GOV-R22** | A pull request MUST receive a sticky comment linking each cited identifier to its defining file. |
 | **GOV-R23** | An issue that describes a behaviour the specification does not cover MUST become a specification change before implementation. |
-| **GOV-R24** | AI-assisted contributions MUST meet the same standards as human ones and MUST be disclosed. |
-| **GOV-R25** | The project lead holds override authority; every override MUST be recorded ([overrides.md](overrides.md)). |
-| **GOV-R26** | Where a decision is genuinely unmade, the document MUST say so under an explicit open-question heading rather than inventing an answer. |
+| **GOV-R24** | The project lead holds override authority; every override MUST be recorded ([overrides.md](overrides.md)). |
+| **GOV-R25** | Where a decision is genuinely unmade, the document MUST say so under an explicit open-question heading rather than inventing an answer. |
 
 ## Where to ask
 

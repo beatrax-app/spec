@@ -1,5 +1,5 @@
 # Reusable hygiene checks: workflow lint, spelling, links, markdown.
-# Called by each repo:  uses: beatrax-app/spec/.github/workflows/hygiene.yml@main
+# Called by each repo:  uses: beatrax-app/spec/.github/workflows/hygiene.yml@v1
 # One definition, no drift (Q-R20).
 name: hygiene
 

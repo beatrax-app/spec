@@ -25,7 +25,7 @@ the product's behaviour.
 | **REPO-R4** | Every repository MUST call the shared hygiene checks. |
 | **REPO-R5** | Every repository's `CODEOWNERS` MUST be generated from the single maintainer registry and MUST NOT be edited by hand. |
 | **REPO-R6** | Every repository MUST sync its labels from the canonical label set. |
-| **REPO-R7** | Every third-party action MUST be pinned to a full commit hash with an inline version comment; first-party reusable workflows MUST be referenced on the default branch. |
+| **REPO-R7** | Every third-party action MUST be pinned to a full commit hash with an inline version comment; first-party reusable workflows MUST be referenced by their major-version tag ([ADR-0021](../00-overview/decisions/0021-reusable-workflow-version-tags.md)). |
 | **REPO-R8** | Every repository MUST protect its default branch with linear history, signed commits, required status checks, and blocked force-push and deletion. |
 | **REPO-R9** | Every repository MUST enable platform secret scanning and push protection. |
 | **REPO-R10** | Every repository MUST enable dependency alerts and scheduled dependency updates. |

@@ -41,7 +41,7 @@ from every repository.
 | Kind | Policy |
 |------|--------|
 | Third-party actions | **Full commit hash**, with an inline version comment ([ADR-0012](../00-overview/decisions/0012-action-pinning.md)) |
-| First-party reusable workflows | The default branch |
+| First-party reusable workflows | Their major-version tag (`@v1`) |
 | Language dependencies | A lock file, committed |
 | Runtime version | The bundled version, with the next one in the matrix |
 

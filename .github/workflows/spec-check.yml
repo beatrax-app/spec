@@ -2,7 +2,7 @@
 #
 #   jobs:
 #     spec-check:
-#       uses: beatrax-app/spec/.github/workflows/spec-check.yml@main
+#       uses: beatrax-app/spec/.github/workflows/spec-check.yml@v1
 #
 # Defined once here so the rule has exactly one implementation and cannot drift
 # between repos. See spec 50-governance/cross-repo-ci.md.

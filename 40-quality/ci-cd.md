@@ -55,7 +55,7 @@ tag push
           generate the update manifests with binary hashes
           sign each manifest
           create the release with every binary and manifest attached
-          stable → DRAFT · release candidate → published prerelease
+          stable → DRAFT · prerelease tag → published prerelease
 ```
 
 The asymmetric publish is
@@ -69,7 +69,7 @@ of build: **a bundle that boots but reports the wrong version**.
 | Rule | Why |
 |------|-----|
 | **Third-party actions pinned to a full commit hash**, with an inline version comment | Tags are mutable, and this attack has happened in the wild ([ADR-0012](../00-overview/decisions/0012-action-pinning.md)) |
-| **First-party reusable workflows referenced on the default branch** | They are ours, gated by our own review; pinning costs coordination and buys nothing |
+| **First-party reusable workflows referenced by major-version tag** | The tag mover and the consumer are the same protected repository, so fixes still propagate in one merge — but a breaking change can cut `v2` instead of breaking every sibling at once |
 | **No trigger that exposes secrets to a fork's code** | The canonical secret-exfiltration pattern, made impossible by construction |
 | **No build-time telemetry or third-party upload** | The local-only contract extends to the pipeline |
 | **No update path that skips verification** | The signed manifest is the only binary-integrity signal ([F6](../10-functional/features/f-platform/f6-updates.md)) |
