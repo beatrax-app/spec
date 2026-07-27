@@ -10,3 +10,4 @@
 | [open-questions.md](open-questions.md) | Every genuinely unresolved question, in one place |
 | [references.md](references.md) | Standards, formats, and protocols this specification depends on |
 | [colophon.md](colophon.md) | The open-source projects beatrax is built on, named and credited |
+| [bank-coverage.md](bank-coverage.md) | Which banks beatrax can read, and on what evidence |

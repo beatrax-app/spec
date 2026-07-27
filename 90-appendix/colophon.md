@@ -21,7 +21,7 @@ The list is generated from the product repository's `composer.json` and
 | **Laravel 13** | The application framework — routing, container, queue, scheduler, migrations, and the console layer every operational command is built on. |
 | **Livewire 4** | Server-rendered interactivity. Every surface in the app is a Livewire component, which is what keeps the whole product in one language instead of two. |
 | **Flux** | The Livewire component library behind the modals, popovers, and form controls. |
-| **NativePHP for Desktop** | Packages the application as a real desktop app on macOS, Windows, and Linux, and provides the native window, tray, and OS-notification surfaces. |
+| **NativePHP** | Packages the application as a real native app — desktop on macOS, Windows, and Linux, and the mobile clients — providing the native window, tray, biometric, and OS-notification surfaces. |
 | **SQLite** | The store. One file, WAL mode, on the user's own disk ([ADR-0005](../00-overview/decisions/0005-sqlite-wal.md)). |
 
 ## Reading financial data
