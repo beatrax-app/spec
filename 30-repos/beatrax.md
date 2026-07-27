@@ -57,7 +57,7 @@ All three must pass before review starts.
 | Local development setup and troubleshooting | The quality standards it satisfies |
 | Operational runbooks with real commands | The operations requirements they satisfy |
 | Per-module implementation maps | The component model |
-| The changelog | The roadmap |
+| The release notes | The roadmap |
 
 The product repository keeps its own internal documentation tree for the left
 column. This specification owns **what** and **why**; that tree owns **where in
@@ -91,12 +91,13 @@ The next release is cut from the default branch inside the new organisation
 | **REPO-R29** | Each platform bundle MUST be smoke-tested — launched and asked for its health endpoint — before upload. |
 | **REPO-R30** | Release manifests MUST be signed, and every binary hash MUST be recorded in the signed manifest. |
 | **REPO-R31** | A stable tag MUST publish as a draft; a release-candidate tag MUST publish immediately as a prerelease. |
-| **REPO-R32** | The changelog MUST be the single source of release notes, and the release body MUST be generated from it. |
-| **REPO-R33** | A user-visible change MUST add a changelog entry; an omitted entry MUST simply not appear in the release. |
+| **REPO-R32** | The release body MUST be generated from the commit history at tag time; no hand-maintained changelog file may be the release-note source. |
+| **REPO-R33** | A user-visible change MUST carry a conventional commit subject written as release-note copy; a subject written for the implementer MUST read that way in the release. |
 | **REPO-R34** | The bundled environment template MUST contain only placeholders, and the application key MUST be minted on first launch behind a sentinel. |
 | **REPO-R35** | No build-time telemetry, error-reporting initialisation, or third-party source-map upload may exist in the pipeline. |
 | **REPO-R36** | The product's own documentation MUST NOT contradict this specification; where it does, this specification wins and the product page is corrected. |
 | **REPO-R37** | The former development branch MUST be retired after merge and MUST NOT be documented as a living branch. |
+| **REPO-R54** | Housekeeping commit types MUST be excluded from the release body, and an oversized body MUST be trimmed to a whole entry rather than allowed to fail the publish. |
 
 ## Related
 

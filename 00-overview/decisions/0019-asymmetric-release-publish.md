@@ -76,9 +76,9 @@ Supporting rules:
 
 ### Neutral
 
-- Release notes are generated from the changelog rather than written on the
-  release, so the changelog entry is what a contributor is asked for — and an
-  omitted entry simply does not appear.
+- Release notes are generated from the commit history rather than written on
+  the release, so the commit subject is what a contributor is asked for — and a
+  subject written for the implementer reads that way to the user.
 
 ## Revisit if
 

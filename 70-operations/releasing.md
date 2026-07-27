@@ -62,8 +62,8 @@ pipeline sets nothing and self-identifies as a development build
 
 - [ ] Every goal in the version manifest is satisfied
       ([versions/](versions/)).
-- [ ] The changelog's unreleased section is complete and reads as **release
-      notes**, in the user's language.
+- [ ] The commit subjects since the last tag read as **release notes**, in the
+      user's language. They are the release body.
 - [ ] Any breaking change has release-note prominence
       ([OPS-R12](README.md#the-ops-r-namespace)).
 - [ ] The branch ruleset's required checks still name the jobs that actually run
@@ -76,8 +76,8 @@ pipeline sets nothing and self-identifies as a development build
 
 ### The tag
 
-Move the changelog's unreleased section under the version heading, commit,
-sign, and push the tag.
+Sign and push the tag. The notes are assembled from the commits it spans, so
+there is nothing to move by hand.
 
 ### What the pipeline does
 
@@ -85,7 +85,8 @@ sign, and push the tag.
 2. **Three platform builds in parallel**, each installing or extracting its
    bundle, launching it, asking its health endpoint, and comparing the reported
    versions before upload.
-3. **Publish**, only if all three succeeded: generate the update manifests with
+3. **Publish**, only if all three succeeded: generate the release notes from
+   the commits since the previous tag, generate the update manifests with
    binary hashes, sign each manifest, and create the release with every binary
    and manifest attached — as a draft for stable, published for a release
    candidate.

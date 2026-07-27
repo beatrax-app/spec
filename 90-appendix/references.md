@@ -83,8 +83,8 @@ consult rather than guessing at behaviour.
 
 - **Semantic Versioning** — as read in
   [20-architecture/contracts/versioning.md](../20-architecture/contracts/versioning.md).
-- **Keep a Changelog** — the changelog's shape. It is the single source of
-  release notes ([70-operations/releasing.md](../70-operations/releasing.md)).
+- **git-cliff** — assembles the release notes from the commit history at tag
+  time ([70-operations/releasing.md](../70-operations/releasing.md)).
 - **Conventional Commits** — commit subjects
   ([GOV-R16](../50-governance/README.md#the-gov-r-namespace)).
 - **Developer Certificate of Origin 1.1** — the sign-off

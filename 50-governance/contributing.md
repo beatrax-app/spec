@@ -70,9 +70,8 @@ These are enforced. Fighting them is a slower path than following them.
 1. Target the default branch.
 2. Fill in the template. **The specification citation goes in the body as well as
    in a commit** — the gate reads both.
-3. Add a changelog entry under the unreleased heading for any user-visible
-   change. The changelog is the single source of release notes, so an omitted
-   entry simply will not appear.
+3. Write the commit subject for the person who will read the release notes.
+   The notes are assembled from the commits, so the subject is the entry.
 4. Wait for the pipeline. A sticky comment will link each identifier you cited
    to its defining file.
 5. Address feedback with new commits; avoid force-pushing during review unless

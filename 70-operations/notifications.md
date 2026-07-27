@@ -38,7 +38,7 @@ matter get missed.
 ## Release announcements
 
 A release announcement carries the version, a link, and the headline of what
-changed — drawn from the changelog, which is the single source of release notes
+changed — drawn from the generated notes, which are the single record of a release
 ([OPS-R11](README.md#the-ops-r-namespace)).
 
 **A breaking change is stated in the announcement, not left to the reader to
@@ -54,7 +54,7 @@ nobody is told about something they cannot download
 
 | Not announced | Why |
 |---------------|-----|
-| Every merge | Noise. The changelog is the record. |
+| Every merge | Noise. The release is the record. |
 | Every dependency bump | Noise, and grouped anyway. |
 | Product telemetry | There is none ([ADR-0004](../00-overview/decisions/0004-local-only-hosting.md)). |
 | Anything derived from a user's data | There is nothing to derive it from, and there never will be. |

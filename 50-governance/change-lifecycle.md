@@ -19,7 +19,7 @@ SPEC PR  ── new or amended requirement, reviewed as prose
   │           merges FIRST
   ▼
 implementation PR  ── cites the identifier the spec PR created
-  │                    tests, changelog entry, browser walkthrough
+  │                    tests, release-note subject, browser walkthrough
   ▼
 merge  ── squash or rebase; linear history
   │

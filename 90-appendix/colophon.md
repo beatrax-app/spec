@@ -87,8 +87,8 @@ The list is generated from the product repository's `composer.json` and
 
 ## Also
 
-Beyond the dependency list: **Keep a Changelog** and **Semantic Versioning**
-for release discipline, the **Hippocratic License** for the terms
+Beyond the dependency list: **Conventional Commits**, **git-cliff** and
+**Semantic Versioning** for release discipline, the **Hippocratic License** for the terms
 ([license-rationale.md](license-rationale.md)), and the **Noise Protocol
 Framework** as the design the transport handshake follows.
 

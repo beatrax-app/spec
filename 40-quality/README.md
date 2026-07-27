@@ -46,7 +46,7 @@ itself.
 | **Q-R21** | Local hooks MUST mirror the cheap CI checks so a contributor finds a failure before pushing. |
 | **Q-R22** | The documentation site MUST be link-checked before it is built. |
 | **Q-R23** | A change that alters behaviour MUST cite a requirement identifier that already exists on the canonical spec. |
-| **Q-R24** | A user-visible change MUST add a changelog entry. |
+| **Q-R24** | A user-visible change MUST carry a conventional commit subject written as release-note copy, in the user's language. |
 | **Q-R25** | A test MUST NOT be marked skipped or pending to make a gate green without a recorded reason. |
 
 ## The principle underneath

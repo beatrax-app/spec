@@ -71,7 +71,7 @@ Envelope (zero-based) budgeting replaces category-linked pots.
 
 - **Users lose a working feature and get manual work in exchange.** Anyone using
   category-linked pots must re-assign that money themselves. This needs
-  prominence in the release notes, not a line in a changelog.
+  prominence in the release notes, not one line among the rest.
 - **The retirement is one-way.** There is no downgrade path that reconstructs
   category-linked pots.
 - Onboarding gains a first-month assignment step, because an empty envelope grid

@@ -17,6 +17,9 @@ Afschriftnummer = "Afschriftnummer"
 Volgnummer = "Volgnummer"
 Omschrijving = "Omschrijving"
 Categorie = "Categorie"
+# Institution names as they are actually spelled.
+# Split on the capital, so the exception is the part the dictionary rejects.
+Regio = "Regio"
 # Library and protocol names the dictionary does not carry.
 Livewire = "Livewire"
 NativePHP = "NativePHP"

@@ -14,7 +14,7 @@ how.
 | **Website** | The public site | Marketing layout and page composition ([30-repos/website.md](../30-repos/website.md)) |
 | **Documentation site** | This specification, published | Nothing brand-specific — it inherits |
 | **Installers and store listings** | The first thing a user sees | Icon, name, and description |
-| **Release notes** | Generated from the changelog | The voice, applied to change |
+| **Release notes** | Generated from the commit history | The voice, applied to change |
 
 None of them own primitives ([DES-R2](README.md#the-des-r-namespace)).
 
@@ -62,9 +62,9 @@ are, they inherit every rule on this page.
 
 ## Release notes
 
-Generated from the changelog
+Generated from the commit history
 ([70-operations/releasing.md](../70-operations/releasing.md)), which means the
-changelog is written **in the user's language**, not the implementer's.
+commit subject is written **in the user's language**, not the implementer's.
 
 "Envelope carryover fold now anchored at activation" is a commit message.
 "Money you set aside now rolls forward correctly from the month you switched

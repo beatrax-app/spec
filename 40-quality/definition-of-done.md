@@ -25,8 +25,8 @@ A change is done when every box below is ticked. Not most of them.
       identifier the specification change created
       ([50-governance/change-lifecycle.md](../50-governance/change-lifecycle.md)).
 - [ ] Every new requirement has a test.
-- [ ] A changelog entry exists under the unreleased heading, in the user's
-      language, saying what changed for them.
+- [ ] The commit subject reads as release-note copy, in the user's language,
+      saying what changed for them — it is what the release body will carry.
 - [ ] The behaviour was walked in a browser, on both desktop and phone widths.
 
 ## For a new user-scoped surface
@@ -94,8 +94,10 @@ A change is done when every box below is ticked. Not most of them.
 
 - [ ] Every goal in the version manifest is satisfied
       ([70-operations/versions/](../70-operations/versions/)).
-- [ ] The changelog's unreleased section is complete and reads as release notes.
-- [ ] Any breaking change has **release-note prominence**, not a changelog line.
+- [ ] The generated notes read as release notes end to end, with no subject
+      that only makes sense to the person who wrote it.
+- [ ] Any breaking change has **release-note prominence**, not one line among
+      the rest.
 - [ ] The branch ruleset's required status checks still name the jobs that
       actually run ([ci-cd.md](ci-cd.md#keeping-the-ruleset-honest)).
 - [ ] Every platform bundle smoke-tested green.

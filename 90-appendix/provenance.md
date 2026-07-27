@@ -21,7 +21,7 @@ were never true. The defence is to say where every part came from.
 | Its legal documentation | [90-appendix/license-rationale.md](license-rationale.md), [90-appendix/data-retention.md](data-retention.md) |
 | Its research and history documentation | Constraints and hazards that became requirements |
 | Its planning corpus | The [roadmap](../00-overview/roadmap.md)'s three buckets, the requirement inventory, the deferred register |
-| Its git history, tags, and changelog | The release baseline — verified rather than assumed |
+| Its git history, tags, and releases | The release baseline — verified rather than assumed |
 | Its readme, notice, security policy, and contributing guide | The voice, the licence posture, [30-repos](../30-repos/) |
 | The module tree | The functional map, [20-architecture/component-model.md](../20-architecture/component-model.md) |
 | The route surface | The navigation map in [10-functional/features/README.md](../10-functional/features/README.md) |
@@ -49,7 +49,7 @@ code**.
 | Per-module implementation maps — which class, which file, which table | They change with every refactor. This specification names behaviour and contracts; the code is where the code is. |
 | Local development setup and troubleshooting | Changes with the toolchain and must be tested against it. |
 | Executable runbooks with real commands and flags | Same. [70-operations/runbooks.md](../70-operations/runbooks.md) states what each must guarantee; the product states how. |
-| The changelog | It is the release-note source and belongs with the releases. |
+| The release notes | They are generated from the commit history and belong with the releases. |
 | Per-module test-running instructions | Toolchain detail. |
 | Design explorations and interface sketches | Distilled into the shipped surfaces and into [60-brand](../60-brand/). |
 | The internal codename | Not the product's name. Recorded in the [glossary](../00-overview/glossary.md#deliberately-not-used) so nobody reintroduces it. |

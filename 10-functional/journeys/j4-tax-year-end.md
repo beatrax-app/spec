@@ -89,7 +89,7 @@ On upgrade, every category-linked pot is archived and its balance released to it
 account's unallocated pool. **The user must re-assign that money into envelopes
 by hand.** Goal-linked pots are untouched.
 
-This needs release-note prominence, not a changelog line — a user who does not
+This needs release-note prominence, not one line among the rest — a user who does not
 notice will see money they thought was allocated sitting unallocated, and will
 reasonably conclude something is broken.
 

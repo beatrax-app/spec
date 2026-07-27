@@ -32,8 +32,8 @@ and the runbooks.
 | **OPS-R8** | A generated file MUST NOT be edited by hand. |
 | **OPS-R9** | Dependency updates MUST run on a schedule and MUST be grouped so the noise is bounded. |
 | **OPS-R10** | Every release MUST publish checksums and a signed manifest. |
-| **OPS-R11** | The changelog MUST be the single source of release notes; a release body MUST be generated from it. |
-| **OPS-R12** | A breaking change MUST be given release-note prominence, not a changelog line. |
+| **OPS-R11** | A release body MUST be generated from the commit history the tag spans; no hand-maintained file may be the release-note source. |
+| **OPS-R12** | A breaking change MUST be given release-note prominence, not one line among the rest. |
 | **OPS-R13** | A version's goals MUST be locked in a manifest before it is staged. |
 | **OPS-R14** | Every goal MUST be a requirement identifier that the specification defines. |
 | **OPS-R15** | Only one version may be staged or releasable at a time. |
