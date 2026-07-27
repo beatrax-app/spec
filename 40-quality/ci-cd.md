@@ -55,7 +55,7 @@ tag push
           generate the update manifests with binary hashes
           sign each manifest
           create the release with every binary and manifest attached
-          stable → DRAFT · release candidate → published prerelease
+          stable → DRAFT · prerelease tag → published prerelease
 ```
 
 The asymmetric publish is

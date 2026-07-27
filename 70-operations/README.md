@@ -25,7 +25,7 @@ and the runbooks.
 | **OPS-R1** | The pushed tag MUST be the single source of truth for a build's version string. |
 | **OPS-R2** | A build produced outside the release pipeline MUST self-identify as a development build. |
 | **OPS-R3** | The release workflow MUST trigger only on a tag push. |
-| **OPS-R4** | A stable tag MUST publish as a draft for human review; a release-candidate tag MUST publish immediately as a prerelease. |
+| **OPS-R4** | A stable tag MUST publish as a draft for human review; a tag carrying any semver prerelease identifier MUST publish immediately as a prerelease. |
 | **OPS-R5** | Every platform build MUST pass its smoke test before the publish step runs. |
 | **OPS-R6** | Labels MUST be synced to every repository from one canonical file; a label MUST NOT be created by hand. |
 | **OPS-R7** | Maintainership MUST be declared in one registry, and every ownership file MUST be generated from it. |

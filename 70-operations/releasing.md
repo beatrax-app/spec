@@ -41,14 +41,26 @@ shape.
 | Shape | Channel | Publish behaviour |
 |-------|---------|-------------------|
 | `vX.Y.Z` | stable | Builds, smoke-tests, uploads, and creates a **draft**. A human reviews and publishes. |
-| `vX.Y.Z-rc.N` | preview | Published immediately as a prerelease. |
+| `vX.Y.Z-<prerelease>` | preview | Published immediately as a prerelease. Any semver prerelease identifier — `-rc.1`, `-beta`, `-develop`. |
+
+**The hyphen is what decides the channel.** A tag with a prerelease identifier
+is a preview; one without is stable. The identifier itself carries no meaning to
+the pipeline — it is there for the humans reading the release list, so name it
+for what the build is (`-rc.1` before a release, `-develop` for a snapshot off
+the integration branch).
 
 The asymmetry is [ADR-0019](../00-overview/decisions/0019-asymmetric-release-publish.md):
 a mistaken stable tag push costs a deleted draft, not a bad release in the
-field.
+field. That record's examples predate this generalisation and name `-rc.N`
+specifically; the decision it records — stable drafts, previews publish — is
+unchanged.
 
-There is no alpha tier. Anything needing a tester before stable rides the
-preview channel.
+There is **one** preview channel, not a tier ladder. Anything needing a tester
+before stable rides it, whatever the identifier says.
+
+A preview tag rides a **staged** version; a stable tag needs a **releasable**
+one ([staging.md](staging.md)). That is the point of a preview: to exercise
+goals that are not all satisfied yet.
 
 **The pushed tag is the single source of truth for the version string**
 ([OPS-R1](README.md#the-ops-r-namespace)). The workflow strips the leading
@@ -88,8 +100,7 @@ there is nothing to move by hand.
 3. **Publish**, only if all three succeeded: generate the release notes from
    the commits since the previous tag, generate the update manifests with
    binary hashes, sign each manifest, and create the release with every binary
-   and manifest attached — as a draft for stable, published for a release
-   candidate.
+   and manifest attached — as a draft for stable, published for a preview.
 
 ### After the tag
 
@@ -109,8 +120,8 @@ Fix and re-tag with a new patch version; do not move a tag.
 manifest stops the updater offering it, but users who already installed it have
 it — which is exactly why the draft step exists for stable.
 
-**A tag was pushed by mistake.** Delete the draft. For a release candidate,
-which publishes immediately, publish a corrected one.
+**A tag was pushed by mistake.** Delete the draft. For a preview tag, which
+publishes immediately, publish a corrected one — it is already in the field.
 
 ## What is never overridable here
 
