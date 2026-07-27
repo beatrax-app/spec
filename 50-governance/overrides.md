@@ -10,7 +10,7 @@ This page says who may break a rule, when, and what they owe afterwards.
 
 ## Who
 
-**The project lead** ([GOV-R25](README.md#the-gov-r-namespace)), identified in
+**The project lead** ([GOV-R24](README.md#the-gov-r-namespace)), identified in
 the maintainer registry by the lead flag
 ([70-operations/maintainers.toml](../70-operations/maintainers.toml)).
 

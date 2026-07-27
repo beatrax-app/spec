@@ -10,7 +10,7 @@
 [[maintainer]]
 handle  = "lessevv"
 name    = "Wessel Verheij"
-lead    = true            # project lead; holds the override authority (GOV-R25)
+lead    = true            # project lead; holds the override authority (GOV-R24)
 scope   = ["*"]
 domains = ["*"]
 

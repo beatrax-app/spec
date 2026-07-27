@@ -6,7 +6,7 @@ Every genuinely unresolved question in this specification, in one place.
 
 They are recorded here **and** in the document each belongs to. A question
 smoothed over reads better and is worse: nobody knows to check it
-([GOV-R26](../50-governance/README.md#the-gov-r-namespace)).
+([GOV-R25](../50-governance/README.md#the-gov-r-namespace)).
 
 ## Product and release
 
