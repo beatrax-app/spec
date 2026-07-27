@@ -64,7 +64,7 @@ jobs:
   notify:
     needs: toggle
     if: needs.toggle.outputs.flagged == 'true'
-    uses: beatrax-app/spec/.github/workflows/discord-notify.yml@c834e5e03d5ece45462cfe2f5896451abf5b55ca # main
+    uses: beatrax-app/spec/.github/workflows/discord-notify.yml@v1
     with:
       title: "🔔 Awaiting review · ${{ github.event.repository.name }} #${{ needs.toggle.outputs.pr }}"
       body: "Passed CI with no review — a maintainer needs to take a look."

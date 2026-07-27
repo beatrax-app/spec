@@ -21,13 +21,55 @@ One definition, no drift ([Q-R20](../40-quality/README.md#the-q-r-namespace)).
 
 ## How a repository calls one
 
-A short caller workflow that names the shared definition. First-party reusable
-workflows are referenced on the **default branch**
-([ADR-0012](../00-overview/decisions/0012-action-pinning.md)) so a fix
-propagates in one merge rather than needing a pin bump in every consumer.
+A short caller workflow that names the shared definition, referenced by its
+**major-version tag**
+([ADR-0021](../00-overview/decisions/0021-reusable-workflow-version-tags.md)):
+
+```yaml
+jobs:
+  dco:
+    uses: beatrax-app/spec/.github/workflows/dco.yml@v1
+```
+
+`v1` moves forward as fixes merge here, so a fix still propagates in one merge
+rather than needing a bump in every consumer. A **breaking** change cuts `v2`
+instead, so consumers migrate deliberately rather than all failing at once.
 
 Every repository calls the governance gate, sign-off, commit lint, and hygiene
 ([REPO-R1](../30-repos/README.md#the-repo-r-namespace)–[REPO-R4](../30-repos/README.md#the-repo-r-namespace)).
+
+## The workflow contract, and what breaks it
+
+The tag is a promise about the **calling interface**, not about the internals.
+These are breaking, and cut a new major:
+
+| Change | Why it breaks a consumer |
+|--------|--------------------------|
+| Removing or renaming an input or secret | The caller's `with:`/`secrets:` block stops matching |
+| Making an optional input required | Callers that omit it start failing |
+| Renaming a job | Consumers name jobs as required status checks in their rulesets; a rename silently stops the check being required ([OPS-R18](../70-operations/README.md#the-ops-r-namespace)) |
+| Tightening a check so a pull request that passed now fails | The gate moves under merges already in flight |
+
+Everything else — a bug fix, a new optional input, a faster implementation — moves
+`v1` forward.
+
+**Every move is also an immutable `v1.<minor>.<patch>` tag**, so what `v1` pointed
+at on a given day stays recoverable and a consumer that must hold still can pin
+to the immutable one.
+
+### Moving the tag
+
+After a change to a shared workflow merges here:
+
+```sh
+git tag -s v1.2.0 -m "shared workflows v1.2.0"
+git tag -f -s v1   -m "shared workflows v1 → v1.2.0"
+git push origin v1.2.0
+git push --force origin v1
+```
+
+Forgetting this means the fix reaches nobody, which is the one real cost of this
+scheme ([ADR-0021](../00-overview/decisions/0021-reusable-workflow-version-tags.md#negative)).
 
 ## How the governance gate works
 
