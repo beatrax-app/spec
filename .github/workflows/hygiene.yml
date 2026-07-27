@@ -78,7 +78,11 @@ jobs:
       - name: lychee link check
         uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
         with:
-          args: "--no-progress --accept 200,206,429 ."
+          # A slow third-party host failed this check on a green branch —
+          # four timeouts against contributor-covenant.org, zero errors. The
+          # retries and the wider timeout cover a host having a bad minute;
+          # a link that is genuinely gone still fails, which is the point.
+          args: "--no-progress --accept 200,206,429 --timeout 30 --max-retries 5 --retry-wait-time 3 ."
           fail: true
 
   markdown:
