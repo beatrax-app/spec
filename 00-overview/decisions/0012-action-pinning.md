@@ -46,6 +46,18 @@ Two rules, deliberately different:
 Dependency automation watches the actions ecosystem weekly so the inline version
 comments do not rot.
 
+## Enforcement
+
+The `action pins` step in the shared `hygiene` workflow fails the build on any
+`uses:` line that breaks either rule — a third-party action without a full
+40-character SHA, or a first-party reusable workflow off its major-version tag.
+It runs in every repository that calls `hygiene`.
+
+This is deliberate rather than incidental. The second rule of this ADR went
+unfollowed from the day it was written until [ADR-0021](0021-reusable-workflow-version-tags.md)
+found three repositories doing two different things, because nothing checked.
+An unenforced pinning rule is a comment.
+
 ## Alternatives considered
 
 | Option | Why it lost |

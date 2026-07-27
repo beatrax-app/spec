@@ -20,6 +20,46 @@ jobs:
       - name: actionlint
         uses: raven-actions/actionlint@3d39aea434753780c3b3d4a1a31c854b4dbf49d7 # v2.2.0
 
+      # The org's two pinning rules are the kind that decay silently: nothing
+      # fails when a `uses:` line drifts, it just quietly widens the blast
+      # radius of someone else's repository. This is the only thing enforcing
+      # them, so it runs everywhere hygiene runs.
+      - name: action pins (ADR-0012, ADR-0021)
+        run: |
+          fail=0
+          while IFS= read -r line; do
+            file=${line%%:*}
+            rest=${line#*:}
+            lineno=${rest%%:*}
+            ref=$(printf '%s' "$line" | sed -E 's/.*uses:[[:space:]]*//; s/[[:space:]]*(#.*)?$//' | tr -d "\"'")
+
+            # A local composite action carries no supply-chain risk of its own.
+            case $ref in
+              ./*|'') continue ;;
+            esac
+
+            if [ "${ref%%/*}" = "beatrax-app" ]; then
+              # First-party: the moving major-version tag is the contract.
+              if ! printf '%s' "$ref" | grep -qE '@v[0-9]+$'; then
+                echo "$file:$lineno: first-party reusable workflow must ride a major-version tag (@v1), got: $ref"
+                fail=1
+              fi
+              continue
+            fi
+
+            if ! printf '%s' "$ref" | grep -qE '@[0-9a-f]{40}$'; then
+              echo "$file:$lineno: third-party action must be pinned to a full 40-character commit SHA, got: $ref"
+              fail=1
+            fi
+          done < <(grep -rnE '^[[:space:]]*(-[[:space:]]*)?uses:' .github/workflows/ 2>/dev/null)
+
+          if [ "$fail" -ne 0 ]; then
+            echo
+            echo "See ADR-0012 (third-party SHA pinning) and ADR-0021 (first-party @vN tags)."
+            exit 1
+          fi
+          echo "action pins OK"
+
   typos:
     runs-on: ubuntu-latest
     steps:
