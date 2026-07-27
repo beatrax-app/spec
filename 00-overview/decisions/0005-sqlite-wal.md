@@ -1,6 +1,6 @@
 # ADR-0005: SQLite with WAL journal mode as the canonical store
 
-**Status:** Accepted
+**Status:** Accepted; the portability claim below is superseded by [ADR-0022](0022-sqlite-only-schema.md)
 **Date:** 2026-05-27
 **Graduated from:** product-repo Phase 17, decision D-32
 
@@ -49,7 +49,7 @@ proceed while a writer is active.
 
 | Option | Why it lost |
 |--------|-------------|
-| **PostgreSQL 16** | Every operational cost above, for capability the product does not need. The migration path is preserved: no SQLite-only schema feature is used. |
+| **PostgreSQL 16** | Every operational cost above, for capability the product does not need. *(This row claimed the migration path was preserved. It is not — thirty-two migrations use SQLite-only triggers and search is built on FTS5. See [ADR-0022](0022-sqlite-only-schema.md).)* |
 | **MySQL / MariaDB** | Same rejection, plus a less clean framework-default story. |
 | **SQLite with the default rollback journal** | The scheduler-plus-worker-plus-request concurrency produced "database is locked" errors during background jobs. WAL is the fix. |
 | **A separate database file per subsystem** | The cross-file consistency story was more complex than the value it added, and the framework's database queue driver is happy sharing the application database. |
