@@ -142,6 +142,7 @@ in the application and by database trigger.
 | **C8-R19** | The pruning predicate MUST use only plaintext columns so it can run without the at-rest key. |
 | **C8-R20** | Notification content MUST be treated as sensitive and encrypted at rest alongside other identifying text. |
 | **C8-R21** | Cross-user reads and writes MUST return not-found. |
+| **C8-R22** | The digest cadence vocabulary MUST be closed to daily, weekly, and off; it MUST be expressed as one named type rather than as free strings, and the stored column MUST be constrained to that set. It is distinct from the series cadence in [C2](c2-recurring.md) and MUST NOT share a type with it. |
 
 ## Related
 

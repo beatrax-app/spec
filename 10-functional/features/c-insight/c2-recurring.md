@@ -39,6 +39,13 @@ low-confidence.
 
 The next expected date is derived from the inferred cadence.
 
+The five outcomes — weekly, monthly, quarterly, yearly, irregular — are the
+whole vocabulary. Nothing else is a cadence a series can hold, and a value
+outside the set is a defect rather than a new case to handle, so the set is
+named once and both the code and the column are held to it. The digest cadence
+in [C8](c8-notifications.md) is a different vocabulary that happens to share
+the word and the value `weekly`; the two are not interchangeable.
+
 ### Metrics refresh, cadence flips, and re-detection
 
 A new occurrence on an approved series refreshes its metrics without creating a
@@ -124,6 +131,7 @@ append-only audit trail. Transitions take a row lock with a busy timeout.
 | **C2-R17** | Approve, reject, un-reject, and snooze MUST each raise exactly one event. |
 | **C2-R18** | External reads of series occurrences MUST go through the feature's own public query surface. |
 | **C2-R19** | Cross-user reads and writes MUST return not-found. |
+| **C2-R20** | The series cadence vocabulary MUST be closed to weekly, monthly, quarterly, yearly, and irregular; it MUST be expressed as one named type rather than as free strings, and the stored column MUST be constrained to that set. |
 
 ## Related
 
