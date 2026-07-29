@@ -51,6 +51,18 @@ to monthly to quarterly — up to a maximum point count. It never silently
 truncates the range, because a chart showing half the period the user asked for
 is worse than a coarser chart showing all of it.
 
+The granularity the user chooses is monthly or weekly, and nothing else.
+Quarterly is a widening outcome the generator reaches on its own; it is never a
+value the user picks and never one a saved report holds, so it is not part of
+the vocabulary. A stored granularity outside the set is a defect rather than a
+new case to handle, so the set is named once and the code is held to it.
+
+The series cadence in [C2](c2-recurring.md) and the digest cadence in
+[C8](c8-notifications.md) also say `weekly`. All three are separate
+vocabularies that happen to share a word and a value, and none of them may
+share a type — a report is not on a cadence, and widening its buckets has
+nothing to do with how often a series recurs or how often a digest is sent.
+
 ### Currency modes are explicit
 
 In base mode, values convert and merge, and rows with no available rate are
@@ -124,6 +136,7 @@ that would accept ambiguous input. An inverted range is rejected.
 | **C7-R18** | Every write action MUST guard ownership explicitly and MUST return not-found for a report the caller does not own. |
 | **C7-R19** | A chart segment MUST drill through to the transactions behind it, carrying the report's filters. |
 | **C7-R20** | Custom ranges MUST be parsed strictly, and an inverted range MUST be rejected. |
+| **C7-R21** | The report granularity vocabulary MUST be closed to monthly and weekly; it MUST be expressed as one named type rather than as free strings, a stored value outside the set MUST be rejected rather than defaulted, and the type MUST NOT be shared with the series cadence of C2 or the digest cadence of C8. |
 
 ## Related
 
@@ -131,3 +144,5 @@ that would accept ambiguous input. An inverted range is rejected.
 - [B9 Full-text search](../b-ledger/b9-search.md) — the drill-through target
 - [B10 Multi-currency](../b-ledger/b10-multi-currency.md) — the currency modes
 - [C1 Dashboard](c1-dashboard.md) — pinned cards
+- [C2 Recurring detection](c2-recurring.md) — the series cadence, a separate vocabulary that also says weekly
+- [C8 Notifications](c8-notifications.md) — the digest cadence, the third one
