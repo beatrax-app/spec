@@ -7,7 +7,7 @@ check.
 
 | Page | Contents |
 |------|----------|
-| [features/](features/) | Fifty-one features across seven areas, each with numbered requirements |
+| [features/](features/) | Fifty-two features across seven areas, each with numbered requirements |
 | [journeys/](journeys/) | Seven end-to-end paths, each naming the features it exercises |
 
 ## The contract

@@ -84,8 +84,12 @@ comment policy applies to code
 
 ### Translation
 
-The product has a translated readme and no translated interface. Interface
-translation is not currently in scope, and this page does not imply otherwise.
+Interface localisation is specified separately in
+[G7](g7-localisation.md) — supported languages, detection, the per-user
+preference, and full string coverage all live there. What this page owns is the
+honesty rule that outlives any single locale: a string shown in English because
+its translation is missing is **English**, and the interface must not present a
+partially translated locale as though it were complete.
 
 ## Acceptance criteria
 
@@ -104,11 +108,12 @@ translation is not currently in scope, and this page does not imply otherwise.
 | **G5-R11** | The product MUST use one voice, British-leaning, calm and precise. |
 | **G5-R12** | The interface MUST NOT contain placeholders, coming-soon copy, or controls that do nothing. |
 | **G5-R13** | A setting reserved for future behaviour MUST say so explicitly. |
-| **G5-R14** | Interface translation MUST NOT be implied where it does not exist. |
+| **G5-R14** | A locale's translation coverage MUST NOT be overstated; a string shown by English fallback MUST read as English, not as evidence of a complete translation. See [G7](g7-localisation.md). |
 
 ## Related
 
 - [G1 Privacy stance](g1-privacy.md) — the honesty requirements this enforces
 - [G2 Error and remedy model](g2-error-model.md)
+- [G7 Interface localisation](g7-localisation.md) — supported languages, detection, and the per-user preference
 - [60-brand/brand-rules.md](../../../60-brand/brand-rules.md) — the voice
 - [ADR-0011](../../../00-overview/decisions/0011-code-comment-policy.md) — the same discipline in code

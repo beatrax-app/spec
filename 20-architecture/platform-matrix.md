@@ -34,6 +34,7 @@ documentation says so plainly rather than shipping something that will not run.
 | File-open intake | Native or process arguments | Not applicable | Not applicable |
 | Notifications | Operating-system delivery | In-application only | Platform local notifications |
 | Theme signal | Reported by the shell | Browser preference | Reported by the shell |
+| Language signal | `Accept-Language` from the webview | `Accept-Language` from the browser | `Accept-Language` from the webview |
 
 Storage paths resolve through a **single path authority**
 ([ARCH-R8](README.md#the-arch-r-namespace)), which is what makes the

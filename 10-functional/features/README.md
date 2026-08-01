@@ -2,7 +2,7 @@
 
 **Status:** Accepted
 
-Fifty-one features across seven areas. This catalogue is the **contract the
+Fifty-two features across seven areas. This catalogue is the **contract the
 technical spec is written against** — every architecture and implementation
 decision must trace to a feature requirement here, not the other way round.
 
@@ -155,6 +155,7 @@ exhibit**. G1 in particular is the one the whole product is judged on.
 | [G4](g-ux/g4-pwa.md) | Responsive and installable PWA |
 | [G5](g-ux/g5-plain-language.md) | Plain language and in-product help |
 | [G6](g-ux/g6-keyboard.md) | Keyboard and command palette |
+| [G7](g-ux/g7-localisation.md) | Interface localisation and language selection |
 
 ---
 

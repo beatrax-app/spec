@@ -41,7 +41,7 @@ freely.
 | Section | Contents | Read this if… |
 |---------|----------|---------------|
 | **[00-overview](00-overview/)** | Vision, glossary, roadmap, and twenty Architecture Decision Records | …you want the *why* behind any choice |
-| **[10-functional](10-functional/)** | Fifty-one features across seven areas, and seven user journeys | …you are deciding what to build, or verifying it got built |
+| **[10-functional](10-functional/)** | Fifty-two features across seven areas, and seven user journeys | …you are deciding what to build, or verifying it got built |
 | **[20-architecture](20-architecture/)** | System context, component model, data flow, data model, platform matrix, contracts | …you are implementing across a seam |
 | **[30-repos](30-repos/)** | Per-repository specifications | …you are working inside one repository |
 | **[40-quality](40-quality/)** | Code standards, comment policy, testing, CI/CD, security, definition of done | …you are writing or reviewing a pull request |
@@ -53,7 +53,7 @@ freely.
 ### Fast paths
 
 - **"I want to understand the product"** → [vision](00-overview/vision.md) → [journeys](10-functional/journeys/) → [J1 First run](10-functional/journeys/j1-first-run.md)
-- **"What does it actually do?"** → [the feature catalogue](10-functional/features/) — 51 features
+- **"What does it actually do?"** → [the feature catalogue](10-functional/features/) — 52 features
 - **"What is shipped, and what is not?"** → [roadmap](00-overview/roadmap.md) — three buckets, kept strictly apart
 - **"How does sync work?"** → [E1](10-functional/features/e-sync/e1-change-capture.md) → [E3](10-functional/features/e-sync/e3-transport.md) → [ADR-0014](00-overview/decisions/0014-op-log-crdt-merge-engine.md) → [ADR-0015](00-overview/decisions/0015-multi-master-p2p-sync.md)
 - **"What does it send anywhere?"** → [G1 Privacy stance](10-functional/features/g-ux/g1-privacy.md) — the complete outbound surface
@@ -107,7 +107,7 @@ committed to.
 | Section | Status | Contents |
 |---------|--------|----------|
 | 00-overview | Accepted | Vision, glossary, roadmap, 20 decision records |
-| 10-functional | Accepted | 51 features across 7 areas, 7 journeys |
+| 10-functional | Accepted | 52 features across 7 areas, 7 journeys |
 | 20-architecture | Accepted | System context, components, data flow, data model, platform matrix, 4 contracts |
 | 30-repos | Accepted | spec, beatrax, website, .github |
 | 40-quality | Accepted | Standards, comments, testing, CI/CD, security, done, tooling |
