@@ -30,7 +30,8 @@ elsewhere is wrong by definition.
 Users; sessions; system alerts; user preferences.
 
 The user record carries the owner and developer flags, the forced-change flag,
-and the per-user settings the product accumulated: theme, currency view, period
+and the per-user settings the product accumulated: theme, language
+([G7](../10-functional/features/g-ux/g7-localisation.md)), currency view, period
 start day, detection windows, thresholds, drop-folder behaviour, close
 behaviour, community settings, tax country, and the activation and backfill
 anchors.

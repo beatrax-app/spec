@@ -16,7 +16,7 @@ enforcement in one place.
 
 ```text
 00-overview/     vision, glossary, roadmap, decisions/
-10-functional/   features/ (7 areas, 51 features), journeys/ (7)
+10-functional/   features/ (7 areas, 52 features), journeys/ (7)
 20-architecture/ system context, components, data flow, data model,
                  platform matrix, contracts/
 30-repos/        one page per repository
