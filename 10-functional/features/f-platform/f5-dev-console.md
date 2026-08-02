@@ -90,6 +90,14 @@ panel ([F4](f4-backup-restore.md)), the sync quarantine view
 ([E6](../e-sync/e6-sync-status.md)), and a worker heartbeat that the boot probe
 reads.
 
+The snapshot renders effective configuration and environment, so every
+secret-bearing value is masked before it reaches the page. The match is on the
+key, and it covers plural forms: a retired key list is as sensitive as the key
+in use, and a rule written for the singular alone does not see it. A key whose
+sensitivity is uncertain is masked — an over-masked diagnostic row costs a
+reader one lookup, while an under-masked one publishes a secret to anything
+that can read the page, including a screenshot or a support bundle.
+
 The heartbeat is written from the worker's own loop rather than an event
 listener, because the listener form does not fire reliably under the worker.
 
@@ -117,6 +125,8 @@ by architecture test, so no shipped code path can pull it in
 | A run finishing between two polls | The registry entry survives both; the closing audit record is durable. |
 | A worker dying mid-run | An opening record with no close; surfaced as an orphan. |
 | A credential rotated mid-output | The next line uses the new pattern; already-written lines keep the old redaction. |
+| A retired key list alongside the key in use | Both are masked in the snapshot; the plural name is not a way out of the rule. |
+| A benign key whose name resembles a secret | Masked. The rule errs toward masking, and the cost is one lookup. |
 | A query with a trailing statement | Rejected as multiple statements; semicolons inside quoted literals pass. |
 | A failed job pruned from the queue | The lifecycle log survives independently. |
 | The queue dashboard package absent | Registration is skipped silently. |
@@ -150,6 +160,7 @@ by architecture test, so no shipped code path can pull it in
 | **F5-R23** | Development commands MUST be filtered out of the palette server-side for non-developers, and only the safe tier may appear at all. |
 | **F5-R24** | Queue-dashboard imports MUST be confined to a single file, enforced by architecture test. |
 | **F5-R25** | The queue dashboard MUST be registered only when both the development flag and the package are present. |
+| **F5-R26** | The system snapshot MUST mask every secret-bearing configuration and environment value, matching singular and plural key forms alike, and MUST resolve an uncertain key toward masking. |
 
 ## Related
 

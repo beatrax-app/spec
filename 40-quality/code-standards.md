@@ -151,6 +151,14 @@ Credentials and secrets never appear in a serialisable component property, so
 they cannot reach a rendered snapshot — enforced by a registry-backed
 architecture test.
 
+Output is escaped. Where a value must be rendered as raw markup — an inline
+vector image is the honest case, since escaping it stops it drawing — the
+property holding it is locked against client mutation. A serialisable component
+property is rehydrated from the client on every request, so "the server built
+this markup" is true only of the first render; without the lock the raw sink
+accepts whatever the client returns. The lock and the raw echo are a pair, and
+neither is safe to add or remove alone.
+
 ## Related
 
 - [ADR-0001](../00-overview/decisions/0001-modular-architecture.md) · [ADR-0002](../00-overview/decisions/0002-di-only-rule.md) · [ADR-0009](../00-overview/decisions/0009-brick-money-multi-currency.md) · [ADR-0018](../00-overview/decisions/0018-amounts-plaintext-at-rest.md)

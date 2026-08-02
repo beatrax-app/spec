@@ -48,6 +48,7 @@ itself.
 | **Q-R23** | A change that alters behaviour MUST cite a requirement identifier that already exists on the canonical spec. |
 | **Q-R24** | A user-visible change MUST carry a conventional commit subject written as release-note copy, in the user's language. |
 | **Q-R25** | A test MUST NOT be marked skipped or pending to make a gate green without a recorded reason. |
+| **Q-R26** | A component property rendered as raw markup MUST be locked against client mutation. |
 
 ## The principle underneath
 
