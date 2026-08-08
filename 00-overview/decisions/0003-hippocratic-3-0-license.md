@@ -6,7 +6,7 @@
 
 ## Context
 
-beatrax is a local-only personal-finance dashboard. It reads bank statements,
+Beatrax is a local-only personal-finance dashboard. It reads bank statements,
 credit-card PDFs, PayPal exports, and email receipts. It resolves funding chains
 across accounts. That class of code earns trust by being readable — by shipping
 its full source so the people who run it can audit what it does on their own
@@ -31,7 +31,7 @@ Three requirements had to hold at once:
 
 ## Decision
 
-beatrax ships under the Hippocratic License 3.0, specifically the unmodified
+Beatrax ships under the Hippocratic License 3.0, specifically the unmodified
 `HL3-FULL` variant covering the full ethical-use clause set. The licence text
 lives at the product repo root in `LICENSE`; the human-readable rationale is
 [90-appendix/license-rationale.md](../../90-appendix/license-rationale.md).
@@ -62,7 +62,7 @@ CC BY-SA 4.0 — see [LICENSE.md](../../LICENSE.md).
   source?" compliance checks will return *no, it is source-available*. This is
   the explicit trade.
 - **Not bundleable as a permissively-licensed dependency.** Other projects
-  cannot pull beatrax in under MIT or Apache umbrella terms. beatrax is a
+  cannot pull Beatrax in under MIT or Apache umbrella terms. Beatrax is a
   finished product, not a building block; the constraint matches the intent.
 - **A packaging-metadata wrinkle.** The SPDX list does not yet carry an
   identifier for Hippocratic-3.0 (v2.1 is registered; v3.0 sits behind an open

@@ -23,7 +23,7 @@ sources, and its actual runway all stay invisible.
 > from — across every account chain — so my monthly finances stop being a
 > manual reconciliation puzzle.**
 
-That sentence is the product. If everything else fails, beatrax must still
+That sentence is the product. If everything else fails, Beatrax must still
 surface the complete picture of monthly fixed payments and the funding chain
 that connects them. It is carried verbatim from the product repo's own
 `.planning/PROJECT.md`, and it is the tiebreaker for every scoping argument in
@@ -37,7 +37,7 @@ enough to install a desktop application, grant read-only OAuth access to their
 own mailbox if they want receipt scanning, and open a CSV when they need to.
 
 Someone who banks exclusively with one institution that already has a good app
-does not need beatrax. Someone whose spending is split across several banks,
+does not need Beatrax. Someone whose spending is split across several banks,
 cards, PayPal, and app-store subscriptions — and who has given up reconciling
 it by hand — is exactly who it is for.
 
@@ -48,7 +48,7 @@ for it.
 
 ### P1 — Nothing leaves the machine
 
-beatrax is local-first and local-only. No telemetry, no analytics, no crash
+Beatrax is local-first and local-only. No telemetry, no analytics, no crash
 reporter, no cloud database, no remote account. The SQLite file, the OAuth
 tokens, and the cached receipts live on the user's disk and never leave it
 unless the user exports them.
@@ -63,7 +63,7 @@ Full rationale: [ADR-0004](decisions/0004-local-only-hosting.md).
 ### P2 — Sync without a server that can read anything
 
 Multi-device sync is the one place where the local-only promise is under
-genuine pressure, and it is where most products quietly give up. beatrax does
+genuine pressure, and it is where most products quietly give up. Beatrax does
 not. Devices sync peer-to-peer over the LAN; when a peer is offline the fallback
 is a store-and-forward relay that only ever holds ciphertext it cannot decrypt.
 
@@ -120,7 +120,7 @@ See [ADR-0001](decisions/0001-modular-architecture.md),
 
 ### P7 — It informs; it never transacts
 
-beatrax tells the user that a subscription rose 40%, models what cancelling it
+Beatrax tells the user that a subscription rose 40%, models what cancelling it
 would do to their forecast, and links to the provider's own cancellation page.
 It does not cancel anything, move money, or act on the user's behalf. The
 optional open-banking connector is account-information-only by construction —
@@ -152,7 +152,7 @@ the reasoning, not an issue.
 | **A hosted multi-tenant service** | The product is a desktop application for one household. Every operational assumption in the architecture depends on that. |
 | **LLM-based categorisation** | The explainability the deterministic matchers give up nothing worth having. Recorded in [B2](../10-functional/features/b-ledger/b2-categorisation.md). |
 
-## What beatrax is not
+## What Beatrax is not
 
 It is not a budgeting-first app that happens to import statements — the ledger
 and the chain resolution came first, and envelope budgeting arrived on top of

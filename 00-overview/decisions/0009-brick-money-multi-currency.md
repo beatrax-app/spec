@@ -6,7 +6,7 @@
 
 ## Context
 
-beatrax handles money in multiple currencies. App-store receipts arrive in USD.
+Beatrax handles money in multiple currencies. App-store receipts arrive in USD.
 Card issuers settle foreign-currency charges from many countries — some
 merchants quote USD, hotel chains quote GBP, European retailers stay in EUR. The
 system has to preserve both the original-currency amount and the settled amount,

@@ -6,7 +6,7 @@
 
 ## Context
 
-beatrax grew across eleven shipped phases into a system with eighteen bounded
+Beatrax grew across eleven shipped phases into a system with eighteen bounded
 domains — Auth, Categorization, Chains, Community, Core, Counterparties,
 Desktop, DevMode, DriftAlerts, EmailScan, Forecasting, Import, Ingestion,
 Ledger, Onboarding, Receipts, Recurring, Transfers. It has since grown to

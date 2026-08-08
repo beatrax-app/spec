@@ -6,7 +6,7 @@
 
 ## Purpose
 
-beatrax handles domain vocabulary most people have never needed: statement
+Beatrax handles domain vocabulary most people have never needed: statement
 formats, settlement chains, hybrid logical clocks, group data keys. The user
 does not need to learn any of it, and the product must not make them.
 

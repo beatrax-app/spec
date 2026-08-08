@@ -13,7 +13,7 @@
 ## Precondition
 
 A working install on one device. A second device — a laptop, or a phone — with
-beatrax installed and no data.
+Beatrax installed and no data.
 
 ## The path
 

@@ -2,11 +2,11 @@
 
 **Status:** Accepted
 
-Which banks beatrax can read, and on what evidence.
+Which banks Beatrax can read, and on what evidence.
 
-beatrax does not integrate with banks. It reads **statement files**, so the
+Beatrax does not integrate with banks. It reads **statement files**, so the
 question is never "is this bank supported?" but "does this bank export a format
-beatrax parses?" ([A1](../10-functional/features/a-ingestion/a1-source-formats.md)).
+Beatrax parses?" ([A1](../10-functional/features/a-ingestion/a1-source-formats.md)).
 That makes the answer for most of Europe *yes*, because CAMT.053 and MT940 are
 standards rather than per-bank integrations.
 
@@ -17,8 +17,8 @@ by how strong the evidence is, and the distinction matters more than the names.
 
 | Tier | What it means |
 |------|---------------|
-| **Verified** | A shape beatrax explicitly recognises, with an adapter or a header profile and tests behind it. Detected automatically on upload. |
-| **Expected** | The institution publishes CAMT.053 and/or MT940 to customers, which beatrax parses generically. Not individually tested by the maintainers. |
+| **Verified** | A shape Beatrax explicitly recognises, with an adapter or a header profile and tests behind it. Detected automatically on upload. |
+| **Expected** | The institution publishes CAMT.053 and/or MT940 to customers, which Beatrax parses generically. Not individually tested by the maintainers. |
 
 An **Expected** entry that does not work is a bug worth reporting — a parse
 failure on a conforming file is a defect, not an unsupported bank. Corrections
@@ -101,14 +101,14 @@ Eurobank · National Bank of Greece · Bank of Cyprus · Luminor · SEB Baltics
 
 MT940 is available from the business products of the large UK banks
 (Barclays, HSBC, Lloyds, NatWest, Santander UK). Personal current accounts
-generally export CSV instead, in per-bank shapes that beatrax reads only where
+generally export CSV instead, in per-bank shapes that Beatrax reads only where
 someone has contributed the header profile. The UK is therefore weaker
 territory than the euro area, and honestly so.
 
 ## Outside Europe
 
 There is no CAMT.053 or MT940 convention to lean on. Generic CSV import works,
-but the column mapping is the user's to do, and beatrax's counterparty and
+but the column mapping is the user's to do, and Beatrax's counterparty and
 chain resolution assume IBAN-shaped identifiers throughout. Treat non-European
 use as possible rather than supported.
 

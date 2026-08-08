@@ -70,7 +70,7 @@ One suggestion per subscription, each dismissible by a stable key so a dismissal
 survives recomputation. Suggestions are cached per user and invalidated on
 dismissal.
 
-**beatrax never acts.** It links to the provider's own page and stops
+**Beatrax never acts.** It links to the provider's own page and stops
 ([P7](../../../00-overview/vision.md#p7--it-informs-it-never-transacts)).
 
 ### Boundaries
@@ -130,7 +130,7 @@ writes an append-only audit row.
 | **C3-R16** | This feature MUST NOT write recurring-series state; threshold edits MUST delegate to the recurring feature's public action. |
 | **C3-R17** | The watch overview MUST read a deeper occurrence history than the per-series detail view. |
 | **C3-R18** | Savings suggestions MUST be one per subscription, dismissible by a stable key, and cached with invalidation on dismissal. |
-| **C3-R19** | beatrax MUST NOT cancel, switch, or otherwise act on a subscription; it MUST only link to the provider's own page. |
+| **C3-R19** | Beatrax MUST NOT cancel, switch, or otherwise act on a subscription; it MUST only link to the provider's own page. |
 | **C3-R20** | Every action MUST be idempotent and MUST return not-found for a cross-user target. |
 | **C3-R21** | The detection job MUST be unique per user and series. |
 | **C3-R22** | Snooze idempotency MUST compare absolute instants, not formatted strings. |

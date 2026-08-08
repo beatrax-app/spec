@@ -7,10 +7,10 @@
 ## Purpose
 
 Importing a statement tells you what the bank says. Reconciling tells you that
-you have *checked* it — that the transactions beatrax holds add up to the
+you have *checked* it — that the transactions Beatrax holds add up to the
 balance the bank printed, and that nothing is missing or invented.
 
-Before this feature, beatrax trusted the import and had no way to express
+Before this feature, Beatrax trusted the import and had no way to express
 "I have verified this period". Now it does, and the verification survives
 re-import and device sync.
 
@@ -32,7 +32,7 @@ the list or the detail view.
 ### Reconciling to a statement balance
 
 The user picks an account and enters the balance their statement shows as of a
-date. beatrax shows the cleared balance it computes up to that date and the
+date. Beatrax shows the cleared balance it computes up to that date and the
 difference between the two.
 
 - **Zero difference** — the user completes the reconciliation, and every cleared
@@ -56,7 +56,7 @@ Unlocking means explicitly un-reconciling.
 
 ### It survives re-import
 
-Reconciliation status is beatrax's own state, not something derived from the
+Reconciliation status is Beatrax's own state, not something derived from the
 source. Re-importing the same statement classifies every row as a duplicate
 ([A3](../a-ingestion/a3-idempotency.md)) and leaves status untouched.
 

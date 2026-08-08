@@ -11,13 +11,13 @@ to them.
 
 This is the standard arrangement for a source-available project and it exists for
 one reason: a user must be able to tell whether the thing they downloaded is
-beatrax.
+Beatrax.
 
 ## What you may do
 
 - **Use the name to refer to the project.** Write about it, review it, compare
   it, criticise it.
-- **State that your work is based on beatrax**, or compatible with it, or a fork
+- **State that your work is based on Beatrax**, or compatible with it, or a fork
   of it — accurately.
 - **Reproduce the logo** in documentation, articles, and talks, unmodified, at a
   size where it reads.
@@ -25,7 +25,7 @@ beatrax.
 
 ## What you may not do
 
-- **Distribute a modified build under the beatrax name**
+- **Distribute a modified build under the Beatrax name**
   ([DES-R11](README.md#the-des-r-namespace)). Change the name.
 - **Use the name or marks in a way that implies endorsement**, affiliation, or
   official status.
@@ -40,12 +40,12 @@ The product's entire proposition is a promise about what it does with the user's
 financial data. A modified build carrying the name inherits that promise without
 being bound by it.
 
-A user who downloads "beatrax" from somewhere and finds it phoning home has been
+A user who downloads "Beatrax" from somewhere and finds it phoning home has been
 harmed by the name, not by the code. Renaming is what makes that
 distinguishable.
 
 **This is not a restriction on forking.** Fork freely; the licence permits it.
-Just do not call it beatrax.
+Just do not call it Beatrax.
 
 ## The publisher
 

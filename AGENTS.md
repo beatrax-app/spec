@@ -2,13 +2,13 @@
 
 Orientation for a focused session in this repository.
 
-> **Common rules for every beatrax repository** live in
+> **Common rules for every Beatrax repository** live in
 > [50-governance/ai-contributors.md](50-governance/ai-contributors.md). This file
 > is the spec-repository-specific header; the shared rules are canonical there.
 
 ## What this repository is
 
-The **canonical specification** for beatrax. No code. It spans every
+The **canonical specification** for Beatrax. No code. It spans every
 implementation repository and owns the cross-cutting decisions between them.
 Everything else in the organisation is built *against* this repository, and every
 change elsewhere cites an identifier that exists here.

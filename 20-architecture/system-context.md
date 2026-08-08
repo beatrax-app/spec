@@ -2,7 +2,7 @@
 
 **Status:** Accepted
 
-What beatrax is, what it talks to, and what it deliberately does not.
+What Beatrax is, what it talks to, and what it deliberately does not.
 
 ## The system boundary
 
@@ -11,7 +11,7 @@ What beatrax is, what it talks to, and what it deliberately does not.
                         │           THE USER'S MACHINE        │
                         │                                     │
   Statement files ─────▶│  ┌───────────────────────────────┐  │
-  (CAMT.053, MT940,     │  │          beatrax              │  │
+  (CAMT.053, MT940,     │  │          Beatrax              │  │
    CSV, card PDF,       │  │                               │  │
    processor CSV)       │  │   Laravel + Livewire, in a    │  │
                         │  │   desktop shell or a local    │  │

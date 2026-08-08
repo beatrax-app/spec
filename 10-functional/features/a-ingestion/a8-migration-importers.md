@@ -12,7 +12,7 @@ start again is asking them not to switch.
 
 This feature imports a full budget export — categories, the whole budget
 assignment history, transactions with splits and cleared status, accounts,
-transfers, payees, and (where the source has them) goals — into beatrax's
+transfers, payees, and (where the source has them) goals — into Beatrax's
 envelope model.
 
 ## Behaviour
@@ -46,7 +46,7 @@ product uses. There is no privileged path into the ledger.
 
 ### Re-running the same export is a true no-op
 
-A source-map records, per user, which source entity became which beatrax record.
+A source-map records, per user, which source entity became which Beatrax record.
 Every promotion step consults it first; a hit reuses the existing record and
 performs **no further writes**. That is what makes a byte-identical re-run a
 genuine no-op rather than merely "safe to call again".
@@ -61,13 +61,13 @@ record.
 ### Updating from a newer export: a three-way merge
 
 Re-importing a newer export of the same budget compares three values per field:
-the staged new value, the beatrax current value, and the baseline recorded at
+the staged new value, the Beatrax current value, and the baseline recorded at
 the last import.
 
 | Comparison | Outcome |
 |------------|---------|
 | New equals current | Skip — nothing changed. |
-| New differs, current equals baseline | Apply — the source changed and beatrax has not. |
+| New differs, current equals baseline | Apply — the source changed and Beatrax has not. |
 | New differs, current differs from baseline | Conflict — both changed; ask the user. |
 
 Money is compared as money, never as a formatted string.
@@ -134,7 +134,7 @@ Abandoned runs are swept after an age threshold.
 | **A8-R6** | Promotion MUST proceed in dependency order: categories, budget assignments, accounts, transactions, splits, transfer pairing, goals. |
 | **A8-R7** | Promotion MUST NOT run inside one wrapping transaction; only the status change and counts may be wrapped. |
 | **A8-R8** | Every promotion step MUST write through the same public writers the rest of the product uses. |
-| **A8-R9** | A source-map MUST record which source entity became which beatrax record, per user. |
+| **A8-R9** | A source-map MUST record which source entity became which Beatrax record, per user. |
 | **A8-R10** | Every promotion step MUST consult the source-map first; a hit MUST reuse the existing record and perform no further writes. |
 | **A8-R11** | The source-map MUST record one row per promoted transaction, not one per split leg. |
 | **A8-R12** | Natural-key fallback MUST apply only among entities lacking a stable source identifier. |

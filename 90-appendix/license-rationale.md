@@ -6,7 +6,7 @@ The two long-form decisions the readme and the notice link out to.
 
 ## Why the Hippocratic License 3.0
 
-beatrax handles a person's full banking history, their email receipts, and the
+Beatrax handles a person's full banking history, their email receipts, and the
 funding chains between their accounts. That class of code earns trust by being
 **readable** — by shipping its full source so the people who run it can audit
 what it does on their own machine.
@@ -46,9 +46,9 @@ It is **source-available, not open source**. It is not OSI-approved.
 
 - Procurement processes, downstream relicensing workflows, and "is this open
   source?" compliance checks will correctly return *no*.
-- Other projects cannot pull beatrax in under permissive umbrella terms.
+- Other projects cannot pull Beatrax in under permissive umbrella terms.
 
-If you need an OSI-approved licence for any of those reasons, **beatrax is not
+If you need an OSI-approved licence for any of those reasons, **Beatrax is not
 the right project for your use case**. That is a genuine trade, not a
 technicality, and the product's own copy says so
 ([DES-R8](../60-brand/README.md#the-des-r-namespace)).
@@ -73,13 +73,13 @@ Hippocratic License 3.0. The **marks** are neither
 
 ## Why no paid signing certificates
 
-beatrax ships installers for three desktop platforms. On two of them, the
+Beatrax ships installers for three desktop platforms. On two of them, the
 first-launch experience for an unsigned application is a security dialogue asking
 the user to confirm they want to run software the operating system cannot tie to
 a paid developer identity.
 
 Two subscriptions would make that dialogue go away: one platform vendor's
-developer identity, and another's hosted signing service. beatrax subscribes to
+developer identity, and another's hosted signing service. Beatrax subscribes to
 neither.
 
 The reasoning is small and specific:

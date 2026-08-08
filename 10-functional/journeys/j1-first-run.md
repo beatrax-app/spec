@@ -59,7 +59,7 @@ already have. Each upload is **staged**, not committed.
 
 ### 5. Name the accounts
 
-The first upload contains account identifiers beatrax has never seen. Rather than
+The first upload contains account identifiers Beatrax has never seen. Rather than
 failing, the preview collects them, de-duplicates them, and asks for a name for
 each. Naming creates the account and re-runs the preview.
 

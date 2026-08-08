@@ -22,7 +22,7 @@ disproportionate for a project this size.
 Sign-off achieves what actually matters — a per-commit, auditable attestation of
 provenance — with no paperwork, no account, and no relationship to establish.
 
-It also matters more than usual **because the licence is unusual**. beatrax is
+It also matters more than usual **because the licence is unusual**. Beatrax is
 source-available under an ethical-use licence rather than a permissive one
 ([ADR-0003](../00-overview/decisions/0003-hippocratic-3-0-license.md)), so a
 contributor genuinely needs to have read what they are contributing under.

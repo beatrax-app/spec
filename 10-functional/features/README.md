@@ -45,7 +45,7 @@ what has landed but is unreleased, and what is still outstanding.
 
 There is one: **the household**. A single person, or two people sharing an
 install. There is no operator/end-user split, no administrator persona, and no
-support team — the person who installs beatrax is the person who uses it.
+support team — the person who installs Beatrax is the person who uses it.
 
 The only meaningful distinction inside a household is **owner** versus
 **partner**: the first account created is the owner, holds the developer flag,
@@ -56,7 +56,7 @@ and can create and reset the second account. That distinction appears only in
 
 ## A — Ingestion
 
-How money gets into beatrax. The most-used surface and the one that has to be
+How money gets into Beatrax. The most-used surface and the one that has to be
 boringly reliable, because a bad import corrupts everything downstream.
 
 | ID | Feature |
@@ -90,7 +90,7 @@ The canonical record and everything that makes sense of it.
 
 ## C — Insight and alerts
 
-What beatrax notices on the user's behalf.
+What Beatrax notices on the user's behalf.
 
 | ID | Feature |
 |----|---------|
@@ -106,7 +106,7 @@ What beatrax notices on the user's behalf.
 
 ## D — Money management
 
-The features that move beatrax from *observe* to *operate*.
+The features that move Beatrax from *observe* to *operate*.
 
 | ID | Feature |
 |----|---------|
@@ -130,7 +130,7 @@ The v2.0 headline. Local-first, end-to-end encrypted, peer-to-peer.
 
 ## F — Platform
 
-How beatrax runs, installs, protects itself, and recovers.
+How Beatrax runs, installs, protects itself, and recovers.
 
 | ID | Feature |
 |----|---------|

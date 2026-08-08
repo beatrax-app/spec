@@ -2,7 +2,7 @@
 
 **Status:** Accepted
 
-Why beatrax exists, what it is committed to, and the record of every contested
+Why Beatrax exists, what it is committed to, and the record of every contested
 decision.
 
 | Page | Read this if… |

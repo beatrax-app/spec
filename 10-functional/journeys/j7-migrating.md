@@ -10,14 +10,14 @@
 
 ## Precondition
 
-An export from YNAB (either generation) or Actual Budget. A beatrax install,
+An export from YNAB (either generation) or Actual Budget. A Beatrax install,
 either fresh or already in use.
 
 ## The path
 
 ### 1. Export from the other tool
 
-The user produces an export in that product's own format. beatrax reads it as it
+The user produces an export in that product's own format. Beatrax reads it as it
 is — no intermediate conversion, no spreadsheet step.
 
 An Actual export is opened **read-only**, so the source is never modified.
@@ -62,7 +62,7 @@ unbounded transaction the import design exists to avoid.
 
 ### 5. What lands where
 
-| From the other tool | In beatrax |
+| From the other tool | In Beatrax |
 |---------------------|------------|
 | Category tree | Categories |
 | Budget assignments, month by month | Envelope assignments ([D1](../features/d-money/d1-envelope-budgeting.md)) |
@@ -82,7 +82,7 @@ balance — confusing the two silently doubles a year of budget history.
 ### 6. Re-running, and updating
 
 A byte-identical re-run is a **true no-op**: a source map records which source
-entity became which beatrax record, every step consults it first, and a hit
+entity became which Beatrax record, every step consults it first, and a hit
 reuses the existing record and writes nothing.
 
 A **newer** export of the same budget performs a three-way merge against the
@@ -91,7 +91,7 @@ baseline recorded at the previous import:
 | Comparison | Outcome |
 |------------|---------|
 | Nothing changed in the source | Skip |
-| The source changed, beatrax did not | Apply |
+| The source changed, Beatrax did not | Apply |
 | Both changed | Conflict — the user decides |
 
 Money is compared as money, never as a formatted string.
@@ -104,7 +104,7 @@ says so rather than letting a user assume otherwise.
 
 *Exercises: [A8](../features/a-ingestion/a8-migration-importers.md).*
 
-### 7. Continue in beatrax
+### 7. Continue in Beatrax
 
 From here the routine is [J2](j2-daily-use.md) and [J3](j3-monthly-reconcile.md).
 Statement imports run alongside migrated history, deduplicating on the

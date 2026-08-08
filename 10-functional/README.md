@@ -2,7 +2,7 @@
 
 **Status:** Accepted
 
-What beatrax does, expressed as behaviour a user can observe and a test can
+What Beatrax does, expressed as behaviour a user can observe and a test can
 check.
 
 | Page | Contents |
@@ -25,7 +25,7 @@ in review ([50-governance/canonical-spec.md](../50-governance/canonical-spec.md)
 |------|--------|
 | **[A — Ingestion](features/a-ingestion/)** | How money gets in: parsers, the import pipeline, idempotency, receipts, open banking, cash, migration |
 | **[B — The ledger](features/b-ledger/)** | The canonical record: transactions, categorisation, rules, counterparties, chains, transfers, splits, reconciliation, search, currency |
-| **[C — Insight](features/c-insight/)** | What beatrax notices: the dashboard, recurring, drift, anomalies, forecasting, the calendar, reports, notifications |
+| **[C — Insight](features/c-insight/)** | What Beatrax notices: the dashboard, recurring, drift, anomalies, forecasting, the calendar, reports, notifications |
 | **[D — Money management](features/d-money/)** | Envelope budgeting, goals, pots, tax |
 | **[E — Sync](features/e-sync/)** | The v2.0 headline: change capture, pairing, transport, at-rest encryption, the mobile peer, status |
 | **[F — Platform](features/f-platform/)** | The shell, setup, authentication, backup, the dev console, updates, data locations |

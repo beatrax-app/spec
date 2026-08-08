@@ -6,7 +6,7 @@
 
 ## Purpose
 
-beatrax ships without paid operating-system code-signing identities
+Beatrax ships without paid operating-system code-signing identities
 ([the rationale](../../../90-appendix/license-rationale.md#why-no-paid-signing-certificates)).
 The signed update manifest is therefore **the sole binary-integrity signal**,
 which makes this feature security-critical rather than a convenience.

@@ -7,7 +7,7 @@
 ## Purpose
 
 Importing a statement is the single most consequential thing a user does in
-beatrax, and the one they will do most often. A bad import is expensive to
+Beatrax, and the one they will do most often. A bad import is expensive to
 notice and expensive to undo, so the flow is built around one rule: **the user
 sees exactly what will happen before anything happens**.
 
@@ -48,7 +48,7 @@ log where [F5](../f-platform/f5-dev-console.md) can read it.
 
 ### Unknown accounts are a question, not a failure
 
-When a row belongs to an account beatrax has not seen, the preview does not
+When a row belongs to an account Beatrax has not seen, the preview does not
 fail. It collects the unknown identifiers, de-duplicates them across the whole
 file, and asks the user to name each one. Naming creates the account and the
 preview re-runs.

@@ -28,7 +28,7 @@ Adding one is shipping a class and adding it to a list; nothing else changes.
 
 An unmatched message is recorded as a miss. No enrichment is written, no
 exception is thrown, and the message stays available for a matcher that may
-ship later. Silence here is correct: a receipt for something beatrax does not
+ship later. Silence here is correct: a receipt for something Beatrax does not
 track is not a problem to report.
 
 ### What a match produces

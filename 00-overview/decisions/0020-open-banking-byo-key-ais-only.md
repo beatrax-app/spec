@@ -13,7 +13,7 @@ version.
 A live bank connection is the single biggest threat to the product's founding
 promise ([ADR-0004](0004-local-only-hosting.md)). The standard shape of this
 feature — the vendor holds an aggregator contract, the vendor's servers see the
-user's transactions, the app fetches from the vendor — is exactly what beatrax
+user's transactions, the app fetches from the vendor — is exactly what Beatrax
 exists not to be.
 
 Open banking was deferred out of two consecutive milestones for precisely this
@@ -24,7 +24,7 @@ reason before it was finally scoped in a shape that survives the constraint.
 The connector ships, and it is constrained on four axes at once.
 
 1. **Bring your own key.** The user registers with the aggregator themselves and
-   holds their own credentials. There is no beatrax-operated aggregator account,
+   holds their own credentials. There is no Beatrax-operated aggregator account,
    no shared client, and no relationship between the maintainer and the user's
    bank. The private key is generated locally and never leaves the machine.
 
@@ -41,7 +41,7 @@ The connector ships, and it is constrained on four axes at once.
    server-side with a short time-to-live rather than trusted from the client.
 
 4. **The data path is machine-to-aggregator, direct.** The user's machine talks
-   to the aggregator; no beatrax infrastructure is in the path, because there is
+   to the aggregator; no Beatrax infrastructure is in the path, because there is
    none. Fetched transactions land through the existing import-preview pipeline
    and the existing fingerprint, so a bank connection produces zero net-new
    duplicates against statements the user already imported by file.

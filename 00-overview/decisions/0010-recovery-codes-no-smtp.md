@@ -15,7 +15,7 @@ token. In a hosted deployment that flow is load-bearing: the provider runs SMTP,
 deliverability is a known cost of doing business, and the user trusts the
 address on file.
 
-beatrax does not run SMTP. The desktop bundle ships to end users' machines; it
+Beatrax does not run SMTP. The desktop bundle ships to end users' machines; it
 cannot ship a working outbound relay. Three options were on the table:
 
 - **Wire SMTP through the user's own mail provider.** Possible only if the user

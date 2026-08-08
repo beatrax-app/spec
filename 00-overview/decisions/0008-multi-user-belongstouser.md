@@ -6,7 +6,7 @@
 
 ## Context
 
-beatrax shipped v1.0 as a single-user application. The intent, from the outset,
+Beatrax shipped v1.0 as a single-user application. The intent, from the outset,
 was to share the dashboard with a partner once the product was proven. That
 commitment shaped the schema from the first phase: every domain table holding
 user-scoped data carries a `user_id` foreign key, and models use a shared trait

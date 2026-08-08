@@ -3,7 +3,7 @@
 **Status:** Accepted
 
 Terms this spec uses precisely. Where a word has a loose everyday meaning and a
-narrow beatrax meaning, the narrow one is what the spec means.
+narrow Beatrax meaning, the narrow one is what the spec means.
 
 ## Product and domain
 
@@ -85,4 +85,4 @@ narrow beatrax meaning, the narrow one is what the spec means.
 | "cloud sync" | "peer-to-peer device sync" | There is no cloud that can read anything. |
 | "server" (for the relay) | "relay" | It stores and forwards ciphertext; calling it a server implies it holds state it can use. |
 | "AI categorisation" | "rule and memory categorisation" | There is no model. The matchers are deterministic. |
-| "diederik" | "beatrax" | The internal codename appears in some historical artefacts and command names. The product is beatrax. |
+| "diederik" | "Beatrax" | The internal codename appears in some historical artefacts and command names. The product is Beatrax. |

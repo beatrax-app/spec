@@ -29,12 +29,12 @@ Reports go through **private vulnerability reporting**, not the public issue
 tracker.
 
 **In scope:** the application code; the bundled dependencies where the
-vulnerability is reachable through beatrax's own usage; the shell layer in the
+vulnerability is reachable through Beatrax's own usage; the shell layer in the
 released installers; the update verification chain; and local data-at-rest
 assumptions.
 
-**Out of scope:** third-party services beatrax integrates with, unless triggered
-exclusively by a flaw in beatrax's handling; operating-system security on the
+**Out of scope:** third-party services Beatrax integrates with, unless triggered
+exclusively by a flaw in Beatrax's handling; operating-system security on the
 user's machine; social engineering; issues requiring the user to grant
 destructive permissions on their own machine; and theoretical risks with no
 demonstrable reproduction.

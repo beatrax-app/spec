@@ -7,7 +7,7 @@ The public site.
 ## What it is
 
 The place someone lands before they have downloaded anything. It explains what
-beatrax is, who it is for, what it costs them in trust, and where to get it.
+Beatrax is, who it is for, what it costs them in trust, and where to get it.
 
 It is **not** the documentation site — that is built from this specification and
 published from it
@@ -53,7 +53,7 @@ Screenshots come from the product repository.
 | ID | Requirement |
 |----|-------------|
 | **REPO-R38** | The site MUST NOT include analytics, tracking, or third-party embeds that load code onto a visitor's browser. |
-| **REPO-R39** | The site MUST describe beatrax as source-available and MUST NOT describe it as open source. |
+| **REPO-R39** | The site MUST describe Beatrax as source-available and MUST NOT describe it as open source. |
 | **REPO-R40** | The site MUST name the outbound-call surface rather than only claiming local-first. |
 | **REPO-R41** | The site MUST state what a sync relay can and cannot observe. |
 | **REPO-R42** | The site MUST state that installers are unsigned and MUST explain why. |

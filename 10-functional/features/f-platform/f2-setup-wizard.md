@@ -6,7 +6,7 @@
 
 ## Purpose
 
-The first session decides whether someone keeps using beatrax. It has to get
+The first session decides whether someone keeps using Beatrax. It has to get
 from an empty database to a populated dashboard in one guided pass, using files
 the user already has, without asking anything it can work out for itself.
 

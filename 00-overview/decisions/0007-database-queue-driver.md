@@ -6,7 +6,7 @@
 
 ## Context
 
-beatrax runs background work: chain resolution per user, email-scan backfill,
+Beatrax runs background work: chain resolution per user, email-scan backfill,
 drift and anomaly re-evaluation, forecast recomputation, notification triggers,
 sync catch-up. Laravel gives a clean abstraction over queue drivers and the
 application code is driver-agnostic. The choice of driver is an operational
