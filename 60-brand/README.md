@@ -17,7 +17,7 @@ The visual and verbal identity, and the rules both surfaces obey.
 
 | ID | Requirement |
 |----|-------------|
-| **DES-R1** | The product name MUST be written lower-case in prose, including at the start of a sentence. |
+| **DES-R1** | The product name MUST be written capitalised as "Beatrax" in prose, including mid-sentence. |
 | **DES-R2** | Brand primitives MUST be defined once and consumed by every surface; no surface may introduce its own. |
 | **DES-R3** | Every primitive MUST have both a light and a dark value. |
 | **DES-R4** | Every themed surface MUST carry a dark companion for every light-mode colour utility, enforced by test in the product. |
