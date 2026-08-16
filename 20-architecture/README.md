@@ -11,7 +11,7 @@ challenged in review.
 
 | Page | Covers |
 |------|--------|
-| [system-context.md](system-context.md) | What beatrax is, what it talks to, and what it deliberately does not |
+| [system-context.md](system-context.md) | What Beatrax is, what it talks to, and what it deliberately does not |
 | [component-model.md](component-model.md) | The thirty-four modules and what each owns |
 | [data-flow.md](data-flow.md) | The end-to-end path from a source file to a rendered figure |
 | [data-model.md](data-model.md) | The tables, their trust boundaries, and their state columns |

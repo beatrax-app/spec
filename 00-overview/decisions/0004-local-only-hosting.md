@@ -6,7 +6,7 @@
 
 ## Context
 
-The data beatrax processes — full bank-account history, credit-card statements,
+The data Beatrax processes — full bank-account history, credit-card statements,
 email receipts, the funding chains between every account — is the single most
 sensitive class of personal data the average person holds outside their medical
 records. It includes who they pay, how much, when, where, and what for. It maps
@@ -35,7 +35,7 @@ default".
 
 ## Decision
 
-beatrax is a local-only application.
+Beatrax is a local-only application.
 
 - **All data is stored on the user's machine** — the SQLite database in the
   per-OS user-data directory; backups alongside it; OAuth tokens in a
@@ -109,7 +109,7 @@ infrastructure is never in the loop, because there is none.
 
 - [ADR-0003](0003-hippocratic-3-0-license.md) — the licence that makes the claim
   auditable
-- [ADR-0006](0006-nativephp-desktop-shell.md) — the shell that ships beatrax as
+- [ADR-0006](0006-nativephp-desktop-shell.md) — the shell that ships Beatrax as
   a local app rather than a hosted service
 - [ADR-0015](0015-multi-master-p2p-sync.md) — how multi-device works without
   contradicting this

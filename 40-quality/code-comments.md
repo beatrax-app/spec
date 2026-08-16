@@ -106,7 +106,7 @@ tuning against a real offender set.
 
 The one-time sweep is large and must be **manual per file** — every file read and
 corrected, so no genuine *why* is lost. A blind find-and-replace would delete
-real reasoning along with the noise. In beatrax that sweep covered roughly 1 435
+real reasoning along with the noise. In Beatrax that sweep covered roughly 1 435
 backend files across eighteen plans, and the test was activated only once the
 sweep passed.
 

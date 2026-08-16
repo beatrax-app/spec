@@ -6,7 +6,7 @@
 
 ## Purpose
 
-beatrax has to install like a desktop application: download, double-click, and
+Beatrax has to install like a desktop application: download, double-click, and
 you are in the dashboard. No terminal, no server to start, no browser bookmark.
 
 This feature owns the shell that makes that true, and the quarantine that keeps

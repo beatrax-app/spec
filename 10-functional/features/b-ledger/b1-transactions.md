@@ -27,7 +27,7 @@ an answerable question.
 ### Imported rows are immutable; user-authored rows are not
 
 An imported transaction is a record of what a statement said, and it is not
-editable or deletable. What *is* editable is everything beatrax layered on top:
+editable or deletable. What *is* editable is everything Beatrax layered on top:
 its category, its counterparty, its note, its tax tag, its split legs, its
 reconciliation status.
 

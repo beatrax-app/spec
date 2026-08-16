@@ -10,7 +10,7 @@ Every downstream number — budgets, reports, the spending breakdown, the tax
 export — is a sum over categories. Getting categories right is therefore not a
 convenience feature; it is the input to everything.
 
-beatrax categorises deterministically, with no model and no cloud call, using
+Beatrax categorises deterministically, with no model and no cloud call, using
 two cooperating layers: rules the user can read and edit, and a memory that
 learns from their corrections.
 
@@ -38,7 +38,7 @@ afterwards.
 
 If nothing clears the confidence bar, the transaction is left uncategorised and
 lands in the triage queue. Assigning a wrong category silently mistrains the
-memory layer and corrupts every downstream total, so beatrax would rather say
+memory layer and corrupts every downstream total, so Beatrax would rather say
 nothing.
 
 The dashboard surfaces how many transactions need categorising, so the work does

@@ -4,8 +4,8 @@
 
 ## The name
 
-**beatrax**, lower-case, always — including at the start of a sentence
-([DES-R1](README.md#the-des-r-namespace)).
+**Beatrax**, capitalised, always — a proper noun written with a capital B
+everywhere, including mid-sentence ([DES-R1](README.md#the-des-r-namespace)).
 
 It is named after the maintainer's mother, Bea. That is worth knowing because it
 explains the product's register: it was built for someone specific, and it reads

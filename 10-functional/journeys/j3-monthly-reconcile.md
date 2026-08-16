@@ -2,7 +2,7 @@
 
 **Status:** Accepted
 
-> Once a month, an hour, on a Sunday. The user checks that what beatrax holds
+> Once a month, an hour, on a Sunday. The user checks that what Beatrax holds
 > matches what their bank says — and then trusts every number in the product for
 > the next four weeks on the strength of it.
 
@@ -45,13 +45,13 @@ or reject recurring suggestions. Split anything that was several things at once
 The core of the hour.
 
 Open the reconcile surface, pick an account, enter the closing balance the
-statement shows and the date it applies to. beatrax shows its own cleared
+statement shows and the date it applies to. Beatrax shows its own cleared
 balance and **the difference**.
 
 - **Zero.** Complete the reconciliation. Every cleared row up to that date
   becomes reconciled and locks against further change.
 - **Not zero.** The difference is shown plainly with the cleared set visible.
-  Nothing is auto-corrected — that is the user's investigation, and beatrax's job
+  Nothing is auto-corrected — that is the user's investigation, and Beatrax's job
   is to make it findable rather than to guess.
 
 Common causes: a transaction not yet cleared, one cleared that should not be, a

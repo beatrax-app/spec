@@ -11,7 +11,7 @@ feature watches everything else: a charge much larger than usual for that
 merchant, a large charge at a merchant never seen before, or an apparent
 duplicate inside a short window.
 
-It is the closest beatrax comes to fraud detection, and it is deliberately
+It is the closest Beatrax comes to fraud detection, and it is deliberately
 framed as "this looks unusual" rather than "this is wrong" — because the user
 knows things the statistics do not.
 

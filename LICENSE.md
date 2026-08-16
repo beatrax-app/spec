@@ -1,6 +1,6 @@
 # Licence — Documentation
 
-Copyright © 2026 beatrax contributors.
+Copyright © 2026 Beatrax contributors.
 
 The documentation in this repository is licensed under the
 **Creative Commons Attribution-ShareAlike 4.0 International** licence
@@ -26,5 +26,5 @@ The Hippocratic License is an *ethical source* licence and is **not
 OSI-approved**. See [licence rationale](90-appendix/license-rationale.md) for
 what that means in practice.
 
-**Note on the marks.** The beatrax name and logo are covered by neither licence.
+**Note on the marks.** The Beatrax name and logo are covered by neither licence.
 See [60-brand/trademark.md](60-brand/trademark.md).

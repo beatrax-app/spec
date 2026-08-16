@@ -6,7 +6,7 @@
 
 ## Context
 
-beatrax has to install like a desktop app. A finance dashboard the user opens
+Beatrax has to install like a desktop app. A finance dashboard the user opens
 every morning cannot demand a terminal session, a serve command, and a browser
 bookmark. The target user installs from a `.dmg`, an `.exe`/`.msi`, or an
 `.AppImage`/`.deb`, double-clicks an icon, and lands in the dashboard.
@@ -16,7 +16,7 @@ React. That constrains the shell choice sharply.
 
 ## Decision
 
-beatrax ships as a desktop application via NativePHP, which bundles PHP, the
+Beatrax ships as a desktop application via NativePHP, which bundles PHP, the
 application, and an Electron-based Chromium shell into a per-platform installer.
 
 - **The desktop bundle** is produced by the framework's native-build command,

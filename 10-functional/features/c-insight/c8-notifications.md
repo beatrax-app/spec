@@ -6,7 +6,7 @@
 
 ## Purpose
 
-Before this feature, beatrax's notifications were fire-and-forget: if the user
+Before this feature, Beatrax's notifications were fire-and-forget: if the user
 was not looking when one fired, it was gone. For a payment reminder that is
 worse than useless.
 

@@ -6,7 +6,7 @@
 
 ## Purpose
 
-beatrax reads the statement formats European banks and payment processors
+Beatrax reads the statement formats European banks and payment processors
 already export, so it is not tied to any one institution and needs no
 integration agreement with anybody. This feature is the layer that turns each
 of those wire formats into one canonical shape.
@@ -20,7 +20,7 @@ about the ones it cannot handle.
 
 ### The format is declared, never sniffed
 
-The user says which format a file is; beatrax never guesses from content. A
+The user says which format a file is; Beatrax never guesses from content. A
 format identifier is chosen from a fixed set, and an unknown one is a typed
 error rather than a best-effort attempt.
 
@@ -109,7 +109,7 @@ header mismatch, and unsupported format are each distinct.
 
 | ID | Requirement |
 |----|-------------|
-| **A1-R1** | The source format MUST be declared by the caller. beatrax MUST NOT infer a format from file content. |
+| **A1-R1** | The source format MUST be declared by the caller. Beatrax MUST NOT infer a format from file content. |
 | **A1-R2** | An unknown format identifier MUST raise a typed error naming the identifier. |
 | **A1-R3** | A pre-parse check MUST run before the parser and MUST report character set, header signature, and any mismatch. |
 | **A1-R4** | A leading byte-order mark MUST be stripped rather than treated as data. |

@@ -13,7 +13,7 @@ consult rather than guessing at behaviour.
 
 ## Financial data formats
 
-- **ISO 20022** — the message standard. beatrax consumes the bank-to-customer
+- **ISO 20022** — the message standard. Beatrax consumes the bank-to-customer
   statement message (`camt.053`) and handles every sub-version the supported
   banks export ([A1](../10-functional/features/a-ingestion/a1-source-formats.md)).
 - **MT940** — the legacy SWIFT customer statement message, including its

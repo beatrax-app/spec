@@ -5,7 +5,7 @@
 
 ## Context
 
-Once beatrax runs on a desktop and a phone, the two copies diverge. Reconciling
+Once Beatrax runs on a desktop and a phone, the two copies diverge. Reconciling
 them is the largest single piece of design in the project, and the topology
 choice constrains everything downstream — identity, transport, conflict
 resolution, and what happens when a device is lost.

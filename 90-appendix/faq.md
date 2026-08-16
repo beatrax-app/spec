@@ -2,7 +2,7 @@
 
 **Status:** Accepted
 
-The questions people actually ask before installing beatrax, answered once so
+The questions people actually ask before installing Beatrax, answered once so
 the website, the README, and any future support material all say the same
 thing.
 
@@ -13,7 +13,7 @@ these are the questions where a reassuring half-answer is worse than none.
 
 ## The basics
 
-### What does beatrax cost?
+### What does Beatrax cost?
 
 Nothing. There is no paid tier, no trial, no licence key and no upsell. There
 is also no service to run, which is why there is nothing to bill for.
@@ -44,7 +44,7 @@ directory.
 
 ## Getting your transactions in
 
-### Does beatrax connect to my bank?
+### Does Beatrax connect to my bank?
 
 Not by default. You export a statement from your bank and drop the file in.
 There is an optional open-banking connector, off by default, which needs your
@@ -52,7 +52,7 @@ own aggregator API key — but file import is the primary path, deliberately.
 
 ### Do you need my banking password?
 
-Never. beatrax does no screen-scraping and never logs in as you. It reads
+Never. Beatrax does no screen-scraping and never logs in as you. It reads
 files your bank already gives you.
 
 ### Which file formats does it read?
@@ -91,7 +91,7 @@ only ever holds encrypted data it cannot read.
 ### Can you read my data when it syncs?
 
 No. Sync is end-to-end encrypted between devices you have paired and verified
-yourself. The relay holds ciphertext with no key, and there is no beatrax
+yourself. The relay holds ciphertext with no key, and there is no Beatrax
 account or server that ever sees your ledger.
 
 ### Can two people share a ledger?
@@ -111,10 +111,10 @@ afterwards.
 ### What happens if I lose everything?
 
 The data is gone, and nobody can recover it — which is the same property that
-means nobody can hand it to anyone else. beatrax can produce an encrypted
+means nobody can hand it to anyone else. Beatrax can produce an encrypted
 backup and reminds you to; where you keep it is your decision.
 
-### Is beatrax open source?
+### Is Beatrax open source?
 
 The source is public, buildable and modifiable. The licence adds ethical-use
 clauses, which is the one thing that prevents it being certified by the Open

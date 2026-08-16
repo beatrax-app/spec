@@ -8,7 +8,7 @@
 
 A bank statement says `PAYPAL EUROPE 19,99`. The receipt in the user's inbox
 says which Google Play subscription that was, what it cost in its original
-currency, and which card funded it. Scanning the inbox is how beatrax turns an
+currency, and which card funded it. Scanning the inbox is how Beatrax turns an
 anonymous line into a labelled one.
 
 This feature owns the connection and the fetch. What happens to a fetched

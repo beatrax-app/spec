@@ -6,7 +6,7 @@
 
 ## Context
 
-beatrax runs on one machine at a time. Concurrent write load is bounded by one
+Beatrax runs on one machine at a time. Concurrent write load is bounded by one
 household's import cadence — a handful of statements per month, plus background
 email scans every fifteen minutes, plus sync ops arriving from peers.
 

@@ -2,7 +2,7 @@
 
 **Status:** Accepted
 
-The open-source projects beatrax is built on, named.
+The open-source projects Beatrax is built on, named.
 
 The rest of this specification names tools by role rather than by product — a
 choice that keeps requirements from decaying every time a dependency is

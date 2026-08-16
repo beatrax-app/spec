@@ -2,7 +2,7 @@
 
 **Status:** Accepted
 
-beatrax holds a household's complete financial history on their own machine.
+Beatrax holds a household's complete financial history on their own machine.
 This page states what it defends against, what it does not, and the practices
 that follow.
 

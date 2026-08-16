@@ -94,7 +94,7 @@ The user can model the cancellation — which creates a forecast scenario and
 shows the effect **without changing anything** — and then follow a link to the
 provider's own cancellation page.
 
-beatrax never cancels anything ([P7](../../00-overview/vision.md#p7--it-informs-it-never-transacts)).
+Beatrax never cancels anything ([P7](../../00-overview/vision.md#p7--it-informs-it-never-transacts)).
 
 *Exercises: [C3](../features/c-insight/c3-drift-alerts.md), [C5](../features/c-insight/c5-forecasting.md), [C9](../features/c-insight/c9-community-corpus.md).*
 

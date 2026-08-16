@@ -5,7 +5,7 @@
 
 ## Context
 
-beatrax was developed in a single repository, `nightworksio/beatrax`, under a
+Beatrax was developed in a single repository, `nightworksio/beatrax`, under a
 personal-scope organisation shared with unrelated projects. It is moving to its
 own organisation, `beatrax-app`. That move is the moment to decide what the
 repository boundary is, because it is expensive to change afterwards — commit
@@ -57,7 +57,7 @@ triage — is defined **once, here**, and called by the others
 | **One repository for everything** | The spec would be versioned with the code it governs, which makes "cite something that already exists on the canonical spec" circular — a PR could add the requirement and the implementation in the same commit, and the gate would pass. The separation is what gives the gate teeth. |
 | **Two repositories (`beatrax` + `spec`)** | Workable, but the website's deploy pipeline and the product's release pipeline have nothing in common, and org-wide health files genuinely need the `.github` repository name to be inherited at all. |
 | **Splitting the product by module** | Thirty-four repositories, thirty-four version skews, and a boundary that stops being test-enforceable the moment it crosses a repository line. The module boundary already works. |
-| **Keeping it under `nightworksio`** | The org is shared with unrelated projects, so org-level settings, labels, and reusable workflows cannot be tuned for beatrax without affecting them. |
+| **Keeping it under `nightworksio`** | The org is shared with unrelated projects, so org-level settings, labels, and reusable workflows cannot be tuned for Beatrax without affecting them. |
 
 ## Consequences
 

@@ -35,7 +35,7 @@ The firing leg may carry the identifier of one of the user's own accounts —
 the forward case. Or it may carry none, in which case the partner's identifier
 is resolved through the alias bridge — the reverse case. Both directions are
 walked, because which leg fires first depends on file order, which the user
-controls and beatrax does not.
+controls and Beatrax does not.
 
 Under at-rest encryption the forward arm decrypts the firing leg's identifier
 once; the reverse arm narrows candidates on plaintext dimensions first and

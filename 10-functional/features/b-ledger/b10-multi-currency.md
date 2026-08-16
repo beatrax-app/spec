@@ -8,7 +8,7 @@
 
 A household with an app-store subscription billed in dollars, a hotel booked in
 pounds, and a bank account in euros has three currencies whether it wants them
-or not. beatrax preserves every one of them exactly, shows what a charge really
+or not. Beatrax preserves every one of them exactly, shows what a charge really
 cost, and — when the user asks — rolls everything into one reporting currency
 without ever pretending the conversion was free.
 

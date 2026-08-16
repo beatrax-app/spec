@@ -7,7 +7,7 @@ assume.
 
 ## The scheme
 
-Semantic versioning on the shipped product, with beatrax's own reading of what
+Semantic versioning on the shipped product, with Beatrax's own reading of what
 each component means for a **local-first application that holds the user's only
 copy of their data**.
 

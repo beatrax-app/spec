@@ -2,7 +2,7 @@
 
 **Status:** Accepted
 
-beatrax was built with heavy AI assistance, deliberately and openly — the product
+Beatrax was built with heavy AI assistance, deliberately and openly — the product
 repository says so in its own readme. This page states the rules that made that
 work, and that apply to anyone else contributing the same way.
 

@@ -7,7 +7,7 @@ boundaries that make each step safe to re-run.
 
 ## The ingestion pipeline
 
-Every transaction beatrax ever shows enters through the same pipeline. Source
+Every transaction Beatrax ever shows enters through the same pipeline. Source
 formats feed in at parse; everything past parse is uniform.
 
 ```text

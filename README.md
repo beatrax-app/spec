@@ -1,10 +1,10 @@
-<h1 align="center">beatrax — Specification</h1>
+<h1 align="center">Beatrax — Specification</h1>
 
 <p align="center">
   <em>A local-first personal finance dashboard for the unified picture of your cross-account money.</em>
 </p>
 
-The single source of truth for the beatrax project: what it is, why it is built
+The single source of truth for the Beatrax project: what it is, why it is built
 this way, and the standards every repository in the organisation is held to.
 
 This repository contains **no code**. It spans the implementation repositories
@@ -109,7 +109,7 @@ committed to.
 | 00-overview | Accepted | Vision, glossary, roadmap, 20 decision records |
 | 10-functional | Accepted | 52 features across 7 areas, 7 journeys |
 | 20-architecture | Accepted | System context, components, data flow, data model, platform matrix, 4 contracts |
-| 30-repos | Accepted | spec, beatrax, website, .github |
+| 30-repos | Accepted | spec, Beatrax, website, .github |
 | 40-quality | Accepted | Standards, comments, testing, CI/CD, security, done, tooling |
 | 50-governance | Accepted | Canonical-spec rule, lifecycle, contributing, cross-repo CI, sign-off, routing, overrides, AI contributors |
 | 60-brand | Accepted | Brand rules, surface mapping, accessibility, trademark |

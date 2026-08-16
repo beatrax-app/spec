@@ -6,7 +6,7 @@
 
 ## Purpose
 
-This is the capability that makes beatrax different from a per-account ledger
+This is the capability that makes Beatrax different from a per-account ledger
 viewer, and it is the one the [vision](../../../00-overview/vision.md) is
 written around.
 

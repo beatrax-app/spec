@@ -6,7 +6,7 @@
 
 ## Purpose
 
-A savings goal is a target amount by a target date. The value beatrax adds is
+A savings goal is a target amount by a target date. The value Beatrax adds is
 not the target — anyone can write that down — but the honest answer to "will I
 make it", derived from what the user is actually saving rather than what they
 intended to.

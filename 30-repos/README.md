@@ -59,7 +59,7 @@ The product repository is moving from a shared personal-scope organisation to
 - Existing clone URLs and issue references redirect, but the product
   repository's own documentation references the old path and needs a sweep.
 - Organisation-level settings — labels, rulesets, secret scanning, the maintainer
-  registry — can be tuned for beatrax without affecting unrelated projects.
+  registry — can be tuned for Beatrax without affecting unrelated projects.
 - The development branch is merged into the default branch and retired; the next
   release is cut from the default branch inside the new organisation
   ([00-overview/roadmap.md](../00-overview/roadmap.md#the-v14--v20-promotion)).
