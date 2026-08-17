@@ -45,6 +45,7 @@ things the *shape* of the system must satisfy, which no single feature owns.
 | **ARCH-R18** | Every background dispatch MUST occur after the transaction that caused it commits, never inside it. |
 | **ARCH-R19** | A parser MUST NOT write to the database. |
 | **ARCH-R20** | Every ingestion path MUST be idempotent on the transaction fingerprint. |
+| **ARCH-R21** | The default user scope MUST fail closed on a web request with no authenticated user, matching no rows rather than returning unscoped results; console and queue contexts stay unscoped under the explicit filter ARCH-R6 requires. |
 
 ## Related
 

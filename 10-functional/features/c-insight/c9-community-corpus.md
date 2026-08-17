@@ -135,6 +135,7 @@ disabled.
 | **C9-R20** | A missing or malformed corpus MUST log a warning and yield an empty corpus without preventing boot. |
 | **C9-R21** | Data files MUST be parsed with object instantiation disabled. |
 | **C9-R22** | Seeding MUST be idempotent across repeated installs. |
+| **C9-R23** | A user-supplied match pattern MUST be length-capped before compilation, so a pathological expression cannot drive catastrophic backtracking; an over-long pattern is treated as a non-match. |
 
 ## Related
 

@@ -97,6 +97,7 @@ user preference that governs them live in [A3](a3-idempotency.md).
 | **A5-R14** | An exception thrown by a matcher MUST propagate rather than being silently swallowed. |
 | **A5-R15** | Re-processing an already-processed message MUST produce no duplicate enrichment. |
 | **A5-R16** | Cross-user reads and writes MUST return not-found. |
+| **A5-R17** | Receipt de-duplication MUST key on a hash of the message content, never on a sender-supplied message identifier, so a forged identifier cannot suppress or displace a distinct receipt. |
 
 ## Related
 

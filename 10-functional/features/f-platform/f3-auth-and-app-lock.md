@@ -167,6 +167,8 @@ needs the key that a locked session does not have.
 | **F3-R31** | Sign-in MUST unlock the session where the recovery wrap succeeds, and MUST start locked where it does not. |
 | **F3-R32** | Biometric enrolment MUST NOT be exempt from the lock. |
 | **F3-R33** | *(Open)* Operating-system key custody MUST be wired on desktop and mobile. Registered but not yet wired. |
+| **F3-R34** | The authentication path MUST equalise work on the account-not-found branch, performing and discarding a hash of equivalent cost, so response time does not distinguish a missing username from a wrong password. |
+| **F3-R35** | A password change or recovery reset MUST invalidate the account's other sessions. |
 
 ## Related
 
