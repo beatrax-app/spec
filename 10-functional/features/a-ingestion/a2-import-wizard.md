@@ -103,6 +103,38 @@ format, shows a sample of each, and commits them together. It drops runs older
 than a two-week window and runs already confirmed, so a forgotten tab cannot
 resurface weeks-old data or replay a committed run.
 
+### The file has to reach the app before any of this applies
+
+Everything above begins with a file arriving. On the desktop and self-hosted
+targets that is an ordinary multipart form post and needs no rule. On the
+mobile shell it cannot be: the page is served through a custom scheme handler
+rather than a socket, and three separate things are true of that path.
+
+The engine hands the shell **no request body at all** for a `FormData` or
+`Blob` post — measured as zero bytes received, against fifteen of fifteen for
+the same request sent as a urlencoded string. No amount of native code fixes
+this, because there is nothing to read.
+
+Even were a body to arrive, the runtime has **no SAPI performing multipart
+parsing**, so `$_FILES` stays empty; a hand-built multipart body reaches the
+raw input stream intact and is never decoded.
+
+And the signed URL the upload posts to is minted by a generator whose scheme
+the request can never reproduce, so the signature fails before any of the above
+is reached.
+
+So the mobile shell carries its own transport: the file crosses as a
+base64-encoded string inside a JSON body, which the same measurement shows
+arriving whole, and is decoded server-side into the temporary file the import
+pipeline already expects. Being ASCII, it carries binary formats as safely as
+text ones.
+
+This is a **transport**, not a second import path. The file that reaches the
+parser, the preview it produces, the verdicts, the confirm boundary and every
+rule above are identical on every platform — which is the property that makes
+the divergence acceptable, and the line any future change to it must not
+cross.
+
 ## States
 
 An import run moves through:
@@ -149,6 +181,11 @@ An import run moves through:
 | **A2-R18** | A caller batching several confirms inside its own transaction MUST be able to suppress per-confirm dispatch and fire it once afterwards. |
 | **A2-R19** | Each source format MUST enforce its own upload size cap, and exceeding it MUST be reported with the cap named. |
 | **A2-R20** | An import run's state MUST be one of previewed, confirmed, or discarded; confirmed MUST be terminal. |
+| **A2-R21** | A file MUST reach the import pipeline on every supported platform, whatever transport that platform requires. |
+| **A2-R22** | Where a platform's runtime cannot carry a multipart upload, the file MUST cross by a transport that platform can carry, and MUST be reconstructed byte-for-byte before parsing. |
+| **A2-R23** | A platform-specific upload transport MUST hand the pipeline the same temporary file a multipart upload would, so that parsing, preview, verdicts and confirm are identical on every platform. |
+| **A2-R24** | An upload transport MUST NOT restrict which source formats a platform accepts; binary formats MUST cross as safely as text. |
+| **A2-R25** | A signed upload URL MUST validate against the address the runtime actually presents, not the one its URL generator writes. |
 
 ## Related
 
