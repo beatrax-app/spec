@@ -18,15 +18,16 @@ that follow.
 | **An observer on the network** | Mutually authenticated, forward-secret sessions ([E3](../10-functional/features/e-sync/e3-transport.md)) |
 | **A machine-in-the-middle during pairing** | The mandatory safety-number confirmation on both screens |
 | **A hostile relay operator** | The relay holds ciphertext and performs no cryptography, asserted by test |
-| **A hostile input file** | Typed parse failures, disabled external-entity resolution, size and line caps, archive-bomb and traversal guards |
+| **A hostile input file** | Typed parse failures, disabled external-entity resolution, size and line caps, archive-bomb and traversal guards, and pattern-length caps on user-supplied match expressions ([C9-R23](../10-functional/features/c-insight/c9-community-corpus.md#acceptance-criteria)) |
 | **A hostile aggregator response** | Host allow-list before credentials, HTTPS only, no redirects, private-address rejection |
 | **A tampered update** | Signature verification before anything is read from a manifest, hash verification before any install |
-| **Cross-user data access** | Structural user scoping, explicit filters in background contexts, and not-found on every cross-user surface |
+| **Cross-user data access** | Structural user scoping, explicit filters in background contexts, not-found on every cross-user surface, and a default scope that fails closed on an unauthenticated web request ([ARCH-R21](../20-architecture/README.md#the-arch-r-namespace)) |
 | **Credential leakage into logs** | Three-point scrubbing with cache invalidation on rotation ([F5](../10-functional/features/f-platform/f5-dev-console.md)) |
 | **Credential leakage into rendered pages** | A registry-backed architecture test on serialisable component properties |
+| **Script injected via rendered financial text** | A nonce-based Content-Security-Policy on authenticated responses, so bank- and email-derived text renders as data and cannot execute even if an output sink is missed |
 | **Injection through the developer console** | Registry allow-list, argument escaping, and controller validation — three independent guards |
 | **Spreadsheet formula injection in exports** | Escaping on every free-text cell |
-| **Enumeration of accounts** | Constant messages, not-found rather than forbidden, and audit rows that record no user on an unknown-username failure |
+| **Enumeration of accounts** | Constant messages, not-found rather than forbidden, audit rows that record no user on an unknown-username failure, and equal work on the account-not-found path so timing does not distinguish it ([F3-R34](../10-functional/features/f-platform/f3-auth-and-app-lock.md#acceptance-criteria)) |
 
 ### Explicitly out of scope
 
@@ -87,10 +88,11 @@ is stated rather than glossed.
 |----------|-------------|
 | Secrets in filesystem-permission-protected files, written atomically | Never in the database, never in a component property |
 | Constant-time comparison for every secret comparison | Including callback state and confirmation phrases |
-| Single-use, session-bound, age-limited callback state | On every authorisation flow |
+| Single-use, session-bound, age-limited callback state, with a PKCE S256 challenge bound to the flow | On every authorisation flow ([A4-R22](../10-functional/features/a-ingestion/a4-email-scanning.md#acceptance-criteria)) |
 | Host allow-lists before credentials are attached | On every outbound client, including provider-supplied pagination URLs |
 | Loopback-only binding | Every non-loopback request refused with not-found |
 | No-store cache directives on authenticated responses | So a browser does not write a transaction list to disk |
+| A nonce-based Content-Security-Policy on authenticated responses | Inline scripts carry a per-response nonce; untrusted financial text can never execute as script |
 | Escalating backoff with a hard cap | On the app-lock, with an alert at the cap |
 | Replay defence on biometric assertions | Non-increasing counters rejected |
 | Read-only enforced three ways on the query panel | Parse check, connection mode, and audit record |

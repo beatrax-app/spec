@@ -152,6 +152,8 @@ timeout so concurrent workers serialise rather than clobber.
 | **A4-R19** | The statement-ready nudge MUST read only sender and subject, and MUST match the sender domain by exact equality. |
 | **A4-R20** | Removing an inbox MUST cause its stored message blobs to be reaped. |
 | **A4-R21** | Cross-user reads and writes of inboxes or secrets MUST return not-found, never forbidden. |
+| **A4-R22** | The authorisation flow MUST send a PKCE challenge derived by S256 and bound to the flow, and MUST present the matching verifier at the token exchange. |
+| **A4-R23** | Disconnecting an inbox MUST delete its stored tokens and best-effort revoke them with the provider; a revoke failure MUST NOT block the local disconnect. |
 
 ## Related
 

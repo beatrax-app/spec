@@ -155,6 +155,7 @@ be advertised as device-verified until it has.
 | **E5-R23** | *(Open)* The on-device database MUST be excluded from platform cloud backup where the platform supports it. Not yet satisfied — no native bridge exists. |
 | **E5-R24** | *(Open)* Mobile local notification delivery MUST be verified on real hardware before being advertised. Not yet satisfied. |
 | **E5-R25** | *(Open)* Two-device pairing MUST be verified on real hardware before the import flow is advertised as device-verified. Not yet satisfied. |
+| **E5-R26** | A failure to persist the key to platform secure storage MUST fail closed: the key MUST NOT be written to the session store in cleartext as a fallback, and the failure is surfaced rather than hidden. |
 
 > `E5-R23` through `E5-R25` are the outstanding items that make this feature the
 > last one before v2.0.

@@ -131,6 +131,7 @@ client never listens — it dials out only ([E5](e5-mobile-peer.md)).
 | **E3-R18** | The number of catch-up frames one session may consume MUST be bounded. |
 | **E3-R19** | The desktop bundle MUST run the listener as a managed child process, and templates MUST ship for service-managed hosting. |
 | **E3-R20** | Arrival of key material while the application is locked MUST be logged and returned, never thrown. |
+| **E3-R21** | The relay's deliver endpoint MUST rate-limit per source and reject a burst, so no participant can flood a mailbox. |
 
 ## Related
 
