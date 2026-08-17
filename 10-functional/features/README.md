@@ -25,9 +25,13 @@ Requirements live **inside** their feature — there is no separate requirements
 tree. An ID is `<feature>-R<n>`: `A1-R3` is the third acceptance criterion of
 feature A1.
 
-IDs are **permanent**. A requirement that is removed is marked *Withdrawn* in
-place; its number is never reused. Tests, commits, and version manifests cite
-these IDs.
+A number is **never reused**. A requirement that no longer holds is deleted
+outright and its number left vacant — git carries what stood there, so a
+tombstone in the document would only repeat what history already records. A gap
+in the numbering is therefore expected, and means exactly one thing: look in
+git. What must not happen is a vacated number acquiring new text, because tests,
+commits, and version manifests cite these IDs and would silently resolve to a
+requirement they were never written against.
 
 ### Where the behaviour came from
 

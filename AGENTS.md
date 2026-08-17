@@ -19,8 +19,9 @@ Start at [README.md](README.md), then the section you need.
 
 **This repository is canonical.** When you change it:
 
-- New requirements get a **new, permanent identifier** — never renumber, never
-  reuse a withdrawn one. Mark withdrawn ones withdrawn in place.
+- New requirements get a **new identifier** — never renumber, and never reuse a
+  vacated number. A requirement that no longer holds is deleted outright,
+  leaving a gap; git is the record of what stood there.
 - A behavioural change is a new or edited requirement; a contested decision is a
   new **decision record** — immutable, superseded rather than edited.
 - Identifiers live in seven namespaces: feature (`B5-R13`), `GOV-R`, `ARCH-R`,
