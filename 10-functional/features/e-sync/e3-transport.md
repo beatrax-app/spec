@@ -72,11 +72,12 @@ implied.
 ### Key material over the transport
 
 Group-key epochs ([E4](e4-at-rest-encryption.md)) travel sealed to the
-recipient's public key — confidential, but not sender-authenticated by that
-mechanism alone. **Handling one is therefore only legal from a channel that has
-already authenticated the sender as a confirmed peer.** A blob arriving raw from
-the relay is not such a channel, and routing one into the handler would be a
-defect.
+recipient's public key — confidential, but not sender-authenticated by the seal
+alone. Each wrap therefore **also carries a detached signature by the sending
+device**, verified against that device's still-confirmed registry key before the
+epoch is read. Provenance rides with the wrap, not the channel, so a blob that
+arrives raw from the relay — or from a revoked peer — is refused unless its
+signature verifies.
 
 A failed unseal is checked strictly and **rejects** the message — logged, not
 thrown, and never appended.
@@ -102,7 +103,7 @@ client never listens — it dials out only ([E5](e5-mobile-peer.md)).
 | A frame larger than the cap | Rejected. |
 | A drain attempt with another device's credential | Refused. |
 | A blob nobody collects | Expires after the undelivered window. |
-| A sealed epoch arriving on an unauthenticated channel | Not handled — that path does not exist. |
+| A forged or relay-delivered epoch wrap | Adopted only if its signature verifies against the sender's confirmed device key; otherwise refused, logged, not thrown. |
 | A failed unseal | Strictly checked and rejected; logged, not thrown. |
 | No relay configured | Sync works on the local network only. |
 | The app locked when key material arrives | Logged and returned; never thrown. |
@@ -125,7 +126,7 @@ client never listens — it dials out only ([E5](e5-mobile-peer.md)).
 | **E3-R12** | The relay MUST be off by default, and its address MUST be a user setting rather than a constant. |
 | **E3-R13** | The relay credential MUST be stored with owner-only file permissions. |
 | **E3-R14** | The metadata the relay can observe MUST be documented; traffic-analysis resistance MUST NOT be claimed. |
-| **E3-R15** | Sealed key material MUST be handled only from a channel that has already authenticated the sender as a confirmed peer. |
+| **E3-R15** | A sealed epoch-key wrap MUST NOT be adopted unless it carries a detached signature by the sending device, verified against that device's still-confirmed registry key before the epoch is read — so a forged wrap is refused independent of the channel it arrived on. |
 | **E3-R16** | A failed unseal MUST be checked strictly, MUST reject the message, and MUST NOT throw. |
 | **E3-R17** | Catch-up MUST exchange from a watermark rather than re-sending the whole log. |
 | **E3-R18** | The number of catch-up frames one session may consume MUST be bounded. |

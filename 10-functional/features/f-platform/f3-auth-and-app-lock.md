@@ -169,6 +169,7 @@ needs the key that a locked session does not have.
 | **F3-R33** | *(Open)* Operating-system key custody MUST be wired on desktop and mobile. Registered but not yet wired. |
 | **F3-R34** | The authentication path MUST equalise work on the account-not-found branch, performing and discarding a hash of equivalent cost, so response time does not distinguish a missing username from a wrong password. |
 | **F3-R35** | A password change or recovery reset MUST invalidate the account's other sessions. |
+| **F3-R36** | The app-lock wraps of the data key MUST use a memory-hard KDF at MODERATE limits, and the PIN MUST be at least six digits, so a stolen database file resists offline brute-force of the wrap key; hardware-backed key custody (F3-R33) remains the outstanding defence. |
 
 ## Related
 
