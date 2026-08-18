@@ -35,6 +35,7 @@ that follow.
 |--------|-----|
 | **A compromised operating system** | A user-space application cannot defend against it. |
 | **A maliciously-paired device** | A paired device legitimately holds the group key. The safety-number confirmation is the defence, and it is the user's to perform. |
+| **A household member escalating to operator access** | Every user added to an instance is a co-equal, fully-trusted operator: any of them may enable developer mode (the SQL console and all-user visibility) and back up or restore the whole database. Partner accounts are a convenience, not a privilege boundary. Ordinary per-user data scoping ([ARCH-R6](../20-architecture/README.md#the-arch-r-namespace)) still applies to routine reads and writes. |
 | **Traffic analysis against a relay** | Sizes, timing, and recipient identifiers are observable. Documented, not defended. |
 | **An attacker with the database file, the time, and the motivation** | The plaintext set is too informative. See below. |
 
