@@ -52,6 +52,9 @@ of them invent a decision that was not already made.
 | [0018](0018-amounts-plaintext-at-rest.md) | Amount columns stay plaintext under at-rest encryption | Accepted | New |
 | [0019](0019-asymmetric-release-publish.md) | Stable tags publish as drafts; release candidates publish immediately | Accepted | New |
 | [0020](0020-open-banking-byo-key-ais-only.md) | Open banking is bring-your-own-key, AIS-only, and off by default | Accepted | New |
+| [0021](0021-reusable-workflow-version-tags.md) | First-party reusable workflows ride a moving major-version tag | Accepted | New |
+| [0022](0022-sqlite-only-schema.md) | The schema is SQLite-only, self-hosting included | Accepted | New |
+| [0023](0023-comment-ceiling-no-floor-earned-links.md) | Comment blocks have a ceiling and no floor; documentation links are earned | Accepted | New |
 
 > **Not here:** the spec's own governance rules. Those are not architectural —
 > no component's design depends on them. They live in
