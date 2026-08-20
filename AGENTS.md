@@ -57,7 +57,7 @@ documentation build.
 ## Layout
 
 ```text
-00-overview/     vision, glossary, roadmap, 20 decision records
+00-overview/     vision, glossary, roadmap, 23 decision records
 10-functional/   52 features across 7 areas, 7 journeys — WHAT and WHY
 20-architecture/ system context, components, data flow, data model,
                  platform matrix, 4 contracts

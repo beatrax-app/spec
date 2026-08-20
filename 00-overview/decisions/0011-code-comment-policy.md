@@ -1,7 +1,16 @@
 # ADR-0011: Code comment policy — readable code, architecture in documentation
 
-**Status:** Accepted
+**Status:** Accepted; the M1 floor and the per-class link superseded by [ADR-0023](0023-comment-ceiling-no-floor-earned-links.md)
 **Date:** 2026-07-21
+
+> **Two parts of this record no longer hold.** An inline comment block has a
+> ceiling and no floor — one line is valid where one line is what the thought is
+> worth — and a documentation link is written where it is worth following rather
+> than on every class
+> ([ADR-0023](0023-comment-ceiling-no-floor-earned-links.md)). Everything else
+> below stands: the four-line cap, no informative block comments, tag-only
+> docblocks, no deferral or provenance tokens, every link resolving, and the
+> judgment rules. That is the reason this record is still load-bearing.
 
 ## Context
 
