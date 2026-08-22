@@ -87,4 +87,4 @@ be challenged.
 - Commits carry **no** AI or co-author attribution trailers.
 - Propose before writing; wait for approval before committing.
 - Maintained by NightWorks.io · community on
-  [Discord](https://discord.gg/FYuV9CbTHR).
+  [Discord](https://discord.nightworks.io).

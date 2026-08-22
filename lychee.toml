@@ -4,9 +4,9 @@ exclude = [
   # Product-repo-local documentation paths. They resolve inside beatrax-app/beatrax,
   # not inside this repo.
   "\\.docs/",
-  # Discord rejects unauthenticated invite HEAD requests; the invite is verified
-  # by hand, not by CI.
-  "^https://discord\\.gg/",
+  # The community invite. It redirects to Discord, which rejects unauthenticated
+  # invite HEAD requests; the invite is verified by hand, not by CI.
+  "^https://discord\\.nightworks\\.io",
 ]
 exclude_loopback = true
 max_retries = 2

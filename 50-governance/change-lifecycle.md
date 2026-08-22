@@ -46,7 +46,7 @@ Straight through.
 
 ## Discussion first, for anything large
 
-Open a discussion, or ask in [the Discord](https://discord.gg/FYuV9CbTHR), before
+Open a discussion, or ask in [the Discord](https://discord.nightworks.io), before
 building something substantial. Agreeing on shape early is cheaper than reworking
 a finished pull request — for the contributor most of all.
 

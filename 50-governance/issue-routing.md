@@ -10,7 +10,7 @@ Where things go, and what happens to them.
 |------|-------|
 | Behaviour contradicts the specification | An issue on the repository it affects |
 | A behaviour the specification does not cover | A discussion, then a specification pull request |
-| A question | [The Discord](https://discord.gg/FYuV9CbTHR), or a discussion |
+| A question | [The Discord](https://discord.nightworks.io), or a discussion |
 | A proposal | A discussion first |
 | A security vulnerability | **Private vulnerability reporting only** — never a public issue |
 | A corpus suggestion | The in-product flow ([C9](../10-functional/features/c-insight/c9-community-corpus.md)) |

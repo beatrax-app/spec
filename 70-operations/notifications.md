@@ -10,7 +10,7 @@ What gets announced, where, and the rules the announcer obeys.
 
 ## Where
 
-The project's chat is **[Discord](https://discord.gg/FYuV9CbTHR)**.
+The project's chat is **[Discord](https://discord.nightworks.io)**.
 
 | Announcement | Audience |
 |--------------|----------|

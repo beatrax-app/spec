@@ -54,7 +54,7 @@ from.
 | Kind | Where |
 |------|-------|
 | A bug, or a behaviour that contradicts the specification | An issue on the repository it affects |
-| A question about how something works | [The Discord](https://discord.gg/FYuV9CbTHR), or a discussion |
+| A question about how something works | [The Discord](https://discord.nightworks.io), or a discussion |
 | A proposal that changes behaviour | A discussion first, then a specification pull request |
 | A security report | Private vulnerability reporting, never a public issue ([40-quality/security.md](../40-quality/security.md)) |
 
