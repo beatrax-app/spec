@@ -51,7 +51,7 @@ and the runbooks.
 
 ## Where announcements go
 
-The project's chat is **[Discord](https://discord.gg/FYuV9CbTHR)**. Build and
+The project's chat is **[Discord](https://discord.nightworks.io)**. Build and
 release notifications, triage notices, and awaiting-review flags post there;
 what goes where is [notifications.md](notifications.md).
 

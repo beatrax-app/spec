@@ -10,7 +10,7 @@ Contributions are welcome. This page is what to actually do.
 else follows from, and it will change how you open your first pull request.
 
 **Ask first if it is large.** Open a discussion, or ask in
-[the Discord](https://discord.gg/FYuV9CbTHR). Agreeing on shape early is cheaper
+[the Discord](https://discord.nightworks.io). Agreeing on shape early is cheaper
 than reworking a finished pull request.
 
 ## Setting up

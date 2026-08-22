@@ -146,7 +146,7 @@ See [50-governance](50-governance/).
 | Kind | Where |
 |------|-------|
 | A bug, or behaviour that contradicts this spec | An issue on the repository it affects |
-| A question | [Discord](https://discord.gg/FYuV9CbTHR), or a discussion |
+| A question | [Discord](https://discord.nightworks.io), or a discussion |
 | A proposal | A discussion first, then a spec pull request |
 | A security report | Private vulnerability reporting — never a public issue |
 
@@ -164,5 +164,5 @@ The marks are neither ([60-brand/trademark.md](60-brand/trademark.md)).
 <p align="center">
   <a href="https://nightworks.io">NightWorks.io</a>
   &nbsp;&middot;&nbsp;
-  <a href="https://discord.gg/FYuV9CbTHR">Discord</a>
+  <a href="https://discord.nightworks.io">Discord</a>
 </p>
