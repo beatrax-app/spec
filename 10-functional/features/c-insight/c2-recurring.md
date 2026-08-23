@@ -37,7 +37,19 @@ excluded from the refined median and counted as **missed occurrences** rather
 than distorting the cadence. A series whose intervals vary widely is flagged
 low-confidence.
 
-The next expected date is derived from the inferred cadence.
+The next expected date is one step of the inferred cadence past the most recent
+occurrence, taken in that cadence's own unit — a month for a monthly series, not
+a median number of days. A median in days drifts: a bill seen on 15 January and
+15 February has a 31-day median, which projects 18 March, then 14 April, and a
+little further off every period. Stepping the cadence also leaves a skipped
+payment behind the series rather than inside it, so a subscription that missed a
+month is expected one month out and not three.
+
+The day of the month comes off the series' **first** observed occurrence,
+clamped to the target month. A stepped date cannot supply it: once February
+clamps a bill charged on the 31st to the 28th, every later step inherits the
+28th. Reading the billing day off the first occurrence lands February on the
+28th or the 29th and returns March to the 31st.
 
 The five outcomes — weekly, monthly, quarterly, yearly, irregular — are the
 whole vocabulary. Nothing else is a cadence a series can hold, and a value
@@ -105,6 +117,7 @@ append-only audit trail. Transitions take a row lock with a busy timeout.
 | A snooze that expires | There is no background revival for recurring suggestions; the user sees it when they next open the queue. |
 | An outlier occurrence | Gated by the series's variance tolerance. |
 | Two detectors producing the same cluster | The key is direction-aware, so they cannot collide. |
+| A series billed on the 31st, stepped through February | February takes the 28th or the 29th; March returns to the 31st. |
 | An irregular-cadence series | Detected, but not eligible for drift comparison and excluded from the calendar. |
 | The scheduled run with no decryption key | The identifier-dependent detector is skipped with a warning. |
 
@@ -132,6 +145,7 @@ append-only audit trail. Transitions take a row lock with a busy timeout.
 | **C2-R18** | External reads of series occurrences MUST go through the feature's own public query surface. |
 | **C2-R19** | Cross-user reads and writes MUST return not-found. |
 | **C2-R20** | The series cadence vocabulary MUST be closed to weekly, monthly, quarterly, yearly, and irregular; it MUST be expressed as one named type rather than as free strings, and the stored column MUST be constrained to that set. |
+| **C2-R21** | The next expected date MUST be one step of the inferred cadence past the most recent occurrence, taken in that cadence's own calendar unit rather than as a number of days. For a monthly, quarterly, or yearly series the day of the month MUST be read off the series' first observed occurrence and clamped to the target month. An irregular series MUST have no next expected date. |
 
 ## Related
 
