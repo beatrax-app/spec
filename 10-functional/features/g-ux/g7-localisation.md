@@ -89,6 +89,25 @@ something broken — which is exactly the honesty [G5-R14](g5-plain-language.md)
 requires: an untranslated string reads as English, not as a translated interface
 that silently isn't.
 
+### English is what a locale is measured against
+
+A translation is judged against the **source locale**, and not only key by key.
+Where English names two screens apart, the translation has to keep them apart
+too: two screens carrying one title leaves the reader nothing to tell them by,
+and no amount of per-key completeness will show it, because both keys exist and
+both are translated. What is wrong is a relationship *between* two values, and
+English is the only thing that fixes it.
+
+Some languages have one word where English has two — a plural that equals its
+singular, a noun that covers both the list and the record it lists. That is a
+fact about the language, not a licence to merge the screens: the title carries a
+distinguishing word instead, the way it already does in the navigation the
+reader arrived through.
+
+This is the counterpart to the parity discipline above. Parity asks whether a
+locale said *something* for every key; this asks whether what it said still
+distinguishes what English distinguished.
+
 ### The active language is announced
 
 The active locale is reflected in the document's language attribute, so a screen
@@ -128,6 +147,7 @@ transition back short of clearing the preference.
 | A key missing in the active locale | The English value is shown. |
 | A key missing in English as well | A genuine defect — English coverage is the source locale's contract, not a fallback that may itself have holes. |
 | Language changed mid-session | Applies immediately, without a reload that discards the user's place. |
+| A locale whose singular equals its plural | The two screens still read differently; the title carries a distinguishing word rather than repeating the shared one. |
 
 ## Acceptance criteria
 
@@ -147,6 +167,7 @@ transition back short of clearing the preference.
 | **G7-R12** | *(Open)* A key absent in the active locale MUST fall back to its English value, never to a raw key, a blank, or a placeholder. |
 | **G7-R13** | *(Open)* The active locale MUST be reflected in the document's language attribute for assistive technology. |
 | **G7-R14** | *(Open)* Language detection and selection MUST NOT add an outbound call or send the user's locale off the machine. |
+| **G7-R15** | *(Open)* A locale MUST NOT give one page title to two screens English titles differently; where the language has a single word for both, the title MUST carry a distinguishing word. |
 
 ## Related
 
