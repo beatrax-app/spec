@@ -28,10 +28,9 @@ number as if it were current.
 
 ### How a projection is built
 
-1. **Anchor.** The starting balance, resolved per account kind: from the most
-   recent statement's closing balance for a bank account, from the most recent
-   card statement for a card, from the user-entered opening balance otherwise.
-   An account with no anchor at all sums its history from the beginning.
+1. **Anchor.** Where the account stands today. For every kind but the ICS card
+   that is the figure every other balance surface already reads; a card anchors
+   on its statement instead. Both are set out below.
 2. **Project.** Each approved recurring series contributes at its expected dates.
    A series with modest variance contributes an envelope around its typical
    amount. A series with high variance **and** enough history contributes
@@ -61,6 +60,49 @@ The projection is deterministic: the same inputs produce the same curve, jitter
 included, because the jitter is derived from a stable per-series seed rather
 than randomness.
 
+### The anchor is today's position, not a statement
+
+A statement summary records what a statement said. It is not a position, and it
+anchors nothing. Anchoring on one opened a projection on a closing balance that
+had not moved since April — four months of imported rows simply absent — while
+the dashboard, net worth, and reconciliation read the same account correctly off
+the same rows.
+
+So every account kind but one anchors on the figure those surfaces already
+produce: the account's own baseline, plus every transaction posted up to and
+including today. One reader serves all of them, so they cannot drift apart, and
+a transaction dated ahead of today is not counted as money in hand.
+
+The exception is the **ICS card**, where summing history with nothing to anchor
+on would double-count the billing events the projection is about to re-emit
+forward. A card takes the amount owed at its most recent statement's close, plus
+what has been charged to it since that statement closed, bounded at today —
+without that second part the curve opens on a balance the card has already spent
+past. Where a card has no statement it takes the same balance as everything else
+if the user has entered one, and zero if they have not.
+
+Every path therefore resolves to today, and the anchor carries no as-of date. It
+carried one once, written on every path and read by nothing, which is how a
+figure four months old came to be labelled as the position now.
+
+### Occurrences are computed by index, not by walking
+
+The k-th occurrence of a series is the anchor plus k intervals, computed in one
+step, rather than a cursor stepped forward one interval at a time. The calendar
+has always worked this way ([C6](c6-calendar.md)); the forecast did not.
+
+Chained stepping loses an end-of-month anchor for good. The step itself is
+right — 31 January plus a month is 28 February, not 3 March — but the next step
+is taken from the date February has just clamped, so 28 March follows and every
+month after it inherits the 28th. A rent charged on the 31st was projected three
+days early for the rest of the horizon, and three days early into every
+shortfall window. A quarterly series anchored on 31 December reached 30 December
+a year later, and a yearly one anchored on 29 February never saw a 29th again.
+
+The calendar and the forecast read the same series and disagreed about the date,
+with nothing on either surface to say which was lying. The cadence step is one
+piece of arithmetic, and both take their dates from it.
+
 ### Scenarios never touch the ledger
 
 A scenario is a named set of mutations applied **in memory** during projection.
@@ -89,8 +131,10 @@ scenario.
 
 ### Net worth
 
-Assets minus liabilities per account, using the same anchor resolution, in the
-user's base currency. Accounts with no available rate are excluded and named
+Assets minus liabilities per account, in the user's base currency, read as the
+position today from the same balance reader the anchor uses — not from the
+anchor itself, which for a card is statement-derived and which answers where a
+projection starts rather than what the account holds. Accounts with no available rate are excluded and named
 ([B10](../b-ledger/b10-multi-currency.md)).
 
 ### Opening-balance overrides warn, they do not block
@@ -114,7 +158,10 @@ single sanctioned writer.
 | A worker crash mid-run | The run moves to failed; the next dispatch starts fresh. |
 | Re-projection while a run is in progress | A new run is dispatched and replaces the result once complete. |
 | A cross-currency contribution with no recorded rate | Raises rather than silently mixing currencies. |
-| A card account with no statement and no entered balance | Anchored at zero, avoiding double-counted history. |
+| A card account with no statement and no user-entered balance | Anchored at zero, avoiding double-counted history. |
+| A card charged since its last statement closed | Those charges are added to the anchor, bounded at today. |
+| A transaction dated ahead of today | Outside the anchor; the anchor is the position today, not the one the future implies. |
+| An end-of-month or leap-day series anchor | Preserved; every occurrence is computed from the anchor, never from the one before it. |
 | An override far from the statement anchor | Warned, not blocked. |
 | A completed run with no series | A flat curve at the anchor for the whole horizon. |
 
@@ -125,7 +172,7 @@ single sanctioned writer.
 | **C5-R1** | Horizons of thirty, sixty, and ninety days MUST be supported. |
 | **C5-R2** | Projection MUST run as a background job; it MUST NOT be computed inside a page request. |
 | **C5-R3** | A run in progress MUST be shown as computing rather than displaying a stale figure as current. |
-| **C5-R4** | The starting anchor MUST be resolved per account kind, falling back to summing history where no anchor exists. |
+| **C5-R4** | The starting anchor MUST be the account's position as at today, and it MUST NOT be taken from a statement summary. For every account kind but the ICS card it MUST be the same figure the balance, net-worth, and reconciliation surfaces read — the account's baseline plus every transaction posted up to today. An ICS card MUST anchor on the amount owed at its most recent statement's close plus what has been charged to it since, and, where it has no statement but the user has confirmed a balance, on that same figure. |
 | **C5-R5** | A card account with neither a statement nor an entered opening balance MUST anchor at zero. |
 | **C5-R6** | A high-variance series with sufficient history MUST contribute percentile bands; others MUST contribute an envelope. |
 | **C5-R7** | Percentiles MUST use linear interpolation between closest ranks. |
@@ -149,6 +196,7 @@ single sanctioned writer.
 | **C5-R25** | An opening-balance override diverging materially from the anchor MUST warn and MUST NOT block. |
 | **C5-R26** | Net worth MUST exclude accounts with no available rate and MUST name them. |
 | **C5-R27** | Cross-user reads and writes MUST return not-found. |
+| **C5-R28** | Projected occurrences MUST be computed by index from the series anchor — anchor plus k intervals — never by chained stepping, the rule the calendar is already held to by [C6-R3](c6-calendar.md). The cadence step MUST have one implementation shared by both surfaces, so they cannot disagree about a date. |
 
 ## Related
 
