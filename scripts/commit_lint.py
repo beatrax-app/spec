@@ -8,7 +8,11 @@ _REF = re.compile(r"\A[0-9A-Za-z._/-]{1,255}\Z")
 if not (_REF.match(base) and _REF.match(head)):
     sys.exit("commit_lint: base and head must be valid git refs")
 TYPES = "feat|fix|docs|refactor|test|chore|ci|perf|build|style|revert"
-subject_re = re.compile(rf"^(?:{TYPES})(?:\([a-z0-9.\-]+\))?!?: .+")
+# A change that lands in two modules at once names both. A comma-separated list
+# rather than a bare comma in the charset, so "a,b" passes and "a,", ",a" and
+# "a,,b" still do not.
+SCOPE = r"[a-z0-9.\-]+(?:,[a-z0-9.\-]+)*"
+subject_re = re.compile(rf"^(?:{TYPES})(?:\({SCOPE}\))?!?: .+")
 out = subprocess.run(["git", "log", "--format=%H%x00%s", f"{base}..{head}"],
                      capture_output=True, text=True, check=True).stdout
 bad = []
