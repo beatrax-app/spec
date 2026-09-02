@@ -101,6 +101,8 @@ from the paired pair above:
 
 ## Related
 
+- [ADR-0026](0026-an-id-two-devices-cannot-both-compute-is-minted.md) — the
+  prevention this decision named as the next piece of work
 - [ADR-0024](0024-peer-row-id-aliases.md) — the alias decision this refines, and
   the sentence it corrects
 - [ADR-0014](0014-op-log-crdt-merge-engine.md) — the op log that carries a local
