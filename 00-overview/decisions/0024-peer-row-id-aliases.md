@@ -114,6 +114,9 @@ mutable and is not part of the sync contract.
 
 ## Related
 
+- [ADR-0025](0025-primary-key-collisions-are-quarantined.md) — refines the
+  primary-key half of the decision above, which assumed that ids agreeing meant
+  rows agreeing
 - [ADR-0014](0014-op-log-crdt-merge-engine.md) — the op log whose identity model
   this completes
 - [ADR-0015](0015-multi-master-p2p-sync.md) — no central id allocator, which is
