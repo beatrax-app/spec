@@ -105,10 +105,13 @@ A pairing moves `pending` → `awaiting_confirm` → `confirmed`, falling to
 | **E2-R15** | The pre-confirmation handshake MUST be able to propagate over the relay for devices that cannot see each other. |
 | **E2-R16** | A single state machine MUST own pairing state, with pending, awaiting-confirmation, confirmed, and expired states. |
 | **E2-R17** | The trust boundary — that a paired device is trusted, and revocation does not retroactively protect — MUST be stated to the user in plain language. |
+| **E2-R18** | A confirmed device MAY relay another confirmed device's public identity. A relayed identity MUST be stored unconfirmed, MUST name the device that vouched for it, and MUST verify nothing until the reader confirms it. |
+| **E2-R19** | A relayed identity, once confirmed, MUST grant signature verification only — never transport authentication, epoch delivery, or any other capability of a paired device. |
 
 ## Related
 
 - [ADR-0015](../../../00-overview/decisions/0015-multi-master-p2p-sync.md) — the topology and threat model
+- [ADR-0027](../../../00-overview/decisions/0027-a-confirmed-device-may-introduce-another.md) — why E2-R18 and E2-R19 exist, and the boundary they rest on
 - [E1 Change capture](e1-change-capture.md) — what the keys sign
 - [E3 Transport](e3-transport.md) — what the keys authenticate
 - [E4 At-rest encryption](e4-at-rest-encryption.md) — revocation and rekey
