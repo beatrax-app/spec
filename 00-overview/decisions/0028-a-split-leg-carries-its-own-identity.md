@@ -83,6 +83,8 @@ about how a composite value merges, and this ADR does not make it.
 
 ## Related
 
+- [ADR-0029](0029-the-applier-enforces-the-writers-sum-invariant.md) — closes the
+  doubling recorded above, by giving the applier the writer's own sum invariant
 - [ADR-0026](0026-an-id-two-devices-cannot-both-compute-is-minted.md) — the
   decision that left this table out, and the reason it did
 - [ADR-0025](0025-primary-key-collisions-are-quarantined.md) — what happens
