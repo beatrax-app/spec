@@ -161,9 +161,6 @@ def audit(base: str) -> int:
 
 def pending(base_sha: str, head_sha: str) -> int:
     r = Report()
-    if not all(SHA.match(v) for v in (base_sha, head_sha)):
-        r.say("no pull-request commit range; nothing to check")
-        return r.flush()
     shared = sorted((reusable(base_sha) | reusable(head_sha)) &
                     set(changed(base_sha, head_sha, WORKFLOWS)))
     if shared:
@@ -175,20 +172,33 @@ def pending(base_sha: str, head_sha: str) -> int:
     return r.flush()
 
 
+def accept(value: str, shape: re.Pattern[str]) -> str | None:
+    """What reaches git is the matched text, not the string the caller typed.
+
+    A value of the wrong shape yields None and goes no further; nothing else in
+    this file ever sees an argument straight off the command line."""
+    m = shape.match(value)
+    return m.group(0) if m else None
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--base", default="origin/main")
     ap.add_argument("--pending", nargs=2, metavar=("BASE", "HEAD"))
     args = ap.parse_args()
-    # Every value below reaches git as an argv element. Nothing shaped unlike a
-    # ref gets that far, whatever the caller passed.
+
     if args.pending:
-        base, head = args.pending
-        return pending(base if SHA.match(base) else "", head if SHA.match(head) else "")
-    if not REF.match(args.base):
-        sys.exit("tag_drift: --base must be a valid git ref")
-    base = args.base if git_ok("rev-parse", "--verify", args.base) else "main"
-    return audit(base)
+        base, head = (accept(v, SHA) for v in args.pending)
+        if base is None or head is None:
+            print("no pull-request commit range; nothing to check")
+            return 0
+        return pending(base, head)
+
+    base = accept(args.base, REF)
+    if base is None:
+        print("tag_drift: --base must be a valid git ref")
+        return 2
+    return audit(base if git_ok("rev-parse", "--verify", base) else "main")
 
 
 if __name__ == "__main__":
