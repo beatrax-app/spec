@@ -104,9 +104,17 @@ the last import.
 
 | Comparison | Outcome |
 |------------|---------|
-| New equals current | Skip — nothing changed. |
-| New differs, current equals baseline | Apply — the source changed and Beatrax has not. |
-| New differs, current differs from baseline | Conflict — both changed; ask the user. |
+| New equals baseline | Skip — the source has not changed since the last import. |
+| New differs from baseline, current equals baseline | Apply — the source changed and Beatrax has not. |
+| New differs from baseline, current differs from baseline | Conflict — both changed; ask the user. |
+
+Both questions are asked **against the baseline**, and the first one has to be.
+Skipping on "new equals current" instead would hide a genuine source change
+whenever the user had already made the same edit by hand: the two values match,
+so nothing is recorded and the baseline never advances past what the *previous*
+import saw. Beatrax and the source now agree while the baseline disagrees with
+both — and the next import, comparing against that stale baseline, reports a
+conflict neither side ever had.
 
 Money is compared as money, never as a formatted string.
 
@@ -152,7 +160,7 @@ Abandoned runs are swept after an age threshold.
 
 | Situation | Behaviour |
 |-----------|-----------|
-| A byte-identical re-run | No writes at all. |
+| A byte-identical re-run | Nothing touches a domain table; a run row and its staging copy are still written. |
 | A renamed entity that has a stable identifier | Surfaces as a changed field, not a new record. |
 | A fingerprint collision when applying an amount change | The change is refused and reported rather than throwing. |
 | An entry the importer cannot map to a Beatrax concept | Recorded in an unmapped-items summary with its reason; in the preview when the parser found it, on the results screen when promotion did. The run continues. |
@@ -194,7 +202,7 @@ is missing: plain language on screen, full diagnostics in the local log
 | **A8-R11** | The source-map MUST record one row per promoted transaction, not one per split leg. |
 | **A8-R12** | Natural-key fallback MUST apply only among entities lacking a stable source identifier. |
 | **A8-R13** | Re-importing a newer export MUST perform a three-way merge against the baseline recorded at the previous import. |
-| **A8-R14** | The merge MUST skip when new equals current, apply when current equals baseline, and raise a conflict otherwise. |
+| **A8-R14** | The merge MUST skip when new equals baseline, apply when current equals baseline, and raise a conflict otherwise. |
 | **A8-R15** | Monetary comparison in the merge MUST compare money values, never formatted strings. |
 | **A8-R16** | A budget assignment's imported amount MUST be the assigned amount, never a carried-forward balance. |
 | **A8-R17** | Migrated accounts MUST receive a deterministic synthetic identifier derived from the source identifier. |
