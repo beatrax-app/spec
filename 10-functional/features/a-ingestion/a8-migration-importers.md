@@ -44,6 +44,35 @@ exactly the unbounded transaction the import path exists to avoid.
 Every promotion step writes through the same public writers the rest of the
 product uses. There is no privileged path into the ledger.
 
+### Cannot map and cannot parse are different failures
+
+The preview's unmapped-items summary is about **mapping**, and only mapping. An
+unmapped item is a source concept with no Beatrax counterpart, or one Beatrax
+declines to store as it stands: a saved report, a recurring schedule, a goal with
+no target date, a split whose legs do not add up to their transaction. In each
+case the file was read and the figure understood; there is simply nowhere to put
+it. The run continues, every item is listed with its reason, and the user sees
+them all before promoting anything.
+
+A value that **cannot be parsed** is a different failure, and answering it the
+same way is how a wrong ledger arrives looking right. A cell whose value cannot
+be read refuses the whole file, before a single row is staged.
+
+The reasoning is not squeamishness about one row. A migration reads one product's
+entire history against a format assumption made once, so a cell that will not
+read is evidence about its **column**, not about its row: if one amount in a
+column is not an amount, the column is not the column it was taken for and every
+figure in it is suspect. Continuing imports a plausible-looking ledger that is
+wrong throughout. Substituting a default is worse — an amount folded to zero puts
+a transaction at 0,00 in the ledger with nothing on screen to tell it from a real
+one.
+
+This is deliberately the opposite of the import wizard, where a row that fails
+processing becomes an error row and the import carries on
+([A2-R4](a2-import-wizard.md)). The two are not in conflict. A wizard error row
+carries a verdict the user is shown ([A2-R3](a2-import-wizard.md)); a misread
+amount carries no verdict at all, because it still looks like a figure.
+
 ### Re-running the same export is a true no-op
 
 A source-map records, per user, which source entity became which Beatrax record.
@@ -117,10 +146,27 @@ Abandoned runs are swept after an age threshold.
 | A byte-identical re-run | No writes at all. |
 | A renamed entity that has a stable identifier | Surfaces as a changed field, not a new record. |
 | A fingerprint collision when applying an amount change | The change is refused and reported rather than throwing. |
-| An entry the importer cannot map | Recorded in an unmapped-items summary shown in the preview. |
+| An entry the importer cannot map to a Beatrax concept | Recorded in an unmapped-items summary shown in the preview; the run continues. |
+| A cell whose value cannot be parsed | The whole file is refused before any row is staged; no default is substituted. |
 | An archive that is a zip bomb or contains traversal paths | Rejected before extraction. |
 | A run abandoned mid-preview | Swept after the age threshold, scoped to its owner. |
 | A conflict in a field with no reconciliation support | Not surfaced — the field is simply not reconciled on re-run. |
+
+### Known gap — the refusal names the cell to nobody
+
+The parser composes its refusal around the file, the column and the offending
+value. Neither the reader nor the log is told any of it. The screen shows one
+fixed line for every unreadable export — deliberately, so that a raw exception
+message is never handed to a user — and the log records the exception's class
+and nothing else, because the context helper that writes it strips the message
+wholesale. That default is sound elsewhere in the product, where an exception
+message can carry row data.
+
+The effect here is that the reader is told the file could not be read and given
+nothing to act on, while the diagnostic the parser took the trouble to compose is
+discarded between the two. The sibling pipeline already states the rule this one
+is missing: plain language on screen, full diagnostics in the local log
+([A2-R6](a2-import-wizard.md)).
 
 ## Acceptance criteria
 
@@ -151,6 +197,8 @@ Abandoned runs are swept after an age threshold.
 | **A8-R23** | A confirmed run MUST NOT be discardable, and a discarded run MUST NOT be confirmable. |
 | **A8-R24** | Abandoned runs MUST be swept after an age threshold, scoped to their owner. |
 | **A8-R25** | Fields without reconciliation support MUST be documented as unreconciled rather than silently appearing to reconcile. |
+| **A8-R26** | A value that cannot be parsed MUST refuse the whole file before any row is staged, and MUST NOT be substituted with a default or recorded as an unmapped item. |
+| **A8-R27** | *(Open)* A refusal MUST record the file, the column and the value it could not read in the local log. Not yet satisfied — see [Known gap](#known-gap--the-refusal-names-the-cell-to-nobody). |
 
 ## Related
 
