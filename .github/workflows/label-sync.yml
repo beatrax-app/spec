@@ -1,7 +1,7 @@
 # Reusable label sync. Upserts the canonical label set (70-operations/labels.yml
 # in the spec repo) into the calling repo, so every repo carries the same labels
 # without hand-editing. Additive: it never deletes labels it doesn't know about.
-# OPS-R12.
+# OPS-R6.
 name: label-sync
 
 on:

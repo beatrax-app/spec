@@ -1,5 +1,5 @@
 # Reusable gentle stale policy. Repos call it; the spec repo self-schedules.
-# Generous grace, easy reopen (OPS-R15).
+# Generous grace, easy reopen (OPS-R25).
 name: stale
 on:
   workflow_call:

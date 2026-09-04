@@ -48,6 +48,7 @@ and the runbooks.
 | **OPS-R24** | Untrusted event data MUST reach an announcement through the environment, never by interpolation into a shell. |
 | **OPS-R25** | A stale policy MUST be generous and MUST exempt anything blocked, security-relevant, or marked as wanting help. |
 | **OPS-R26** | Backups MUST be verified, retained on a bounded policy, and exempt a pre-restore snapshot from pruning. |
+| **OPS-R27** | A moving major-version tag MUST be checked against the default branch; a shared workflow that has changed without the tag moving MUST fail a check naming the tag, both commits, and the differing files. |
 
 ## Where announcements go
 

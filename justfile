@@ -39,3 +39,7 @@ check-gate text:
 # Check whether a version manifest is stageable, e.g. `just stageable 2.0.0`.
 stageable version:
     python3 scripts/check_stageable.py {{version}}
+
+# Is the moving major tag still pointing at what consumers should be running?
+tag-drift:
+    python3 scripts/tag_drift.py

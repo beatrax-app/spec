@@ -70,6 +70,23 @@ git push --force origin v1
 
 Forgetting this means the fix reaches nobody, which is the one real cost of this
 scheme ([ADR-0021](../00-overview/decisions/0021-reusable-workflow-version-tags.md#negative)).
+It is no longer left to memory: `tag-drift` fails on `main`, and daily, when a
+shared workflow differs between `v1` and the default branch, and names the tag,
+both commits and the differing files ([OPS-R27](../70-operations/README.md#the-ops-r-namespace)).
+A pull request that touches a shared workflow is told at review time that a move
+will be owed. Run it by hand with `just tag-drift`.
+
+### What the tag does not cover
+
+The tag governs the **workflow definition**. It does not govern what a workflow
+reads while it runs, and several read this repository's default branch:
+`spec-check` and `dco` and `commitlint` and `spec-references` check it out for the
+scripts and the corpus, and `label-sync` fetches the label registry. Those changes
+reach every consumer on merge, tag or no tag. That the corpus works this way is
+deliberate — a requirement merged an hour ago has to be citable. That the scripts
+do is not, and is
+[an open question](../90-appendix/open-questions.md) rather than a settled
+position ([ADR-0030](../00-overview/decisions/0030-the-tag-governs-the-workflow-not-what-it-reads.md)).
 
 ## How the governance gate works
 
@@ -121,4 +138,5 @@ third-party dependencies and the workflows are small.
 
 - [canonical-spec.md](canonical-spec.md) · [dco.md](dco.md)
 - [40-quality/ci-cd.md](../40-quality/ci-cd.md) · [ADR-0012](../00-overview/decisions/0012-action-pinning.md)
+- [ADR-0021](../00-overview/decisions/0021-reusable-workflow-version-tags.md) · [ADR-0030](../00-overview/decisions/0030-the-tag-governs-the-workflow-not-what-it-reads.md) — the tag, and what it governs
 - [30-repos/spec.md](../30-repos/spec.md) · [70-operations/maintainers.md](../70-operations/maintainers.md)
