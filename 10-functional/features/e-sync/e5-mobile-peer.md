@@ -152,13 +152,14 @@ be advertised as device-verified until it has.
 | **E5-R20** | Syncing on mobile data MUST be the default, with an explicit user opt-out. |
 | **E5-R21** | Background pull MUST fan out over the device's users and MUST skip cleanly when no identity is unlocked. |
 | **E5-R22** | The client MUST show its own sync status and offer a manual sync action. |
-| **E5-R23** | *(Open)* The on-device database MUST be excluded from platform cloud backup where the platform supports it. Not yet satisfied — no native bridge exists. |
-| **E5-R24** | *(Open)* Mobile local notification delivery MUST be verified on real hardware before being advertised. Not yet satisfied. |
+| **E5-R23** | The on-device database MUST be excluded from platform cloud backup where the platform supports it. |
+| **E5-R24** | Mobile local notification delivery MUST be verified on real hardware before being advertised. |
 | **E5-R25** | *(Open)* Two-device pairing MUST be verified on real hardware before the import flow is advertised as device-verified. Not yet satisfied. |
 | **E5-R26** | A failure to persist the key to platform secure storage MUST fail closed: the key MUST NOT be written to the session store in cleartext as a fallback, and the failure is surfaced rather than hidden. |
 
-> `E5-R23` through `E5-R25` are the outstanding items that make this feature the
-> last one before v2.0.
+> `E5-R25` is the one outstanding item that makes this feature the last one
+> before v2.0. `E5-R23` and `E5-R24` were verified on real hardware on
+> 2026-09-04 (iPhone 12 mini, iOS 26.5.2).
 
 ## Related
 

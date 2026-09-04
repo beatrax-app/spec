@@ -186,13 +186,13 @@ resumable initial sync, and shows sync status.
 **Outstanding:** the final plan — full surface-parity smoke test, the as-is
 invariant, and real-device UAT on iPhone and Android.
 
-Two human-only gates sit inside this:
+One human-only gate sits inside this: real two-device pairing UAT on hardware,
+which also gates advertising the "import from another device" flow as
+device-verified.
 
-- Real two-device pairing UAT on hardware, which also gates advertising the
-  "import from another device" flow as device-verified.
-- On-device proof that the mobile local-notification plugin fires an OS banner
-  (the plugin is installed and the adapter is wired; only the hardware check is
-  outstanding).
+The other two hardware checks were taken on 2026-09-04, on an iPhone 12 mini
+running iOS 26.5.2: the local-notification plugin fires a real OS banner, and
+the on-device database is excluded from iCloud backup.
 
 Feature: [E5](../10-functional/features/e-sync/e5-mobile-peer.md).
 
@@ -255,12 +255,6 @@ Phase 20 has a title and no plan. The open sub-questions:
 
 Nothing in the sources answers these. They must be answered before Phase 20 can
 be planned.
-
-### Is the mobile local-notification hardware check a v2.0 blocker?
-
-The plan is marked complete with its third task explicitly paused pending an
-on-device build. Whether v2.0 ships with mobile notifications advertised, or
-ships with them present-but-unadvertised, is a product call nobody has made.
 
 ### Does the codebase's own phase numbering carry into the spec?
 

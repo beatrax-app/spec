@@ -12,8 +12,9 @@
 # released tag is v1.3.0 (2026-06-14). See the roadmap's three buckets.
 #
 # OUTSTANDING at the time of writing:
-#   E5-R23, E5-R24, E5-R25  — the mobile peer's real-device acceptance and the
-#                             backup-exclusion bridge
+#   E5-R25                  — the mobile peer's real-device pairing acceptance.
+#                             E5-R23 and E5-R24 were verified on hardware on
+#                             2026-09-04 and are no longer outstanding.
 #   F8-R1 .. F8-R26         — app-store distribution, scoped in F8 and a goal of
 #                             this release. Several are already satisfied by
 #                             shipped work; the rest are the outstanding block.
