@@ -25,15 +25,6 @@ The last unscoped piece of v2.0. Sub-questions, none answered by any source:
 [20-architecture/platform-matrix.md](../20-architecture/platform-matrix.md) ·
 [license-rationale.md](license-rationale.md#the-open-question)*
 
-### Is the mobile local-notification hardware check a v2.0 blocker?
-
-The plugin is installed and the adapter wired; the on-device proof that a banner
-fires is outstanding. Whether v2.0 advertises mobile notifications, or ships them
-present-but-unadvertised, is a product call nobody has made.
-
-*In: [E5-R24](../10-functional/features/e-sync/e5-mobile-peer.md#acceptance-criteria) ·
-[00-overview/roadmap.md](../00-overview/roadmap.md#open-questions)*
-
 ## Correctness and security
 
 ### When do the connector's per-connection and per-user secret gaps become blockers?
