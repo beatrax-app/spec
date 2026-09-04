@@ -14,9 +14,13 @@
 # OUTSTANDING at the time of writing:
 #   E5-R23, E5-R24, E5-R25  — the mobile peer's real-device acceptance and the
 #                             backup-exclusion bridge
-#   app-store distribution  — not yet scoped; no requirements exist to cite,
-#                             which is why none appear below. See the roadmap's
-#                             open questions.
+#   F8-R1 .. F8-R26         — app-store distribution, scoped in F8 and a goal of
+#                             this release. Several are already satisfied by
+#                             shipped work; the rest are the outstanding block.
+#                             Scope is the two mobile stores: the Mac App Store
+#                             and the Microsoft Store are out, and F8 says why,
+#                             which closes that part of the roadmap's open
+#                             question.
 #
 # Carry-over release-readiness items (A6-R20, A6-R21, F1-R18, F3-R33) are
 # recorded as unsatisfied in their own feature docs. They are deliberately NOT
@@ -106,6 +110,12 @@ goals = [
 
   # ── The single position definition (landed) ─────────────────────────────────
   "C1-R8", "C1-R9", "C1-R10", "C1-R11", "C1-R12", "C1-R13", "C1-R14",
+
+  # ── App-store distribution (scoped; partly landed) ──────────────────────────
+  "F8-R1", "F8-R2", "F8-R3", "F8-R4", "F8-R5", "F8-R6", "F8-R7", "F8-R8",
+  "F8-R9", "F8-R10", "F8-R11", "F8-R12", "F8-R13", "F8-R14", "F8-R15",
+  "F8-R16", "F8-R17", "F8-R18", "F8-R19", "F8-R20", "F8-R21", "F8-R22",
+  "F8-R23", "F8-R24", "F8-R25", "F8-R26",
 
   # ── Comment policy enforcement (landed) ─────────────────────────────────────
   "Q-R11", "Q-R12",
