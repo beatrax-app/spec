@@ -1,7 +1,7 @@
 # Reusable label sync. Upserts the canonical label set (70-operations/labels.yml
 # in the spec repo) into the calling repo, so every repo carries the same labels
 # without hand-editing. Additive: it never deletes labels it doesn't know about.
-# OPS-R12.
+# OPS-R6.
 name: label-sync
 
 on:
@@ -14,17 +14,58 @@ permissions:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Upsert labels from the spec registry
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
         run: |
-          curl -sfL --proto '=https' --tlsv1.2 https://raw.githubusercontent.com/beatrax-app/spec/main/70-operations/labels.yml -o labels.yml
+          set -euo pipefail
+
+          # curl's --retry covers timeouts and 408/429/5xx only; a connection
+          # reset (exit 35) is not on that list, and the flag that would cover
+          # it retries a 404 too. Q-R27.
+          download() {
+            url=$1
+            out=$2
+            attempt=1
+            while true; do
+              rc=0
+              http=$(curl -sSL --proto '=https' --tlsv1.2 \
+                --connect-timeout 15 --max-time 60 \
+                -w '%{http_code}' -o "$out" "$url") || rc=$?
+              if [ "$rc" -eq 0 ]; then
+                case "$http" in
+                  2??) return 0 ;;
+                  4??)
+                    echo "::error::$url returned HTTP $http; that is not a transient failure."
+                    return 1
+                    ;;
+                esac
+              fi
+              if [ "$attempt" -ge 4 ]; then
+                echo "::error::could not fetch $url after 4 attempts (last: curl exit $rc, HTTP ${http:-none})."
+                return 1
+              fi
+              echo "::warning::fetch attempt $attempt of 4 failed (curl exit $rc, HTTP ${http:-none}); retrying."
+              sleep $((attempt * 5))
+              attempt=$((attempt + 1))
+            done
+          }
+
+          download https://raw.githubusercontent.com/beatrax-app/spec/main/70-operations/labels.yml labels.yml
+
+          # pip retries five times of its own accord, so it needs nothing here.
           python3 -m pip install --quiet "pyyaml==6.0.2"
           python3 - <<'PY'
-          import subprocess, yaml
-          for l in yaml.safe_load(open("labels.yml")):
+          import subprocess, sys, yaml
+          labels = yaml.safe_load(open("labels.yml"))
+          # An empty or malformed registry would upsert nothing and report
+          # success, which reads identically to "already in sync".
+          if not isinstance(labels, list) or not labels:
+              sys.exit("::error::labels.yml did not parse as a non-empty list; refusing to sync nothing.")
+          for l in labels:
               subprocess.run(
                   ["gh", "label", "create", l["name"],
                    "--color", str(l["color"]),

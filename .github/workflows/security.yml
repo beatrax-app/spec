@@ -1,6 +1,7 @@
 # Reusable security checks: secret scanning (gitleaks CLI) and dependency
 # vulnerabilities (osv-scanner CLI). Both free for orgs — the gitleaks *action*
-# requires a paid org licence, the CLI does not. Q-R53, Q-R56.
+# requires a paid org licence, the CLI does not. The gate is the Security row of
+# 50-governance/cross-repo-ci.md; the way it fetches its tools is Q-R27.
 name: security
 
 on:
@@ -13,6 +14,7 @@ permissions:
 jobs:
   gitleaks:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -20,20 +22,103 @@ jobs:
           fetch-depth: 0
       - name: gitleaks (CLI)
         run: |
+          set -euo pipefail
+
+          # curl's own --retry treats only timeouts and 408/429/5xx as
+          # transient, so it does not cover the connection reset that failed
+          # this gate (exit 35). --retry-all-errors does, but it retries a 404
+          # just as eagerly, which would hide a moved release asset behind four
+          # minutes of waiting. Hence the loop: transport failures are retried,
+          # a 4xx stops dead.
+          download() {
+            url=$1
+            out=$2
+            attempt=1
+            while true; do
+              rc=0
+              http=$(curl -sSL --proto '=https' --tlsv1.2 \
+                --connect-timeout 15 --max-time 120 \
+                -w '%{http_code}' -o "$out" "$url") || rc=$?
+              if [ "$rc" -eq 0 ]; then
+                case "$http" in
+                  2??) return 0 ;;
+                  4??)
+                    echo "::error::$url returned HTTP $http; that is not a transient failure."
+                    return 1
+                    ;;
+                esac
+              fi
+              if [ "$attempt" -ge 4 ]; then
+                echo "::error::could not download $url after 4 attempts (last: curl exit $rc, HTTP ${http:-none}). The download failed; nothing has been scanned."
+                return 1
+              fi
+              echo "::warning::download attempt $attempt of 4 failed (curl exit $rc, HTTP ${http:-none}); retrying."
+              sleep $((attempt * 5))
+              attempt=$((attempt + 1))
+            done
+          }
+
           ver="8.30.1"
-          curl -sSfL --proto '=https' --tlsv1.2 "https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_${ver}_linux_x64.tar.gz" | tar xz gitleaks
+          # From the release's own checksums file. It moves with `ver`; a bump
+          # that forgets it fails here rather than running unknown bytes.
+          sha="551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb"
+
+          download "https://github.com/gitleaks/gitleaks/releases/download/v${ver}/gitleaks_${ver}_linux_x64.tar.gz" gitleaks.tar.gz
+          echo "${sha}  gitleaks.tar.gz" | sha256sum -c -
+          tar xzf gitleaks.tar.gz gitleaks
+
           ./gitleaks git --no-banner --redact --exit-code 1 .
 
   osv-scanner:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
       - name: OSV-Scanner (CLI)
         run: |
-          curl -sSfL --proto '=https' --tlsv1.2 "https://github.com/google/osv-scanner/releases/download/v2.4.0/osv-scanner_linux_amd64" -o osv-scanner
+          set -euo pipefail
+
+          # See the note in the gitleaks job: curl's --retry does not cover the
+          # reset (exit 35) this gate failed on, and the flag that does cannot
+          # tell a reset from a 404.
+          download() {
+            url=$1
+            out=$2
+            attempt=1
+            while true; do
+              rc=0
+              http=$(curl -sSL --proto '=https' --tlsv1.2 \
+                --connect-timeout 15 --max-time 120 \
+                -w '%{http_code}' -o "$out" "$url") || rc=$?
+              if [ "$rc" -eq 0 ]; then
+                case "$http" in
+                  2??) return 0 ;;
+                  4??)
+                    echo "::error::$url returned HTTP $http; that is not a transient failure."
+                    return 1
+                    ;;
+                esac
+              fi
+              if [ "$attempt" -ge 4 ]; then
+                echo "::error::could not download $url after 4 attempts (last: curl exit $rc, HTTP ${http:-none}). The download failed; nothing has been scanned."
+                return 1
+              fi
+              echo "::warning::download attempt $attempt of 4 failed (curl exit $rc, HTTP ${http:-none}); retrying."
+              sleep $((attempt * 5))
+              attempt=$((attempt + 1))
+            done
+          }
+
+          ver="2.4.0"
+          # From osv-scanner_SHA256SUMS in the same release. Moves with `ver`.
+          sha="15314940c10d26af9c6649f150b8a47c1262e8fc7e17b1d1029b0e479e8ed8a0"
+
+          download "https://github.com/google/osv-scanner/releases/download/v${ver}/osv-scanner_linux_amd64" osv-scanner
+          echo "${sha}  osv-scanner" | sha256sum -c -
           chmod +x osv-scanner
+
           # exit 128 = no packages found (nothing to scan) -> treat as pass.
           # `|| code=$?` keeps the runner's `set -e` from aborting on non-zero.
           code=0

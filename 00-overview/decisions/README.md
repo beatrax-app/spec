@@ -60,6 +60,7 @@ of them invent a decision that was not already made.
 | [0026](0026-an-id-two-devices-cannot-both-compute-is-minted.md) | An id two devices cannot both compute is minted, not derived | Accepted | New |
 | [0028](0028-a-split-leg-carries-its-own-identity.md) | A split leg carries an identity of its own, and the set conflict stays open | Accepted | New |
 | [0029](0029-the-applier-enforces-the-writers-sum-invariant.md) | The applier enforces the writer's sum invariant, and refuses rather than resolves | Accepted | New |
+| [0030](0030-the-tag-governs-the-workflow-not-what-it-reads.md) | The major tag governs the workflow definition, not what the workflow reads | Accepted | New |
 
 > **Not here:** the spec's own governance rules. Those are not architectural —
 > no component's design depends on them. They live in

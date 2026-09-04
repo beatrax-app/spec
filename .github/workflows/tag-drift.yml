@@ -1,0 +1,42 @@
+# The moving major tag is moved by hand after a shared workflow merges, and a
+# forgotten move means the fix reaches nobody — the one real cost of ADR-0021,
+# named in the ADR itself and until now reported by nothing. OPS-R27.
+#
+# On a pull request this is advisory: it says a move will be owed, while the
+# author is still here. On main and on a schedule it fails, because by then the
+# consumers are already running the wrong copy.
+name: tag-drift
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    paths: [".github/workflows/**"]
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tag-drift:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Will this pull request owe a tag move?
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: python3 scripts/tag_drift.py --pending "$BASE_SHA" "$HEAD_SHA"
+
+      - name: Does the tag point at what consumers should be running?
+        if: github.event_name != 'pull_request'
+        run: python3 scripts/tag_drift.py

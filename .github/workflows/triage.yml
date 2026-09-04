@@ -1,6 +1,6 @@
 # New issues: label needs-triage, assign the covering maintainer from the
 # generated CODEOWNERS, and post to the private maintainer channel.
-# OPS-R20, OPS-R21, OPS-R22.
+# OPS-R20.
 name: triage
 on:
   issues:
