@@ -49,6 +49,7 @@ itself.
 | **Q-R24** | A user-visible change MUST carry a conventional commit subject written as release-note copy, in the user's language. |
 | **Q-R25** | A test MUST NOT be marked skipped or pending to make a gate green without a recorded reason. |
 | **Q-R26** | A component property rendered as raw markup MUST be locked against client mutation. |
+| **Q-R27** | A gate MUST NOT fail on a transient network condition: a download it performs MUST be retried with bounded backoff, and an executable it fetches MUST be verified against a pinned digest before it runs. |
 
 ## The principle underneath
 

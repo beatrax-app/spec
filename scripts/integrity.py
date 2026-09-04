@@ -2,7 +2,8 @@
 """Spec-side integrity checks. Run in CI on the spec repo itself (GOV-R11).
 
 Verifies:
-  - every cited requirement/ADR identifier resolves to a definition
+  - every cited requirement/ADR identifier resolves to a definition, in the
+    Markdown tree and in the shared workflow definitions
   - no requirement ID is defined twice (IDs are permanent and unique, GOV-R8)
   - every internal Markdown link resolves to a real file
 
@@ -22,6 +23,13 @@ LINK = re.compile(r"\[[^\]]*\]\((?!https?://|mailto:)([^)#]+)(?:#[^)]*)?\)")
 
 def md_files():
     return [p for p in ROOT.rglob("*.md") if ".git" not in p.parts]
+
+
+def citing_files():
+    """Everything that may carry a citation. Workflow headers cite identifiers
+    as freely as the prose does, and nothing read them: two invented ids and a
+    third that had drifted sat there from the founding commit onwards."""
+    return md_files() + sorted((ROOT / ".github" / "workflows").glob("*.yml"))
 
 
 def defined_reqs():
@@ -45,7 +53,7 @@ def defined_adrs():
 
 def undefined_citations(defset, adrs):
     problems = []
-    for p in md_files():
+    for p in citing_files():
         text = p.read_text(encoding="utf-8")
         # Only report the first stray citation per file; the rest is noise.
         for rid in REQ_CITE.findall(text):

@@ -75,12 +75,15 @@ of build: **a bundle that boots but reports the wrong version**.
 | **No update path that skips verification** | The signed manifest is the only binary-integrity signal ([F6](../10-functional/features/f-platform/f6-updates.md)) |
 | **Only the product repository holds signing secrets** | Least privilege across the organisation |
 | **Untrusted event data passes through the environment**, never string interpolation into a shell | Workflow injection |
+| **Every download bounded-retried, every fetched executable digest-verified** | A gate that goes red on a dropped connection teaches its readers to ignore it ([Q-R27](README.md#the-q-r-namespace)) |
 
 ## Secret scanning
 
 Handled at the **platform level** — repository secret scanning plus push
-protection — rather than as a workflow. That covers every push and pull request
-against the canonical provider patterns.
+protection — covering every push and pull request against the canonical provider
+patterns. The shared security gate adds a full-history `gitleaks` pass on each
+pull request, so a secret already in the history is found rather than only a
+newly-pushed one.
 
 The repositories hold no project-specific high-entropy tokens needing a custom
 rule.
