@@ -32,7 +32,7 @@ connection.
 1. **Parse and stage.** The export is parsed and written to staging tables in
    bounded chunks. Nothing touches the live ledger.
 2. **Preview.** The user sees what will be created, grouped by kind, with a
-   summary of anything the importer could not map.
+   summary of anything the *parser* could not map.
 3. **Promote.** Staged rows become real records in dependency order: categories,
    then the budget assignment grid, then accounts, then transactions, then
    splits, then a transfer-pairing sweep, then goals.
@@ -46,13 +46,22 @@ product uses. There is no privileged path into the ledger.
 
 ### Cannot map and cannot parse are different failures
 
-The preview's unmapped-items summary is about **mapping**, and only mapping. An
-unmapped item is a source concept with no Beatrax counterpart, or one Beatrax
-declines to store as it stands: a saved report, a recurring schedule, a goal with
-no target date, a split whose legs do not add up to their transaction. In each
-case the file was read and the figure understood; there is simply nowhere to put
-it. The run continues, every item is listed with its reason, and the user sees
-them all before promoting anything.
+The unmapped-items summary is about **mapping**, and only mapping. An unmapped
+item is a source concept with no Beatrax counterpart, or one Beatrax declines to
+store as it stands: a saved report, a recurring schedule, a goal with no target
+date, a split whose legs do not add up to their transaction. In each case the
+file was read and the figure understood; there is simply nowhere to put it. The
+run continues, and every item is listed with its reason.
+
+**Where** it is listed follows from when it was found, and the two are not the
+same screen. What the parser can see — an Actual schedule, a saved report, a goal
+template Beatrax cannot express — is staged with everything else and appears in
+the preview. What only promotion can discover — a fingerprint collision, a split
+whose legs will not store, a goal with no target date — is recorded as it happens
+and appears on the results screen afterwards. A first YNAB import therefore
+previews an empty unmapped list whatever the export holds, because the YNAB
+parsers stage no unmapped items at all; on a re-import the preview does carry the
+three-way merge's conflicts.
 
 A value that **cannot be parsed** is a different failure, and answering it the
 same way is how a wrong ledger arrives looking right. A cell whose value cannot
@@ -146,7 +155,7 @@ Abandoned runs are swept after an age threshold.
 | A byte-identical re-run | No writes at all. |
 | A renamed entity that has a stable identifier | Surfaces as a changed field, not a new record. |
 | A fingerprint collision when applying an amount change | The change is refused and reported rather than throwing. |
-| An entry the importer cannot map to a Beatrax concept | Recorded in an unmapped-items summary shown in the preview; the run continues. |
+| An entry the importer cannot map to a Beatrax concept | Recorded in an unmapped-items summary with its reason; in the preview when the parser found it, on the results screen when promotion did. The run continues. |
 | A cell whose value cannot be parsed | The whole file is refused before any row is staged; no default is substituted. |
 | An archive that is a zip bomb or contains traversal paths | Rejected before extraction. |
 | A run abandoned mid-preview | Swept after the age threshold, scoped to its owner. |
