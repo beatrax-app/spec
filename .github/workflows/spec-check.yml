@@ -25,6 +25,13 @@ jobs:
     steps:
       - name: Check out the calling repo (PR)
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # The default depth of 1 does not contain the base commit, so the
+          # `git log base..head` below resolved nothing and only the PR body
+          # was ever scanned. A contributor who cited the requirement in the
+          # commit — which the guidance asks for — still failed the check, and
+          # the reason was invisible because the failure was swallowed.
+          fetch-depth: 0
 
       - name: Check out the canonical spec
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -45,7 +52,14 @@ jobs:
             printf '%s\n' "$PR_BODY"
             if printf '%s' "$BASE_SHA" | grep -Eq '^[0-9a-f]{40}$' \
                && printf '%s' "$HEAD_SHA" | grep -Eq '^[0-9a-f]{40}$'; then
-              git log --format='%B' "${BASE_SHA}..${HEAD_SHA}" 2>/dev/null || true
+              # Reported rather than swallowed. A silent `|| true` here is what
+              # let the commit half of the contract stop working unnoticed: the
+              # check went on passing for anyone who cited in the body, and
+              # went on failing, unexplainably, for anyone who cited only in a
+              # commit.
+              if ! git log --format='%B' "${BASE_SHA}..${HEAD_SHA}" 2>/dev/null; then
+                echo "::warning::could not read ${BASE_SHA}..${HEAD_SHA}; only the pull-request body was scanned."
+              fi
             fi
           } > .pr-text.txt
 
