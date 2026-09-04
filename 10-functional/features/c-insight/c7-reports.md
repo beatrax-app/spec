@@ -34,10 +34,11 @@ never as spend subtracted from income computed separately. Two separately-rounde
 figures subtracted do not reliably equal one signed sum.
 
 **Category aggregation is split-aware** ([B7](../b-ledger/b7-splits.md)): it
-counts split legs and unsplit parents, never both. A split whose legs do not sum
-rolls up via the parent's own category as a fail-safe. Cross-dimension totals are
-checked for consistency by test — the same period grouped two different ways must
-produce the same total.
+counts a transaction's money once — through the legs of a split that sums,
+through the parent otherwise — and never through both. A split whose legs do not
+sum therefore rolls up through the parent's own category as a fail-safe, its legs
+uncounted. Cross-dimension totals are checked for consistency by test — the same
+period grouped two different ways must produce the same total.
 
 **Net worth over time** is sampled on demand rather than stored as history. Its
 most recent point is not guaranteed to be byte-identical to the dashboard's
@@ -119,8 +120,8 @@ that would accept ambiguous input. An inverted range is rejected.
 | **C7-R1** | A report MUST be composed of a metric, a grouping, a period, filters, a currency mode, and a visualisation. |
 | **C7-R2** | The report MUST render live as both a chart and a table. |
 | **C7-R3** | Net MUST be computed as a single signed sum, never as separately computed spend and income subtracted. |
-| **C7-R4** | Category aggregation MUST be split-aware, counting legs and unsplit parents and never both. |
-| **C7-R5** | A split whose legs do not sum MUST roll up via the parent's own category. |
+| **C7-R4** | Category aggregation MUST be split-aware, counting each transaction's money once — through the legs of a split that sums, through the parent otherwise — and never through both. |
+| **C7-R5** | A split whose legs do not sum MUST roll up through the parent's own category and MUST NOT contribute its legs, on the same terms as [B7-R5](../b-ledger/b7-splits.md). |
 | **C7-R6** | The same period grouped by different dimensions MUST produce the same total, verified by test. |
 | **C7-R7** | Net worth over time MUST be sampled on demand; no net-worth history may be stored. |
 | **C7-R8** | The divergence between the sampled net-worth series and the dashboard card MUST be documented. |
