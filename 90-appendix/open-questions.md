@@ -119,6 +119,21 @@ here first, because both look fine in isolation.
 *In: [60-brand/brand-rules.md](../60-brand/brand-rules.md#screenshots) ·
 [20-architecture/contracts/design-tokens.md](../20-architecture/contracts/design-tokens.md#screenshots-are-shared-assets)*
 
+### Should the shared gate scripts be pinned to the tag that called them?
+
+`spec-check`, `dco`, `commitlint` and `spec-references` are called at `@v1` but
+check this repository out at `main` and run the scripts they find there. The
+specification corpus has to come from `main` — a requirement merged an hour ago
+must be citable. The scripts are the gate's *logic*, and a change to one reaches
+every consumer's merge gate on merge, which is what the moving tag is supposed to
+prevent. `commit_lint.py` has already travelled that way once, as a widening.
+
+Pinning them to `github.job_workflow_sha` would fix it, at the cost of a script
+fix reaching nobody until the tag moves. Nobody has weighed that trade.
+
+*In: [50-governance/cross-repo-ci.md](../50-governance/cross-repo-ci.md#what-the-tag-does-not-cover) ·
+[ADR-0030](../00-overview/decisions/0030-the-tag-governs-the-workflow-not-what-it-reads.md)*
+
 ## Organisation
 
 ### What is the website's hosting and deployment arrangement?

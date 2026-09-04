@@ -1,6 +1,6 @@
 # A PR that passes CI with no review, from a non-maintainer, is flagged for a
 # maintainer; the flag clears when a review lands or the PR closes. Repos call it;
-# the spec repo self-triggers. OPS-R25, OPS-R22.
+# the spec repo self-triggers. OPS-R22.
 name: awaiting-maintainer
 on:
   workflow_call:

@@ -119,6 +119,8 @@ exactly the amount of trust the org already places in its own protected branch.
 
 ## Related
 
+- [ADR-0030](0030-the-tag-governs-the-workflow-not-what-it-reads.md) — what the
+  tag turned out not to cover, and the check that reports a forgotten move
 - [ADR-0012](0012-action-pinning.md) — superseded in part; its third-party rule stands
 - [50-governance/cross-repo-ci.md](../../50-governance/cross-repo-ci.md) — the shared workflows and how they are called
 - [40-quality/ci-cd.md](../../40-quality/ci-cd.md) · [30-repos/README.md](../../30-repos/README.md)
