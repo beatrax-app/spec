@@ -25,12 +25,19 @@ worst thing wins:
 | **Error** | Something failed and needs attention. |
 | **Syncing** | An exchange is in progress. |
 | **Offline** | No peer is reachable. |
+| **Behind** | This device holds changes no peer has yet. |
 | **All synced** | Every known device is up to date. |
 | **Unknown** | Not enough information yet. |
 
-Error outranks syncing, which outranks offline and all-synced, which outrank
-unknown. A device that is behind must never let the overall status read as
-all-synced.
+Error outranks syncing, which outranks offline, behind and all-synced, which
+outrank unknown. A device that is behind must never let the overall status read
+as all-synced.
+
+**Behind** exists because the table did not previously have a word for it. A
+device holding an undelivered change with no exchange under way is not syncing
+— nothing is in progress — and it is not all-synced either. Without a name for
+that state an implementation must borrow one, and the one it borrowed was
+*Syncing*, which told the reader an exchange was happening that was not.
 
 ### Last-synced, per device
 
@@ -73,14 +80,14 @@ sit in one place, so "how is sync configured" is one screen rather than four.
 | ID | Requirement |
 |----|-------------|
 | **E6-R1** | A single aggregate status MUST be computed across every device. |
-| **E6-R2** | Status priority MUST place error above syncing, syncing above offline and all-synced, and those above unknown. |
+| **E6-R2** | Status priority MUST place error above syncing, syncing above offline, behind and all-synced, and those above unknown; a device that is behind MUST outrank all-synced. |
 | **E6-R3** | A device that is behind MUST prevent the aggregate reading as all-synced. |
 | **E6-R4** | Each device's last successful exchange MUST be shown as a concrete time. |
 | **E6-R5** | A device that has never synced MUST be shown as never synced, not as a zero interval. |
 | **E6-R6** | A manual sync action MUST be available. |
 | **E6-R7** | Quarantined operations MUST be visible with their reasons on a read-only, user-scoped surface. The per-entry detail MAY live in the developer console; the count and its plain-language warning MUST NOT. |
 | **E6-R8** | The quarantine surface MUST NOT offer a force-apply action. |
-| **E6-R9** | An unreachable peer MUST read as offline, not as error. |
+| **E6-R9** | An unreachable peer MUST read as offline, not as error. A failure that cannot be classified as a verification failure MUST read as offline, and the aggregate status and the per-device label MUST be derived from one classification. |
 | **E6-R10** | A cryptographic verification failure MUST read as error. |
 | **E6-R11** | Relay configuration, network preferences, and the device list MUST be presented in one place. |
 | **E6-R12** | Every status query MUST be scoped to the requesting user. |

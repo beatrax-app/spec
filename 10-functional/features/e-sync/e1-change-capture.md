@@ -148,7 +148,7 @@ peer is findable ([B9](../b-ledger/b9-search.md)).
 | **E1-R18** | The capture listener MUST never throw; a capture failure MUST NOT break the user's action. |
 | **E1-R19** | The merge registry MUST be verified against the real schema by test. |
 | **E1-R20** | A cascading change MUST emit a compensating operation rather than relying on peers to re-derive the cascade. |
-| **E1-R21** | The full-text index MUST be refreshed as part of merge. |
+| **E1-R21** | The full-text index MUST be refreshed as part of merge. A failure to refresh it MUST NOT be recorded as a quarantined operation — the entry was applied and nothing was refused — and MUST be reported with the rows affected and the recovery it needs. |
 | **E1-R22** | A table not present in the allow-list MUST NOT be writable by the replayer. |
 
 ## Related
