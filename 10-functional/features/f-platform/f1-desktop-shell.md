@@ -82,16 +82,44 @@ The shell can report the operating system's theme preference. Outside the
 bundle that signal is simply absent, and **its absence is itself the signal**:
 the layout falls back to the browser's own preference query.
 
-### Known risk — lock on window close
+### Lock on window close
 
-The lock-on-close listener fires on the shell's own internal channel, and it has
-**not been verified** that this always carries the focused window's session. If
-it does not, the session that gets locked could be a different one, and the
-lock-on-close guarantee would silently not hold.
+The shell posts `WindowHidden`/`WindowClosed` from its own process, which holds
+no session cookie, onto a route with no session middleware. No listener bound to
+such an event can reach the focused window's session — on any route — and a
+closing window cannot be told it is closing either, because the shell removes it
+from its window map before it notifies. The listener therefore records the fact
+device-locally and the window engages the lock on its own next request, where
+the session is the reader's.
 
-This cannot be verified outside a real bundle build. The client-side privacy
-veil and the server-side idle lock still cover backgrounding in the meantime.
-Recorded as an open follow-up rather than described as working.
+This is verified in the repository, not only in a bundle: the suite persists the
+window's session, drives the real event POST, reloads that session from its
+handler, and asserts the reader is sent to the lock screen. An architecture
+guard fails any future listener that reaches session or authentication state
+from a shell event.
+
+Residual: a process killed without notice — force quit, power cut, OOM — records
+no demand, and that session is covered by the idle lock alone.
+
+### Known gap — what a shell event records does not outlive its request
+
+Every event the shell posts is its own request, so state held in memory for the
+life of one is constructed fresh for the next. Two behaviours above are built
+that way, and neither accumulates.
+
+The **watchdog's** rolling counter is held that way, so it starts empty at every
+exit and never reaches the threshold: a crash storm raises no alert today. The
+**window's focus state** is written by the focus listeners and read from other
+requests entirely — by the watchdog before it escalates, and by notification
+delivery before it decides whether to show a toast — so every reader sees the
+constructed default, *focused*. An unfocused window is therefore never observed
+as unfocused, and no operating-system notification is delivered at all.
+
+Both are still what the product intends, which is why the rows below stay and
+say so rather than being deleted. The fix is the shape the lock uses above —
+leave the fact where the next request can read it — and it is not taken yet
+because it changes a user-visible operating-system notification that only a real
+bundle can judge.
 
 ## Edge cases
 
@@ -99,10 +127,10 @@ Recorded as an open follow-up rather than described as working.
 |-----------|-----------|
 | A path pointing at a non-existent file | Canonicalisation fails; logged and dropped. |
 | A file deleted between drop and sign-in | The intent is cleared; the user lands on the dashboard. |
-| The window unfocused when a notification fires | Delivered to the operating system. |
-| The window focused | Not delivered; the in-app surface shows it. |
-| A background-process crash storm | One alert on threshold crossing. |
-| Running outside the bundle | Shell-coupled listeners do not register at all. |
+| The window unfocused when a notification fires | Delivered to the operating system — intended, and [not what happens](#known-gap--what-a-shell-event-records-does-not-outlive-its-request). |
+| The window focused | Not delivered; the in-app surface shows it. This is the answer every window gets, focused or not. |
+| A background-process crash storm | One alert on threshold crossing — intended, and [not what happens](#known-gap--what-a-shell-event-records-does-not-outlive-its-request). |
+| Running outside the bundle | Listeners that call into the shell do not register; the ones that only record a fact do, so the round-trip is provable off-bundle. |
 | First launch before the database file exists | The migrator creates it. |
 | An oversized file | Rejected by the size bound. |
 
@@ -112,7 +140,7 @@ Recorded as an open follow-up rather than described as working.
 |----|-------------|
 | **F1-R1** | Installers MUST ship for macOS, Windows, and Linux, each carrying its own runtime and dependencies. |
 | **F1-R2** | Every platform-specific import MUST live in a single module, enforced by architecture test. |
-| **F1-R3** | No shell-coupled listener may register outside the bundle. |
+| **F1-R3** | A listener that calls into the shell MUST NOT register outside the bundle. A listener that only records what a shell event reported MUST register everywhere, so the round-trip it begins is provable without a bundle build. |
 | **F1-R4** | The first-launch chain MUST be idempotent across launches. |
 | **F1-R5** | Application-key generation MUST be sentinel-guarded and MUST run before anything that would read existing encrypted data. |
 | **F1-R6** | A key MUST NOT be regenerated where an existing database is present. |
@@ -124,10 +152,10 @@ Recorded as an open follow-up rather than described as working.
 | **F1-R12** | Either close outcome MUST lock the application immediately, with no grace period, where the user has the app-lock enabled; where they do not, no close outcome may lock or veil the session ([F3-R29](f3-auth-and-app-lock.md)). |
 | **F1-R13** | Notification delivery MUST consult suppression, then window focus, then the per-device detail preference. |
 | **F1-R14** | A focused window MUST suppress the operating-system notification. |
-| **F1-R15** | Repeated background-process exits within a rolling window MUST raise an alert; a single crash MUST NOT. |
+| **F1-R15** | *(Open)* Repeated background-process exits within a rolling window MUST raise an alert; a single crash MUST NOT. Not yet satisfied — the rolling counter does not survive the request that writes it, so the threshold is never crossed ([Known gap](#known-gap--what-a-shell-event-records-does-not-outlive-its-request)). |
 | **F1-R16** | Outside the bundle, the absence of the theme signal MUST be the documented fallback trigger. |
 | **F1-R17** | Storage paths MUST resolve through the single path authority, enforced by architecture test. |
-| **F1-R18** | *(Open)* Lock-on-window-close MUST be verified to act on the focused window's session. Not yet verified — see [Known risk](#known-risk--lock-on-window-close). |
+| **F1-R18** | Lock-on-window-close MUST act on the focused window's session, and MUST be verified to. |
 
 ## Related
 

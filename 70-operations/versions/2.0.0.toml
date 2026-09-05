@@ -28,7 +28,7 @@
 # is the status that carries unmet goals and `releasable` is the one that does
 # not (OPS-R16). No goal was added or removed here — only the claims about them.
 #
-# NOT SATISFIED, under headings that said landed:
+# NOT SATISFIED — or, for two of them, withdrawn — under headings that said landed:
 #   E1-R5      the distinction is structural and correct; the test the
 #              requirement explicitly demands for it does not exist.
 #   E1-R6      OpLogRebuilder works and is well tested; nothing in production
@@ -52,9 +52,10 @@
 #   E3-R12     the desktop provisions a relay for itself on boot, on enable and
 #              on unlock, then hands the endpoint to the phone over the pairing
 #              QR. Neither device chose it, and it is not off by default.
-#   E4-R23     the requirement documents an absence that has gone: custody is
-#              wired on both shells. The real gap is a Linux desktop with no
-#              keyring, which no page mentions.
+#   E4-R23     WITHDRAWN 2026-09-05. The requirement documented an absence that
+#              has gone: custody is wired on both shells. The residual it leaves
+#              — a platform store that answers and does not protect, which is a
+#              keyring-less Linux desktop — is now F3-R37, and E4 says it.
 #   E4-R24     the same shape. The backup-exclusion bridge exists and Android is
 #              closed; see E5-R23 for what is actually still open.
 #   E5-R10     the async cold-start recovery signal has no emitter. The Android
@@ -111,11 +112,6 @@
 # than a disagreement about a verification.
 #
 # OUTSTANDING — scoped work, not yet on the development line:
-#   A6-R20, A6-R21          — per-connection credential storage and per-user
-#                             credential keying. Carried as accepted deferrals
-#                             until 2026-09-05, when the deferral was reversed.
-#                             Both are built in an open product pull request and
-#                             land together; there is no half-satisfied state.
 #   F8-R1 .. F8-R28         — app-store distribution, scoped in F8 and a goal of
 #                             this release. Scope is ALL FOUR stores, with
 #                             direct download retained wherever it remains
@@ -134,17 +130,19 @@
 #                             interpreter, and no sandboxed build exists to
 #                             measure.
 #
-# SATISFIED, where a page still says otherwise. Recorded rather than corrected:
-# each is a factual call about a feature and belongs to whoever holds it.
-#   E2-R18 .. E2-R21        — relayed device identity (ADR-0027) merged on
-#                             2026-09-05, the day it was classified into this
-#                             release, with the withheld-count filter beside it.
-#                             E2 still marks all four *(Open)*, and the roadmap
-#                             still says they are being built.
+# SATISFIED, and the pages that said otherwise are corrected as of 2026-09-05:
+#   E2-R18 .. E2-R21        — relayed device identity (ADR-0027), merged the day
+#                             it was classified into this release, with the
+#                             withheld-count filter beside it. E2's four markers
+#                             and the roadmap's bucket are cleared.
 #   F3-R33                  — operating-system key custody is bound on both
 #                             shells and the session holds a handle rather than
-#                             a key. F3 still marks it *(Open)* and calls the
-#                             adapters unwired.
+#                             a key. F3's marker is cleared and its "registered
+#                             but not yet wired" prose is gone.
+#   A6-R20, A6-R21          — per-connection credential storage and per-user
+#                             credential keying, satisfied together because they
+#                             are two axes of one file. A6's markers and both
+#                             "Known limitation" sections are gone.
 #
 # DEFINED, LANDED, IN NO BUCKET — a ruling is needed on each, not a correction.
 # Requirements the specification defines and the product satisfies, added to
@@ -165,9 +163,25 @@
 # open on 2026-09-05 and was in no bucket within the hour; the check below
 # caught it on its first run, which is the case for having the check.
 #
-# F1-R18 (lock on window close, unverified) remains the one carry-over
-# release-readiness item that is NOT a goal of v2.0. It cannot be verified
-# outside a real bundle build, and it stays recorded as unsatisfied in F1.
+# Two more joined that list on 2026-09-05 and are satisfied, so they need the
+# same ruling rather than a correction: E2-R22 (which authors a device may relay
+# for) and F3-R37 (what custody does where the platform store is absent or does
+# not protect). Both were defined by work in this release and neither is a goal.
+#
+# DEFINED, OPEN, AND SCHEDULED — but not goals of this file, for the same reason:
+# adding a goal is a scope decision, not a correction. E6-R13 .. E6-R16 and
+# E5-R27 — the withheld status, where it ranks, one classification behind every
+# surface that reports a hold, copy that stays true for a hold nobody can act on,
+# and a first sync that does not report a history it is short of. They are in the
+# roadmap's outstanding bucket, which is what the last check below reads.
+#
+# F1-R18 (lock on window close) was the one carry-over release-readiness item
+# that is NOT a goal of v2.0. It is satisfied as of 2026-09-05, and the claim
+# that it "cannot be verified outside a real bundle build" was wrong: the suite
+# persists the window's session, drives the real shell event POST and reloads
+# that session from the handler. F1-R15 took its place as F1's open item — the
+# watchdog's rolling counter does not survive the request that writes it — and
+# it is in the roadmap's outstanding bucket rather than here.
 
 version = "2.0.0"
 status  = "staged"
@@ -184,7 +198,7 @@ goals = [
   "E2-R9", "E2-R10", "E2-R11", "E2-R12", "E2-R13", "E2-R14", "E2-R15",
   "E2-R16", "E2-R17",
 
-  # ── Sync: relayed device identity (classified and merged 2026-09-05) ────────
+  # ── Sync: relayed device identity (landed 2026-09-05) ───────────────────────
   "E2-R18", "E2-R19", "E2-R20", "E2-R21",
 
   # ── Sync: transport, LAN-direct and relay (landed, except R3, R6, R12) ──────
@@ -243,12 +257,12 @@ goals = [
   "C8-R9", "C8-R10", "C8-R11", "C8-R12", "C8-R13", "C8-R14", "C8-R15",
   "C8-R16", "C8-R17", "C8-R18", "C8-R19", "C8-R20", "C8-R21",
 
-  # ── Open-banking connector (landed; R20/R21 no longer deferred) ─────────────
+  # ── Open-banking connector (landed) ─────────────────────────────────────────
   "A6-R1", "A6-R2", "A6-R3", "A6-R4", "A6-R5", "A6-R6", "A6-R7", "A6-R8",
   "A6-R9", "A6-R10", "A6-R11", "A6-R12", "A6-R13", "A6-R14", "A6-R15",
   "A6-R16", "A6-R17", "A6-R18", "A6-R19", "A6-R20", "A6-R21",
 
-  # ── App-lock: operating-system key custody (no longer deferred; wired) ──────
+  # ── App-lock: operating-system key custody (landed 2026-09-05) ──────────────
   "F3-R33",
 
   # ── Report builder and saved reports (landed, except R13) ───────────────────

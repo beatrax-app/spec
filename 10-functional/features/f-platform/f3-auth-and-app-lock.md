@@ -102,12 +102,22 @@ a rendered snapshot.
 **A user with no lock enabled is never veiled and never locked**, enforced on
 both the client and the server.
 
-**Key custody** is pluggable per platform so a bundle can hold the unlocked key
-in an operating-system protected store. Where that is unavailable the adapter
-passes through unchanged, and where it cannot recover the key the caller falls
-back to a code unlock. The desktop and mobile adapters are **registered but not
-yet wired** ([E4](../e-sync/e4-at-rest-encryption.md)) — the unlocked key
-currently follows session custody everywhere.
+**Key custody** is pluggable per platform, and both shells are wired: the
+unlocked key goes to the operating system's key store and the session holds only
+an opaque handle to it ([E4](../e-sync/e4-at-rest-encryption.md)). Where no such
+store is available — a self-hosted install, a build running outside the bundle —
+the adapter passes through unchanged and the key follows the session, exactly as
+it always did on the web. Where a store holds the key and cannot give it back,
+the caller falls back to a code unlock.
+
+**A store that answers is not the same as a store that protects**, and one
+desktop platform offers the first without the second: a Linux machine with no
+keyring reachable falls back to a fixed-password store whose key is published in
+its own upstream source, and that store reports itself available and does
+encrypt. Custody is asked what the
+machine actually gives it rather than what the bundle intended, and an
+installation that has no protected store is told so instead of being told
+nothing.
 
 ### The route surface
 
@@ -166,19 +176,23 @@ needs the key that a locked session does not have.
 | **F3-R30** | Key custody MUST be pluggable per platform, MUST pass through where unavailable, and MUST fall back to a code unlock where it cannot recover the key. |
 | **F3-R31** | Where the app-lock is enabled, sign-in MUST unlock the session where the recovery wrap succeeds and MUST start locked where it does not; where it is not enabled, sign-in MUST leave the session unlocked. |
 | **F3-R32** | Biometric enrolment MUST NOT be exempt from the lock. |
-| **F3-R33** | *(Open)* Operating-system key custody MUST be wired on desktop and mobile. Registered but not yet wired. |
+| **F3-R33** | Operating-system key custody MUST be wired on desktop and mobile: the unlocked data key MUST be held by the platform key store, and the session MUST hold only an opaque handle to it. |
 | **F3-R34** | The authentication path MUST equalise work on the account-not-found branch, performing and discarding a hash of equivalent cost, so response time does not distinguish a missing username from a wrong password. |
 | **F3-R35** | A password change or recovery reset MUST invalidate the account's other sessions. |
-| **F3-R36** | The app-lock wraps of the data key MUST use a memory-hard KDF at MODERATE limits, and the PIN MUST be six to ten digits, so a stolen database file resists offline brute-force of the wrap key; hardware-backed key custody (F3-R33) remains the outstanding defence. |
+| **F3-R36** | The app-lock wraps of the data key MUST use a memory-hard KDF at MODERATE limits, and the PIN MUST be six to ten digits, so a stolen database file resists offline brute-force of the wrap key. Operating-system key custody (F3-R33) now stands beside it on macOS, Windows, iOS, Android and keyring-backed Linux; where the platform offers no store that protects, this is the whole defence. |
+| **F3-R37** | Custody MUST NOT fail closed where the platform key store is absent, unreachable, or does not protect what it holds. An absent or unreachable store MUST degrade to session custody; a store that answers but does not protect MAY keep the key, and MUST be reported as providing no protection at rest. In every such case the custodian MUST report the custody it is actually providing, and nothing may claim a protection it is not being given. A store that is present and refuses a write is none of these: it MUST fail closed rather than let the raw key land in a persisted session. |
 
-> **`F3-R33` is no longer deferred.** Operating-system key custody was carried as
-> an accepted deferral in the product's deferred register; it is now
-> [in v2.0 scope and being built](../../../00-overview/roadmap.md#3--the-three-latent-risks-no-longer-deferred)
-> on both desktop and mobile. It stays marked *(Open)* and the "registered but
-> not yet wired" description above stays as written, because that is still what
-> the product does. What changed is the schedule, not the state. Until it lands,
-> `F3-R36` is the defence that stands between a stolen database file and the
-> wrap key.
+> **`F3-R33` landed on 2026-09-05**, the same day the deferral it was carried
+> under was reversed. "Registered but not yet wired" had been stale for months:
+> both adapters were bound and both were used, and nothing held either binding
+> in place, because every suite runs on the pass-through custodian and would
+> have stayed green if a binding were deleted.
+>
+> What the wiring found is `F3-R37`. The availability probe answers *yes* on a
+> Linux desktop with no keyring, so such a machine had been reporting the same
+> protection as one with a keyring. Custody now asks which store the shell
+> settled on, and reports *unprotected* for every answer it cannot positively
+> identify.
 
 ## Related
 

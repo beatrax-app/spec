@@ -62,16 +62,6 @@ other two sub-questions of this entry. Both are answered — the second is now a
 
 ## Correctness and security
 
-### Does lock-on-window-close act on the focused window's session?
-
-The listener fires on the shell's internal channel, and it has not been verified
-that this carries the focused window's session. If it does not, the lock-on-close
-guarantee silently does not hold. **It cannot be verified outside a real bundle
-build.**
-
-*In: [F1-R18](../10-functional/features/f-platform/f1-desktop-shell.md#acceptance-criteria) ·
-[40-quality/security.md](../40-quality/security.md#known-outstanding-items)*
-
 ### Is the search index's plaintext shadow an acceptable leak indefinitely?
 
 Full-text search needs plaintext. The index is therefore a readable shadow of
@@ -97,6 +87,26 @@ specification change **merged first**. Ordering is verified in review. Hardening
 it is tracked and unscheduled.
 
 *In: [50-governance/canonical-spec.md](../50-governance/canonical-spec.md#ordering)*
+
+### Should a decision record whose consequences have expired say so?
+
+[GOV-R9](../50-governance/README.md#the-gov-r-namespace) makes an accepted
+decision record immutable but for a supersession stamp, and a stamp names a
+superseding record. That covers a decision that was reversed. It has no answer
+for a record whose *decision* still stands while a consequence it wrote down has
+since been closed — [ADR-0008](../00-overview/decisions/0008-multi-user-belongstouser.md)
+and [ADR-0020](../00-overview/decisions/0020-open-banking-byo-key-ais-only.md)
+both describe the connector's secrets store as installation-wide, and both
+carry a *revisit if* keyed to a gap that closed on 2026-09-05.
+
+Leaving them is the letter of the rule and leaves a reader arriving at either
+one told about a gap that does not exist. Writing a new record to earn the stamp
+manufactures a decision nobody took, which is the worse of the two. What would
+settle it is a ruling on whether the stamp may name a *requirement* that closed
+rather than a superseding record.
+
+*In: [provenance.md](provenance.md#where-sources-disagreed) ·
+[A6](../10-functional/features/a-ingestion/a6-open-banking.md)*
 
 ### Should design tokens become a versioned package?
 
