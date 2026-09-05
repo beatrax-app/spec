@@ -150,6 +150,8 @@ peer is findable ([B9](../b-ledger/b9-search.md)).
 | **E1-R20** | A cascading change MUST emit a compensating operation rather than relying on peers to re-derive the cascade. |
 | **E1-R21** | The full-text index MUST be refreshed as part of merge. A failure to refresh it MUST NOT be recorded as a quarantined operation — the entry was applied and nothing was refused — and MUST be reported with the rows affected and the recovery it needs. |
 | **E1-R22** | A table not present in the allow-list MUST NOT be writable by the replayer. |
+| **E1-R23** | A refusal the receiving device can resolve on its own MUST be resolved rather than quarantined. Where a delete is refused by a row that exists only on the receiver, the receiver MUST clear that row before recording the refusal, because no operation the originating device can write is able to name it. |
+| **E1-R24** | Every quarantine reason MUST be classified as terminal or recoverable, and a recoverable one MUST be both retried and retired. A reason with neither a retry nor a retirement is a permanent divergence recorded as an audit row. |
 
 ## Related
 
