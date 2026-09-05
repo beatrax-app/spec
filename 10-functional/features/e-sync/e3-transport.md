@@ -56,6 +56,15 @@ than described in a comment.
 - Draining a mailbox requires a credential derived **per device**. A credential
   scoped to one device cannot drain or delete another's mailbox. A single
   relay-wide token is not accepted.
+- That credential is refusable **on its face**. The relay must be able to tell
+  that a presented credential is not about the device identifier in the request
+  without consulting prior state — because a mailbox nobody has ever drained has
+  no prior state to consult, and that first drain is the one carrying a new
+  device's key epochs ([E4](e4-at-rest-encryption.md)). "Whoever asks first owns
+  the mailbox" is not an acceptable answer for it.
+- The credential is never shared between the local users of one install. Device
+  identifiers are per user, so one shared credential both breaks the second
+  user's leg and hands the relay a way to link two users as one household.
 - Blobs expire: delivered ones shortly after delivery, undelivered ones after a
   longer window.
 - There are caps on blob size and on pending blobs per recipient.
@@ -102,6 +111,7 @@ client never listens — it dials out only ([E5](e5-mobile-peer.md)).
 | A peer that stops responding mid-session | The receive timeout ends the session. |
 | A frame larger than the cap | Rejected. |
 | A drain attempt with another device's credential | Refused. |
+| A drain attempt against a mailbox nobody has ever drained | Refused unless the credential is about that device identifier. |
 | A blob nobody collects | Expires after the undelivered window. |
 | A forged or relay-delivered epoch wrap | Adopted only if its signature verifies against the sender's confirmed device key; otherwise refused, logged, not thrown. |
 | A failed unseal | Strictly checked and rejected; logged, not thrown. |
@@ -133,6 +143,8 @@ client never listens — it dials out only ([E5](e5-mobile-peer.md)).
 | **E3-R19** | The desktop bundle MUST run the listener as a managed child process, and templates MUST ship for service-managed hosting. |
 | **E3-R20** | Arrival of key material while the application is locked MUST be logged and returned, never thrown. |
 | **E3-R21** | The relay's deliver endpoint MUST rate-limit per source and reject a burst, so no participant can flood a mailbox. |
+| **E3-R22** | A drain credential MUST be bound to the device identifier it drains in a way the relay can verify without prior state, so a credential that is not about that identifier is refused even for a mailbox that has never been drained. |
+| **E3-R23** | A drain credential MUST NOT be shared between the local users of one install. |
 
 ## Related
 
