@@ -31,15 +31,20 @@ time, so a concurrent edit cannot slip a violating state through the gap.
 Every leg must be non-zero and share the parent's sign. A leg of zero is noise;
 a leg of the opposite sign is a refund, which is a different thing.
 
-### Roll-ups count legs, never both
+### Roll-ups count each transaction once
 
 Every category roll-up — the dashboard breakdown, budget spend, reports, the tax
-export — counts the legs of a split and **not** the parent. A split that counted
-both would double the money.
+export — counts a split's money **once**: through its legs, not additionally
+through the parent. A split that counted both would double the money.
 
-Where a split is somehow broken — legs that do not sum — the roll-up falls back
-to the parent's own category rather than reporting a wrong total. Fail-safe
-rather than fail-silent.
+The one exception is a split that is somehow broken — legs that do not sum. That
+transaction is counted through the parent's own category instead, and its legs
+are not counted at all, so the fail-safe cannot double-count either. Falling back
+to a category that is merely coarse beats reporting a wrong total.
+
+The two branches are exclusive by construction, and the predicate that divides
+them is the same one in both: legs count when they sum to the parent, the parent
+counts when they do not.
 
 ### Editing preserves identity
 
@@ -88,7 +93,7 @@ movement; splitting one of them is not a meaningful operation.
 | A single leg | Refused — that is not a split. |
 | Re-importing the split transaction's source | The split survives untouched. |
 | A rules re-apply touching a split transaction | Skipped. |
-| A broken split at roll-up time | Falls back to the parent's own category. |
+| A broken split at roll-up time | Counted through the parent's own category; its legs are not counted. |
 | A reconciled transaction | Splitting is locked like every other mutation ([B8](b8-reconciliation.md)). |
 | Deleting a user-authored split parent | Parent and legs are tombstoned together. |
 
@@ -99,8 +104,8 @@ movement; splitting one of them is not a meaningful operation.
 | **B7-R1** | A split MUST have two or more legs whose signed amounts sum exactly to the parent amount. |
 | **B7-R2** | The sum invariant MUST be re-checked inside the write transaction, not only at validation time. |
 | **B7-R3** | Every leg MUST be non-zero and MUST share the parent's sign. |
-| **B7-R4** | Category roll-ups MUST count a split's legs and MUST NOT count the parent. |
-| **B7-R5** | A split whose legs do not sum MUST roll up via the parent's own category rather than producing a wrong total. |
+| **B7-R4** | A category roll-up MUST count a split's money exactly once, through its legs and not additionally through the parent. The sole exception is the broken split of B7-R5, which is counted through its parent instead. |
+| **B7-R5** | A split whose legs do not sum MUST roll up through the parent's own category and MUST NOT contribute its legs — the single case B7-R4 exempts — rather than producing a wrong total. |
 | **B7-R6** | Saving a split MUST apply an identity-preserving diff, never delete-all-then-reinsert. |
 | **B7-R7** | Amounts MUST be entered as absolute values with the sign implied by the parent. |
 | **B7-R8** | The save MUST be gated on the unallocated remainder reaching exactly zero. |
