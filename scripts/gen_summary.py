@@ -3,7 +3,7 @@
 
 The spec is authored as numbered top-level directories. The docs workflow copies
 them into `src/` and runs this to emit `src/SUMMARY.md`, so the nav stays in sync
-with the files rather than being hand-maintained (Q-R58).
+with the files rather than being hand-maintained (OPS-R8).
 
 Usage: gen_summary.py <src-dir>
 """

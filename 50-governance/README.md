@@ -28,7 +28,7 @@ from.
 | **GOV-R3** | Every cited identifier MUST already exist on the canonical specification's default branch. |
 | **GOV-R4** | A behavioural change's specification change MUST merge **before** its implementation. |
 | **GOV-R5** | Routine maintenance MUST cite the maintenance identifier rather than inventing a requirement. |
-| **GOV-R6** | Requirement identifiers MUST NOT appear in code comments. |
+| **GOV-R6** | Requirement identifiers MUST NOT appear in the code comments of an implementation repository; they belong in commit trailers and pull-request bodies. The canonical repository's own gate scripts are the exception — a gate names the requirement it enforces — and their citations are checked like every other (REPO-R15). |
 | **GOV-R7** | A contested decision MUST be recorded as a decision record before the change that depends on it merges. |
 | **GOV-R8** | Identifiers MUST be permanent and never reused; a withdrawn one MUST be marked in place. |
 | **GOV-R9** | A decision record MUST NOT be edited once accepted; it MUST be superseded by a new one that links both ways. |

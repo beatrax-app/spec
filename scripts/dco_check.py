@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Verify every commit in base..head carries a Signed-off-by matching its author.
-Implements GOV-R29/GOV-R30. Usage: dco_check.py <base_sha> <head_sha>
+Implements GOV-R15. Usage: dco_check.py <base_sha> <head_sha>
 """
 import subprocess, sys, re
 
