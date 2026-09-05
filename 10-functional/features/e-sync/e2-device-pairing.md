@@ -144,10 +144,10 @@ A pairing moves `pending` → `awaiting_confirm` → `confirmed`, falling to
 | **E2-R15** | The pre-confirmation handshake MUST be able to propagate over the relay for devices that cannot see each other. |
 | **E2-R16** | A single state machine MUST own pairing state, with pending, awaiting-confirmation, confirmed, and expired states. |
 | **E2-R17** | The trust boundary — that a paired device is trusted, and revocation does not retroactively protect — MUST be stated to the user in plain language. |
-| **E2-R18** | A confirmed device MAY relay another confirmed device's public identity. A relayed identity MUST be stored unconfirmed, MUST name the device that vouched for it, and MUST verify nothing until the reader confirms it. |
-| **E2-R19** | A relayed identity, once confirmed, MUST grant signature verification only — never transport authentication, epoch delivery, or any other capability of a paired device. |
-| **E2-R20** | Catch-up MUST NOT send an operation whose author the receiving device has declared it cannot verify, and MUST report to that device how many operations were withheld and for which author. |
-| **E2-R21** | A catch-up cursor MUST NOT advance over an operation whose author the receiving device could not verify, so that confirming an introduction later still delivers it. |
+| **E2-R18** | *(Open)* A confirmed device MAY relay another confirmed device's public identity. A relayed identity MUST be stored unconfirmed, MUST name the device that vouched for it, and MUST verify nothing until the reader confirms it. Not yet satisfied — no device relays an identity today, and there is no unconfirmed store to put one in. |
+| **E2-R19** | *(Open)* A relayed identity, once confirmed, MUST grant signature verification only — never transport authentication, epoch delivery, or any other capability of a paired device. Not yet satisfied — there is no relayed identity yet for the boundary to hold around, and until there is, this asserts a property the product does not have. |
+| **E2-R20** | *(Open)* Catch-up MUST NOT send an operation whose author the receiving device has declared it cannot verify, and MUST report to that device how many operations were withheld and for which author. Not yet satisfied — a catch-up request does not yet say which authors the asking device can verify, so the answering side has nothing to filter on. |
+| **E2-R21** | *(Open)* A catch-up cursor MUST NOT advance over an operation whose author the receiving device could not verify, so that confirming an introduction later still delivers it. Not yet satisfied — a cursor advances over every entry the session admitted, including ones the merge layer then refused. |
 
 ## Related
 
