@@ -89,11 +89,15 @@ has not committed.
 Callers that batch several confirms inside their own transaction suppress the
 dispatch and fire it once themselves afterwards.
 
-### Re-importing the same file is free
+### Re-importing the same file short-circuits
 
 A file whose content hash matches one the user already imported and confirmed
-short-circuits to an empty preview. Even without that, every row would classify
-as Duplicate — the hash check just saves the work.
+short-circuits to an empty preview. The short-circuit is load-bearing, not an
+optimisation: every row would indeed classify as Duplicate, but a confirm with
+zero surviving rows still runs the post-commit promotions — card-statement
+metadata, chain resolution, recurring detection — against the rows the first
+import wrote. The hash check is what keeps a re-import from redoing that work,
+so it MUST NOT be described or implemented as a saving that could be dropped.
 
 ### The consolidated first-import view
 
@@ -102,6 +106,11 @@ before committing anything. A consolidated preview groups the staged runs by
 format, shows a sample of each, and commits them together. It drops runs older
 than a two-week window and runs already confirmed, so a forgotten tab cannot
 resurface weeks-old data or replay a committed run.
+
+A file the parser could not read is a fourth case, and it is not a drop. The
+run stays in the view carrying its error, and the files that did parse stay
+confirmable — one unreadable statement in a staged set of six must not hold the
+other five hostage while the user works out what is wrong with it.
 
 ### The file has to reach the app before any of this applies
 
@@ -186,6 +195,7 @@ An import run moves through:
 | **A2-R23** | A platform-specific upload transport MUST hand the pipeline the same temporary file a multipart upload would, so that parsing, preview, verdicts and confirm are identical on every platform. |
 | **A2-R24** | An upload transport MUST NOT restrict which source formats a platform accepts; binary formats MUST cross as safely as text. |
 | **A2-R25** | A signed upload URL MUST validate against the address the runtime actually presents, not the one its URL generator writes. |
+| **A2-R26** | A run in which one or more files failed to parse MUST still be confirmable for the files that did parse. A file-level failure MUST NOT withhold confirm from the run, and in the consolidated view one file MUST NOT veto the rest of the staged set. |
 
 ## Related
 
