@@ -174,7 +174,16 @@ lead's request.
 
 ## Remaining before v2.0 can ship
 
-This is the whole outstanding list. Everything else is done.
+The phases and rulings still open are below. They are not the whole of what is
+unsatisfied: an audit of every identifier in
+[the v2.0 manifest](../70-operations/versions/2.0.0.toml) on 2026-09-05 found
+thirty-six of its three hundred and thirty-nine goals unmet, two asserted but
+unproven, and four outside what the repositories can decide. Most of those are
+single requirements inside features that otherwise landed, so they are recorded
+where they can be read against the goal they belong to rather than restated
+here. **This page is not a second copy of that list**, and the sentence that
+once stood here — "this is the whole outstanding list, everything else is
+done" — was true of the phases and false of the requirements.
 
 ### 1 — Mobile client as a fully synced peer
 
@@ -277,10 +286,26 @@ did not.
 
 Not phases, but they gate a tag. Tracked in
 [70-operations/versions/2.0.0.toml](../70-operations/versions/2.0.0.toml) and in
-the [definition of done](../40-quality/definition-of-done.md):
+the [definition of done](../40-quality/definition-of-done.md). **This bucket now
+has no outstanding items.**
 
-- The v2.0 upgrade note for the category-linked-pot retirement, which is a
-  user-visible breaking change and needs release-note prominence.
+The v2.0 upgrade note for the category-linked-pot retirement is **done**
+([D3-R16](../10-functional/features/d-money/d3-pots.md#acceptance-criteria),
+[OPS-R12](../70-operations/README.md)), as of 2026-09-05. The note is carried in
+a commit's `BREAKING CHANGE:` footer — the only place prose can live in a body
+generated from the commit history ([OPS-R11](../70-operations/README.md)) — and
+the changelog configuration renders that footer in full at the top of the
+release body rather than as one subject line among thousands. The app says it as
+well: the cutover raises a one-time banner naming the amount released and the
+pots it came out of, because the desktop updater renders no release notes of its
+own and a phone takes its update from an app store, so neither reader would
+otherwise be told that money they had set aside is now unallocated.
+
+It had been outstanding since the retirement landed, and for that whole period
+[the v2.0 manifest](../70-operations/versions/2.0.0.toml) listed that
+requirement under a heading reading "(landed)" — one file away from this section
+saying it was not. Nothing read either. That is what opened the manifest audit,
+and `scripts/manifest_check.py` is what now refuses the two pages disagreeing.
 
 The cross-user isolation route probes that stood here are **done**. The pass
 enumerated all seventy-six authenticated `GET` routes against the live router

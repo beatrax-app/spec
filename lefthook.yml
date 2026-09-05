@@ -11,3 +11,5 @@ pre-push:
   commands:
     integrity:
       run: python3 scripts/integrity.py
+    manifests:
+      run: python3 scripts/manifest_check.py

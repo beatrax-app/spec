@@ -3,11 +3,15 @@ default:
     @just --list
 
 # Run every check CI runs.
-ci: integrity typos links markdown
+ci: integrity manifests typos links markdown
 
 # Verify identifiers resolve, none duplicated, links unbroken.
 integrity:
     python3 scripts/integrity.py
+
+# Verify every version manifest's goals against the spec and the roadmap.
+manifests:
+    python3 scripts/manifest_check.py
 
 # Spell check.
 typos:

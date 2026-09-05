@@ -43,6 +43,7 @@ scripts/         the CI automation
 | `gen_codeowners.py` | Generates a repository's `CODEOWNERS` from the maintainer registry. |
 | `gen_summary.py` | Generates the documentation-site navigation from the section tree. |
 | `check_stageable.py` | Validates that a version manifest may be staged. |
+| `manifest_check.py` | Reads every version manifest whatever its status: goals resolve, none is listed twice, and no goal is claimed landed while its own feature page or the roadmap still calls it open. |
 
 ## The workflows it defines
 

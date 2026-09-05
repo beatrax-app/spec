@@ -100,13 +100,23 @@ and the bulk of its goals are already satisfied by work that has landed and not
 yet been released — see the
 [roadmap](../00-overview/roadmap.md#landed-but-unreleased--the-body-of-v20).
 
-The outstanding goals are the mobile peer's remaining acceptance work and
-app-store distribution. The latter is
+Every goal was audited against the product on 2026-09-05, one identifier at a
+time, and the manifest's header records the result per goal rather than per
+block. The largest outstanding block is app-store distribution, which is
 [now scoped](../00-overview/roadmap.md#2--app-store-publishing-and-distribution)
 — all four stores, with direct download retained wherever it remains possible
-([ADR-0032](../00-overview/decisions/0032-all-four-stores-additive-to-direct-download.md))
-— and the manifest also carries the three latent risks and the four relayed-identity
+([ADR-0032](../00-overview/decisions/0032-all-four-stores-additive-to-direct-download.md)).
+The manifest also carries the three latent risks and the four relayed-identity
 requirements that were reclassified into v2.0 scope on 2026-09-05.
+
+**A staged manifest's goals are checked on every push**, by
+`scripts/manifest_check.py`: every goal resolves to a requirement the
+specification defines, and no group heading claims a goal has landed while the
+header, the roadmap, or the requirement's own *(Open)* marker says otherwise.
+`check_stageable.py` asserts the first of those once, on the day a version is
+staged, and exits on the first line for a manifest in any other status — so
+between staging and release the goals were the one body of citations in this
+repository that nothing re-read.
 
 ## Related
 
