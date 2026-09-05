@@ -47,7 +47,9 @@ things the *shape* of the system must satisfy, which no single feature owns.
 | **ARCH-R20** | Every ingestion path MUST be idempotent on the transaction fingerprint. |
 | **ARCH-R21** | The default user scope MUST fail closed on a web request with no authenticated user, matching no rows rather than returning unscoped results; console and queue contexts stay unscoped under the explicit filter ARCH-R6 requires. |
 | **ARCH-R22** | Every platform the matrix lists as shipped MUST be reachable under the address gate the application enforces. Self-hosting off loopback is supported, so the gate MUST admit an explicitly configured widening rather than refusing every non-loopback address unconditionally. |
-| **ARCH-R23** | *(Open)* The widening MUST be opt-in and MUST default to loopback only, so a desktop or mobile bundle stays unreachable off its machine unless its operator has said otherwise. Not yet satisfied — the gate refuses every non-loopback address today; see [Self-hosting and the address gate](#self-hosting-and-the-address-gate). |
+| **ARCH-R23** | The widening MUST be opt-in and MUST default to loopback only, so a desktop or mobile bundle stays unreachable off its machine unless its operator has said otherwise. |
+| **ARCH-R24** | The widening MUST be configured by naming the interfaces served. It MUST refuse a wildcard address, a range, and a hostname, and MUST report each refused entry rather than expanding or resolving it. Where the runtime publishes no bind address, the recorded host MUST authorise the request in its place, and MUST NOT do so when that host is itself a loopback name. |
+| **ARCH-R25** | Whether the boundary is widened MUST be visible on the health surface, as state alone. The interfaces served MUST NOT appear there: once widened, that body crosses the network, where an inventory of what else is served is a disclosure rather than a diagnosis. |
 
 ## Self-hosting and the address gate
 
@@ -66,10 +68,17 @@ refusal — [F6-R13](../10-functional/features/f-platform/f6-updates.md) and
 do G1's catalogue prose and the practice table in
 [40-quality/security.md](../40-quality/security.md).
 
-**It is not built yet** (ARCH-R23). Until it lands, a self-hoster reaches the
-application only by binding loopback behind a reverse proxy on the same machine,
-because the proxy's own connection reports a loopback bind address. That is why
-the matrix's *Shipped* carries a qualifier rather than being taken at face value.
+**It is built.** A self-hoster names the interfaces to serve and the gate admits
+those and nothing else; unset, which is what every bundle ships, the gate is
+byte-for-byte what it was. Binding loopback behind a reverse proxy on the same
+machine still works and needs no configuration, because the proxy's own
+connection reports a loopback bind address.
+
+What the widening does not provide is transport security: the application
+terminates no TLS, so an operator who names an address the whole subnet can
+reach is sending a password and every balance in clear. Naming a private
+address — a VPN interface rather than a LAN one — is the shape the deployment
+guide steers at.
 
 ## Related
 
