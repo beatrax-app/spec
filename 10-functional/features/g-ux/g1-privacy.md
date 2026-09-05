@@ -98,7 +98,8 @@ Data locations, export, and deletion are first-class and documented in
 | ID | Requirement |
 |----|-------------|
 | **G1-R1** | The outbound-call surface MUST be enumerable, and this catalogue MUST be its complete enumeration. |
-| **G1-R2** | Every outbound call other than the update check MUST be off by default. |
+| **G1-R2** | Every outbound call the application itself initiates, other than the update check, MUST be off by default. |
+| **G1-R20** | Handing a URL to the operating system's browser is not a call the application makes and is therefore not disableable; it MUST still pass the applicable allow-list first, and it MUST NOT carry any data beyond the URL the user clicked. |
 | **G1-R3** | The update check MUST be disableable. |
 | **G1-R4** | With every optional feature and the update check disabled, the application MUST make no outbound network call. |
 | **G1-R5** | No telemetry, analytics, or usage-reporting dependency may exist in the shipped bundle. |

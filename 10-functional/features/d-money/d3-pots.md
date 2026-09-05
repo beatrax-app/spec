@@ -86,7 +86,7 @@ action.
 | ID | Requirement |
 |----|-------------|
 | **D3-R1** | A pot MUST NOT have a stored balance column; its balance MUST be the signed sum of its movements at read time. |
-| **D3-R2** | For any account, the real balance MUST equal allocated plus unallocated, where allocated counts active pots only. |
+| **D3-R2** | Unallocated MUST be derived as the account's real balance minus the sum of its active pots, so the three figures cannot disagree; archived pots MUST NOT be counted, and the real balance MUST exclude rows dated after today. |
 | **D3-R3** | Unallocated MUST be computed at read time and MUST be allowed to go negative. |
 | **D3-R4** | Over-allocation MUST be surfaced and MUST NOT be auto-corrected. |
 | **D3-R5** | Every operation MUST be expressed as a movement row; no balance column may be updated. |
@@ -94,7 +94,7 @@ action.
 | **D3-R7** | A withdrawal MUST be checked against the pot's balance. |
 | **D3-R8** | A transfer MUST write an atomic pair of movements and MUST be confined to one account. |
 | **D3-R9** | A transfer MUST require both pots to be active, owned by the caller, and on the same account. |
-| **D3-R10** | Archiving MUST write a final releasing movement and change status in the same transaction; an archived pot MUST read as zero. |
+| **D3-R10** | Archiving MUST release any remaining balance and change status in the same transaction; an archived pot MUST read as zero. A pot already at zero has nothing to release and MUST NOT have a zero-amount movement written for it. |
 | **D3-R11** | Restoring MUST write no movements; the pot MUST return empty. |
 | **D3-R12** | A pot MUST NOT be linkable to a budget category; such a write MUST be rejected. |
 | **D3-R13** | A pot MUST back at most one goal, enforced on both create and edit. |

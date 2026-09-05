@@ -2,12 +2,15 @@
 
 **Status:** Accepted · **Area:** G — Cross-cutting UX
 
-> **Forthcoming.** This feature is specified ahead of its implementation, to
-> unblock the app-side work that introduces it. Nothing here ships in `v1.3.0`;
-> every requirement below is therefore marked *(Open)* until the behaviour it
-> describes lands. This is the same discipline [G5](g5-plain-language.md) applies
-> to deferred behaviour — a specification may run ahead of the product, but it
-> must say so plainly rather than describe an interface that does not yet exist.
+> **This notice is stale, and saying so is the point.** It was written when the
+> feature ran ahead of the product. Localisation has since shipped: two languages
+> are live and thirty modules carry translated strings. The *(Open)* markers below
+> have not been revisited requirement by requirement, so several of them now
+> understate what the product does — the mirror image of the failure this notice
+> was written to avoid, and just as misleading to a reader deciding what is built.
+> Each remaining marker needs verifying against the implementation before v2.0;
+> until that pass runs, treat a marker here as unverified rather than as evidence
+> the behaviour is missing.
 
 ---
 
@@ -167,7 +170,7 @@ transition back short of clearing the preference.
 | **G7-R12** | *(Open)* A key absent in the active locale MUST fall back to its English value, never to a raw key, a blank, or a placeholder. |
 | **G7-R13** | *(Open)* The active locale MUST be reflected in the document's language attribute for assistive technology. |
 | **G7-R14** | *(Open)* Language detection and selection MUST NOT add an outbound call or send the user's locale off the machine. |
-| **G7-R15** | *(Open)* A locale MUST NOT give one page title to two screens English titles differently; where the language has a single word for both, the title MUST carry a distinguishing word. |
+| **G7-R15** | *(Open)* Where English gives two screens distinct titles, a locale MUST NOT collapse them to one; where that language has a single word for both, the title MUST carry a distinguishing word. |
 
 ## Related
 

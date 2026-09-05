@@ -79,7 +79,8 @@ still discover that a number key assigns a category.
 | **G6-R8** | The counterparty triage queue MUST be operable end to end from the keyboard. |
 | **G6-R9** | The categorisation inbox MUST support assigning a category by number key, moving by arrow keys, and committing a batch. |
 | **G6-R10** | Skipping an item MUST re-queue it at the end rather than dropping it. |
-| **G6-R11** | Shortcut handlers MUST NOT fire while focus is in a text input, text area, or editable region. |
+| **G6-R11** | A global shortcut handler MUST NOT fire while focus is in a text input, text area, or editable region, whatever modifiers are held. |
+| **G6-R13** | A component MAY handle keys inside its own field — the palette's navigation and token autocomplete do — provided the handler is scoped to that component and never reaches a global action. |
 | **G6-R12** | Available shortcuts MUST be discoverable on the surface that offers them. |
 
 ## Related

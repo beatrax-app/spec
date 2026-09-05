@@ -135,7 +135,8 @@ The pass reads the same live model the grid does, never a legacy path.
 | ID | Requirement |
 |----|-------------|
 | **D1-R1** | A monthly grid MUST list every live expense category with its assigned amount. |
-| **D1-R2** | A ready-to-assign figure MUST show income minus total assigned for the month. |
+| **D1-R2** | A ready-to-assign figure MUST show income for the month, plus the pool carried in from the previous period, minus total assigned. |
+| **D1-R30** | The pool carried in MUST be the previous period's ready-to-assign after every reduce-to-budget shortfall has been absorbed into it, so an unassigned surplus and an absorbed overspend both roll forward. |
 | **D1-R3** | Ready-to-assign MUST be allowed to go negative and MUST NOT block assignment. |
 | **D1-R4** | Envelope availability MUST be assignment plus carried-in plus net moved minus spent. |
 | **D1-R5** | Carryover MUST be computed by walking forward from an activation anchor, not from the beginning of history. |
@@ -151,7 +152,8 @@ The pass reads the same live model the grid does, never a legacy path.
 | **D1-R15** | The grid MUST include categories that have spending but no assignment. |
 | **D1-R16** | Copy-last-month MUST be offered only where the current month has no assignments and the previous month has some, and MUST NOT apply automatically. |
 | **D1-R17** | Setting an assignment to zero MUST delete the row rather than storing zero. |
-| **D1-R18** | Envelope figures MUST be single-currency; other-currency spend MUST be surfaced separately and never folded in. |
+| **D1-R18** | Envelope figures MUST be denominated in one reporting currency; spend settled in another currency MUST be converted into it before it is folded in. |
+| **D1-R29** | Spend in a currency the rate table cannot price MUST be excluded from the envelope total and surfaced separately on the row, never counted at par. |
 | **D1-R19** | Activation MUST archive every active category-linked pot, releasing balances to unallocated, and MUST leave goal-linked pots untouched. |
 | **D1-R20** | Activation MUST stamp an anchor claimed atomically before any pot is touched. |
 | **D1-R21** | A failed activation walk MUST un-claim the user so a re-run is safe. |
