@@ -62,8 +62,11 @@ than randomness.
 
 ### The anchor is today's position, not a statement
 
-A statement summary records what a statement said. It is not a position, and it
-anchors nothing. Anchoring on one opened a projection on a closing balance that
+A statement summary records what a statement said. On its own it is not a
+position, and for every account kind but the ICS card it anchors nothing —
+the card is the one case where the amount owed at the last close, plus what has
+been charged since, *is* today's position. Anchoring on a closing balance alone
+opened a projection on a figure that
 had not moved since April — four months of imported rows simply absent — while
 the dashboard, net worth, and reconciliation read the same account correctly off
 the same rows.
@@ -171,8 +174,8 @@ single sanctioned writer.
 |----|-------------|
 | **C5-R1** | Horizons of thirty, sixty, and ninety days MUST be supported. |
 | **C5-R2** | Projection MUST run as a background job; it MUST NOT be computed inside a page request. |
-| **C5-R3** | A run in progress MUST be shown as computing rather than displaying a stale figure as current. |
-| **C5-R4** | The starting anchor MUST be the account's position as at today, and it MUST NOT be taken from a statement summary. For every account kind but the ICS card it MUST be the same figure the balance, net-worth, and reconciliation surfaces read — the account's baseline plus every transaction posted up to today. An ICS card MUST anchor on the amount owed at its most recent statement's close plus what has been charged to it since, and, where it has no statement but the user has confirmed a balance, on that same figure. |
+| **C5-R3** | A run in progress MUST be shown as computing rather than displaying a stale figure as current, on every surface that reads its result — the forecast chart, the calendar balance line, and the position summary's shortfall member alike. |
+| **C5-R4** | The starting anchor MUST be the account's position as at today, and a statement's closing balance MUST NOT stand in for that position on its own. For every account kind but the ICS card it MUST be the same figure the balance, net-worth, and reconciliation surfaces read — the account's baseline plus every transaction posted up to today. An ICS card MUST anchor on the amount owed at its most recent statement's close plus what has been charged to it since, bounded at today, so that it too resolves to today; where it has no statement but the user has confirmed a balance, on that confirmed figure. |
 | **C5-R5** | A card account with neither a statement nor an entered opening balance MUST anchor at zero. |
 | **C5-R6** | A high-variance series with sufficient history MUST contribute percentile bands; others MUST contribute an envelope. |
 | **C5-R7** | Percentiles MUST use linear interpolation between closest ranks. |

@@ -88,7 +88,7 @@ A calendar entry drills to its recurring series or its counterparty.
 | An end-of-month anchor across a short month | Preserved by index stepping. |
 | A payment slightly before a series's first observed occurrence | Included, via the inception slack. |
 | Accounts in several currencies | Converted before summing; minor units never added across currencies. |
-| A never-configured account preference | Defaults applied and materialised explicitly on first load. |
+| A never-configured account preference | Defaults applied in memory for that render; nothing is stored until the user changes the selection. |
 
 ## Acceptance criteria
 
@@ -103,7 +103,7 @@ A calendar entry drills to its recurring series or its counterparty.
 | **C6-R7** | Each included account's forecast MUST be fetched once per render, not once per day. |
 | **C6-R8** | Amounts MUST be converted to the base currency before being summed across accounts. |
 | **C6-R9** | A day's start-of-day balance MUST chain from the previous day only where that value was known; otherwise it MUST be shown as unknown. |
-| **C6-R10** | Internal transfers MUST net to zero on the balance line without special-casing. |
+| **C6-R10** | Where both legs of an internal transfer sit on accounts inside the balance set, they MUST net to zero on the line without special-casing. Where one leg's account is outside it — by the card exclusion of C6-R15, by a mirror kind, or by the user's own selection — the surviving leg MUST stand, because it is a real movement of the balance the line is drawn for. |
 | **C6-R11** | A past-day entry MUST be marked paid or missed against a cadence-clamped tolerance window. |
 | **C6-R12** | The tolerance window for a sub-monthly series MUST be at most half its interval. |
 | **C6-R13** | Which accounts contribute entries and which contribute balance MUST be independent settings. |
