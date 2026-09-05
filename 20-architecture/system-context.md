@@ -77,7 +77,9 @@ any data path.
 | **Local development** | The containerised toolchain. |
 
 Every shape is loopback-bound by default and refuses non-loopback requests
-([F6](../10-functional/features/f-platform/f6-updates.md)).
+([F6](../10-functional/features/f-platform/f6-updates.md)). Self-hosting is the
+shape that reaches past loopback, and it does so through an explicit widening
+the operator opts into ([ARCH-R22](README.md)).
 
 ## Quality attributes, in priority order
 

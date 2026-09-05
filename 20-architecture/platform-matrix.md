@@ -12,7 +12,7 @@ What runs where, and what differs.
 | **Windows** | Installer, unsigned | Shipped |
 | **Linux** | Portable image and native package, unsigned | Shipped |
 | **Mobile** | Native shell rendering the same interface | v2.0, [E5](../10-functional/features/e-sync/e5-mobile-peer.md) |
-| **Self-hosted** | The application on a machine the household controls | Shipped |
+| **Self-hosted** | The application on a machine the household controls, reached over their own network | Shipped; off-loopback access awaits the opt-in widening (ARCH-R23) |
 | **Local development** | Containerised toolchain | — |
 
 ### macOS on Intel

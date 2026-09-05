@@ -91,7 +91,7 @@ is stated rather than glossed.
 | Constant-time comparison for every secret comparison | Including callback state and confirmation phrases |
 | Single-use, session-bound, age-limited callback state, with a PKCE S256 challenge bound to the flow | On every authorisation flow ([A4-R22](../10-functional/features/a-ingestion/a4-email-scanning.md#acceptance-criteria)) |
 | Host allow-lists before credentials are attached | On every outbound client, including provider-supplied pagination URLs |
-| Loopback-only binding | Every non-loopback request refused with not-found |
+| Loopback-only binding, widened only on purpose | Every non-loopback request refused with not-found unless the operator explicitly widened the gate; the default is loopback only ([ARCH-R22](../20-architecture/README.md)) |
 | No-store cache directives on authenticated responses | So a browser does not write a transaction list to disk |
 | A nonce-based Content-Security-Policy on authenticated responses | Inline scripts carry a per-response nonce; untrusted financial text can never execute as script |
 | Escalating backoff with a hard cap | On the app-lock, with an alert at the cap |
