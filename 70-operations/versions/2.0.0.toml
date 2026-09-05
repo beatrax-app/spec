@@ -7,36 +7,163 @@
 # end-to-end-encrypted, peer-to-peer sync stack with its own identity,
 # transport, and at-rest-encryption layers.
 #
-# The bulk of these goals are already SATISFIED by work that has landed on the
-# development line and has not yet appeared in a tagged release. The latest
-# released tag is v1.3.0 (2026-06-14). See the roadmap's three buckets.
+# Most of these goals are satisfied by work that has landed on the development
+# line and has not yet appeared in a tagged release. The latest released tag is
+# v1.3.0 (2026-06-14). See the roadmap's three buckets.
 #
-# OUTSTANDING at the time of writing:
-#   (none in E)             — E5-R23 and E5-R24 were verified on hardware on
-#                             2026-09-04, and E5-R25 on 2026-09-05. The whole
-#                             E-sync block is satisfied.
+# AUDITED 2026-09-05 — all 339 identifiers, one at a time, against
+# beatrax@origin/main rather than against the headings below. 297 satisfied,
+# 36 not, 2 asserted but unproven, 4 outside what either repository can decide.
+#
+# The audit was opened because one entry was found false by accident. D3-R16
+# sat under "(landed)" from this file's founding commit until 2026-09-05, while
+# nothing whatsoever told an upgrading reader that money they had set aside was
+# now unallocated: no release note, no commit footer a generated body could
+# render, no in-app disclosure. The roadmap said so plainly the whole time, one
+# file away. A heading nothing reads is a claim nothing checks, so every
+# heading in this file was checked, and scripts/manifest_check.py now reads
+# them on every push.
+#
+# The unmet goals stay listed. A goal is a commitment, not a report: `staged`
+# is the status that carries unmet goals and `releasable` is the one that does
+# not (OPS-R16). No goal was added or removed here — only the claims about them.
+#
+# NOT SATISFIED, under headings that said landed:
+#   E1-R5      the distinction is structural and correct; the test the
+#              requirement explicitly demands for it does not exist.
+#   E1-R6      OpLogRebuilder works and is well tested; nothing in production
+#              calls it, so rebuild is a property rather than the supported
+#              operation the requirement names.
+#   E1-R11     delete-wins is not configurable. deleteWins() has no caller but a
+#              unit test, and a peer tombstone deletes an account whose own rule
+#              declares it must not.
+#   E1-R15     the per-entry user-scope guard was deliberately removed; peer
+#              membership is proved by the confirmed device key instead. The
+#              product is right here and the requirement is stale.
+#   E2-R6      the typed fallback carries the token alone, not the QR's payload.
+#              It re-fetches the identity over the LAN, drops the relay
+#              bootstrap, and a phone mints no typed code at all.
+#   E2-R10     device_registry.last_seen_at is written on every exchange and
+#              read by nothing. The list shows a name and a fingerprint only.
+#   E3-R3      the Noise vectors are self-generated determinism anchors. The
+#              fixture says so; two test names still call them official.
+#   E3-R6      rung two of the ladder — a manually entered host and port —
+#              exists nowhere: no field, no config key, no flag.
+#   E3-R12     the desktop provisions a relay for itself on boot, on enable and
+#              on unlock, then hands the endpoint to the phone over the pairing
+#              QR. Neither device chose it, and it is not off by default.
+#   E4-R23     the requirement documents an absence that has gone: custody is
+#              wired on both shells. The real gap is a Linux desktop with no
+#              keyring, which no page mentions.
+#   E4-R24     the same shape. The backup-exclusion bridge exists and Android is
+#              closed; see E5-R23 for what is actually still open.
+#   E5-R10     the async cold-start recovery signal has no emitter. The Android
+#              half is a documented skeleton, and Android is the only platform
+#              that needs it.
+#   E5-R19     the relay is drained first and unconditionally, deliberately, so
+#              an epoch wrap is never left unread in a mailbox.
+#              LAN-first-then-relay is not what ships.
+#   E5-R23     Android is closed. On iOS the exclusion is set inside
+#              getAppSupportDir, i.e. on Library/Application Support, while the
+#              store is Documents/persisted_data — the ledger, the keyring and
+#              the sync identity sit one directory above the flag.
+#   A8-R24     the abandoned-run sweeper is correct, owner-scoped and tested,
+#              and nothing in production invokes it.
+#   B8-R9      two writers reach a reconciled row without refusing and are on no
+#              exemption list: goal attribution, and the migration importer's
+#              raw status update.
+#   B8-R13     three independent writers of transactions.status, none
+#              delegating to another, and nothing pinning a single one.
+#   C7-R13     the union-and-sort holds for grouped dimensions; a time series
+#              and net worth compare by position instead, deliberately, because
+#              unioning two disjoint windows invented rows.
+#   C1-R8      PositionSummaryDto has no net-worth member at all, and
+#              shortfallAhead is a bool, so "not yet computed" is reported as
+#              "no shortfall".
+#   C8-R1      the requirement was tightened to demand the table list every
+#              trigger kind. The product has eleven; the table has eight.
+#   C8-R10     the product deliberately reversed this. A write on an unpaired
+#              device now persists under a reserved id, because the no-op left
+#              the whole settings screen inert on the default install path.
+#   C8-R17     no site logs and refuses. The runtime path that meets an
+#              unrecognised kind logs it and renders it with a neutral chip.
+#
+# Four of those — E1-R15, E5-R19, C7-R13 and C8-R10 — are not gaps in the
+# product. They are places the product moved on and the requirement did not,
+# each with the reasoning recorded in the product repository. Each needs a
+# ruling on the requirement, not a fix in the code.
+#
+# UNPROVEN — a verification this file asserted, and neither repository records:
+#   E5-R24     mobile local-notification delivery. The only on-device record in
+#              the product is the opposite: a Galaxy producing the inbox row and
+#              no OS banner, in a commit whose own body says it does not fix
+#              delivery. Nothing has touched the listener since.
+#   E5-R25     two-device pairing acceptance. No commit body, no runbook note,
+#              no artefact carries the run, and the baseline it names is well
+#              behind the tip, over commits that changed the pairing path. A
+#              specification asserting its own verification is not evidence.
+#
+# E5 records all three as taken on an iPhone 12 mini, and this file does not
+# overrule that. What it records is narrower and checkable: neither repository
+# carries an artefact of either run, so nothing here can be audited against a
+# build. For E5-R23 the audit also found something no page yet carries — the
+# iOS half flags the wrong directory tree — which is a product defect rather
+# than a disagreement about a verification.
+#
+# OUTSTANDING — scoped work, not yet on the development line:
+#   A6-R20, A6-R21          — per-connection credential storage and per-user
+#                             credential keying. Carried as accepted deferrals
+#                             until 2026-09-05, when the deferral was reversed.
+#                             Both are built in an open product pull request and
+#                             land together; there is no half-satisfied state.
 #   F8-R1 .. F8-R28         — app-store distribution, scoped in F8 and a goal of
-#                             this release. Several are already satisfied by
-#                             shipped work; the rest are the outstanding block.
-#                             Scope is ALL FOUR stores, with direct download
-#                             retained wherever it remains possible (ADR-0032,
-#                             2026-09-05). This reverses the two-mobile-stores
-#                             scope this file previously recorded. F8-R28 is the
-#                             largest unknown in the release: a Mac App Store
-#                             build needs a runtime strategy before it needs a
-#                             submission, because the sandbox ignores one of the
-#                             two hardened-runtime relaxations the bundle uses
-#                             to map its static interpreter.
-#   A6-R20, A6-R21, F3-R33  — the three latent risks. Carried as accepted
-#                             deferrals until 2026-09-05, when the deferral was
-#                             reversed: all three are in scope and being built.
-#                             They are still unsatisfied, and their feature docs
-#                             still mark them (Open).
-#   E2-R18 .. E2-R21        — relayed device identity (ADR-0027). Classified
-#                             into this release on 2026-09-05. Before that they
-#                             were in no bucket at all — neither outstanding nor
-#                             backlog, and absent from this list, which is the
-#                             defect the roadmap now records.
+#                             this release. Scope is ALL FOUR stores, with
+#                             direct download retained wherever it remains
+#                             possible (ADR-0032, 2026-09-05). Audited: 12
+#                             satisfied, 12 not, and 4 that neither repository
+#                             can decide — F8-R4, F8-R15, F8-R16 and F8-R26 are
+#                             console records and listing copy, settled in App
+#                             Store Connect, the Play Console and Partner
+#                             Centre. No store-shaped artefact is built for any
+#                             platform yet, which is what F8-R5 and F8-R27 turn
+#                             on. F8-R28 remains the largest unknown in the
+#                             release: a Mac App Store build needs a runtime
+#                             strategy before it needs a submission, because the
+#                             sandbox ignores one of the two hardened-runtime
+#                             relaxations the bundle uses to map its static
+#                             interpreter, and no sandboxed build exists to
+#                             measure.
+#
+# SATISFIED, where a page still says otherwise. Recorded rather than corrected:
+# each is a factual call about a feature and belongs to whoever holds it.
+#   E2-R18 .. E2-R21        — relayed device identity (ADR-0027) merged on
+#                             2026-09-05, the day it was classified into this
+#                             release, with the withheld-count filter beside it.
+#                             E2 still marks all four *(Open)*, and the roadmap
+#                             still says they are being built.
+#   F3-R33                  — operating-system key custody is bound on both
+#                             shells and the session holds a handle rather than
+#                             a key. F3 still marks it *(Open)* and calls the
+#                             adapters unwired.
+#
+# DEFINED, LANDED, IN NO BUCKET — a ruling is needed on each, not a correction.
+# Requirements the specification defines and the product satisfies, added to
+# their feature pages after this file's blocks were written, and listed in
+# neither these goals nor either roadmap bucket. This is the defect the roadmap
+# already records for E2-R18..E2-R21, still live for eleven more:
+#   A8-R26, C1-R18, C8-R22, D1-R29, D1-R30, E1-R23, E1-R24, E3-R21, E3-R22,
+#   E3-R23, E5-R26
+# Two more sit in the same gap unsatisfied, so they need the ruling first:
+#   B8-R16                  — no exemption list exists in the product at all.
+#   C7-R21                  — the read path defaults an unreadable granularity
+#                             where the requirement says reject. Deliberate: a
+#                             saved report is a synced column and can arrive
+#                             from a peer on another build.
+# And four requirements marked *(Open)* are in no bucket either, so nothing
+# schedules them and nothing has declined them: A8-R27 (satisfied since
+# 2026-09-05, the marker is stale), F6-R5, F7-R10 and G7-R11. F6-R5 was marked
+# open on 2026-09-05 and was in no bucket within the hour; the check below
+# caught it on its first run, which is the case for having the check.
 #
 # F1-R18 (lock on window close, unverified) remains the one carry-over
 # release-readiness item that is NOT a goal of v2.0. It cannot be verified
@@ -47,31 +174,31 @@ status  = "staged"
 repos   = ["beatrax"]
 
 goals = [
-  # ── Sync: change capture and CRDT merge (landed) ────────────────────────────
+  # ── Sync: change capture and CRDT merge (landed, except R5, R6, R11, R15) ───
   "E1-R1", "E1-R2", "E1-R3", "E1-R4", "E1-R5", "E1-R6", "E1-R7", "E1-R8",
   "E1-R9", "E1-R10", "E1-R11", "E1-R12", "E1-R13", "E1-R14", "E1-R15",
   "E1-R16", "E1-R17", "E1-R18", "E1-R19", "E1-R20", "E1-R21", "E1-R22",
 
-  # ── Sync: device identity and pairing (landed) ──────────────────────────────
+  # ── Sync: device identity and pairing (landed, except R6, R10) ──────────────
   "E2-R1", "E2-R2", "E2-R3", "E2-R4", "E2-R5", "E2-R6", "E2-R7", "E2-R8",
   "E2-R9", "E2-R10", "E2-R11", "E2-R12", "E2-R13", "E2-R14", "E2-R15",
   "E2-R16", "E2-R17",
 
-  # ── Sync: relayed device identity (classified in 2026-09-05; being built) ───
+  # ── Sync: relayed device identity (classified and merged 2026-09-05) ────────
   "E2-R18", "E2-R19", "E2-R20", "E2-R21",
 
-  # ── Sync: encrypted transport, LAN-direct and relay (landed) ────────────────
+  # ── Sync: transport, LAN-direct and relay (landed, except R3, R6, R12) ──────
   "E3-R1", "E3-R2", "E3-R3", "E3-R4", "E3-R5", "E3-R6", "E3-R7", "E3-R8",
   "E3-R9", "E3-R10", "E3-R11", "E3-R12", "E3-R13", "E3-R14", "E3-R15",
   "E3-R16", "E3-R17", "E3-R18", "E3-R19", "E3-R20",
 
-  # ── Sync: at-rest encryption, revocation and rekey (landed) ─────────────────
+  # ── Sync: at-rest encryption and rekey (landed, except R23, R24) ────────────
   "E4-R1", "E4-R2", "E4-R3", "E4-R4", "E4-R5", "E4-R6", "E4-R7", "E4-R8",
   "E4-R9", "E4-R10", "E4-R11", "E4-R12", "E4-R13", "E4-R14", "E4-R15",
   "E4-R16", "E4-R17", "E4-R18", "E4-R19", "E4-R20", "E4-R21", "E4-R22",
   "E4-R23", "E4-R24",
 
-  # ── Sync: mobile peer (10 of 11 plans landed; R23–R25 outstanding) ──────────
+  # ── Sync: mobile peer (landed, except R10, R19, R23; R24, R25 unproven) ─────
   "E5-R1", "E5-R2", "E5-R3", "E5-R4", "E5-R5", "E5-R6", "E5-R7", "E5-R8",
   "E5-R9", "E5-R10", "E5-R11", "E5-R12", "E5-R13", "E5-R14", "E5-R15",
   "E5-R16", "E5-R17", "E5-R18", "E5-R19", "E5-R20", "E5-R21", "E5-R22",
@@ -95,7 +222,7 @@ goals = [
   "B7-R9", "B7-R10", "B7-R11", "B7-R12", "B7-R13", "B7-R14", "B7-R15",
   "B7-R16", "B7-R17",
 
-  # ── Reconciliation and cleared status (landed) ──────────────────────────────
+  # ── Reconciliation and cleared status (landed, except R9, R13) ──────────────
   "B8-R1", "B8-R2", "B8-R3", "B8-R4", "B8-R5", "B8-R6", "B8-R7", "B8-R8",
   "B8-R9", "B8-R10", "B8-R11", "B8-R12", "B8-R13", "B8-R14", "B8-R15",
 
@@ -105,13 +232,13 @@ goals = [
   "B3-R16", "B3-R17", "B3-R18", "B3-R19", "B3-R20", "B3-R21", "B3-R22",
   "B3-R23", "B3-R24", "B3-R25",
 
-  # ── Migration importers (landed) ────────────────────────────────────────────
+  # ── Migration importers (landed, except R24) ────────────────────────────────
   "A8-R1", "A8-R2", "A8-R3", "A8-R4", "A8-R5", "A8-R6", "A8-R7", "A8-R8",
   "A8-R9", "A8-R10", "A8-R11", "A8-R12", "A8-R13", "A8-R14", "A8-R15",
   "A8-R16", "A8-R17", "A8-R18", "A8-R19", "A8-R20", "A8-R21", "A8-R22",
   "A8-R23", "A8-R24", "A8-R25",
 
-  # ── Notifications and reminders (landed) ────────────────────────────────────
+  # ── Notifications and reminders (landed, except R1, R10, R17) ───────────────
   "C8-R1", "C8-R2", "C8-R3", "C8-R4", "C8-R5", "C8-R6", "C8-R7", "C8-R8",
   "C8-R9", "C8-R10", "C8-R11", "C8-R12", "C8-R13", "C8-R14", "C8-R15",
   "C8-R16", "C8-R17", "C8-R18", "C8-R19", "C8-R20", "C8-R21",
@@ -121,18 +248,18 @@ goals = [
   "A6-R9", "A6-R10", "A6-R11", "A6-R12", "A6-R13", "A6-R14", "A6-R15",
   "A6-R16", "A6-R17", "A6-R18", "A6-R19", "A6-R20", "A6-R21",
 
-  # ── App-lock: operating-system key custody (no longer deferred) ─────────────
+  # ── App-lock: operating-system key custody (no longer deferred; wired) ──────
   "F3-R33",
 
-  # ── Report builder and saved reports (landed) ───────────────────────────────
+  # ── Report builder and saved reports (landed, except R13) ───────────────────
   "C7-R1", "C7-R2", "C7-R3", "C7-R4", "C7-R5", "C7-R6", "C7-R7", "C7-R8",
   "C7-R9", "C7-R10", "C7-R11", "C7-R12", "C7-R13", "C7-R14", "C7-R15",
   "C7-R16", "C7-R17", "C7-R18", "C7-R19", "C7-R20",
 
-  # ── The single position definition (landed) ─────────────────────────────────
+  # ── The single position definition (landed, except R8) ──────────────────────
   "C1-R8", "C1-R9", "C1-R10", "C1-R11", "C1-R12", "C1-R13", "C1-R14",
 
-  # ── App-store distribution (all four stores; partly landed) ─────────────────
+  # ── App-store distribution (all four stores; the outstanding block) ─────────
   "F8-R1", "F8-R2", "F8-R3", "F8-R4", "F8-R5", "F8-R6", "F8-R7", "F8-R8",
   "F8-R9", "F8-R10", "F8-R11", "F8-R12", "F8-R13", "F8-R14", "F8-R15",
   "F8-R16", "F8-R17", "F8-R18", "F8-R19", "F8-R20", "F8-R21", "F8-R22",

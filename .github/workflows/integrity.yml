@@ -1,4 +1,5 @@
-# Spec-side integrity: identifiers resolve, none duplicated, links unbroken.
+# Spec-side integrity: identifiers resolve, none duplicated, links unbroken, and
+# every version manifest's goals still say something true.
 # The spec is subject to its own rules (GOV-R11). See 50-governance/.
 name: integrity
 
@@ -22,3 +23,5 @@ jobs:
           python-version: "3.12"
       - name: Check spec integrity
         run: python3 scripts/integrity.py
+      - name: Check version manifests
+        run: python3 scripts/manifest_check.py
