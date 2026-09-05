@@ -61,6 +61,7 @@ of them invent a decision that was not already made.
 | [0028](0028-a-split-leg-carries-its-own-identity.md) | A split leg carries an identity of its own, and the set conflict stays open | Accepted | New |
 | [0029](0029-the-applier-enforces-the-writers-sum-invariant.md) | The applier enforces the writer's sum invariant, and refuses rather than resolves | Accepted | New |
 | [0030](0030-the-tag-governs-the-workflow-not-what-it-reads.md) | The major tag governs the workflow definition, not what the workflow reads | Accepted | New |
+| [0031](0031-a-signed-wrap-is-independent-of-its-channel.md) | A signed epoch wrap is trusted on its signature, not on its channel | Accepted | Supersedes part of [0016](0016-noise-transport-zero-knowledge-relay.md) |
 
 > **Not here:** the spec's own governance rules. Those are not architectural —
 > no component's design depends on them. They live in

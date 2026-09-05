@@ -1,7 +1,20 @@
 # ADR-0016: Noise XX/IK transport with a zero-knowledge relay fallback
 
-**Status:** Accepted
+**Status:** Accepted; the sealed-epoch channel precondition and the relay's
+"no cryptography at all" claim superseded by
+[ADR-0031](0031-a-signed-wrap-is-independent-of-its-channel.md)
 **Date:** 2026-06-15
+
+> **Two claims in this record no longer hold.** A sealed epoch wrap now carries a
+> detached signature by the sending device, so it is trusted on that signature
+> and its channel is irrelevant — the "only ever legal from a channel that has
+> already authenticated the sender" rule below is superseded. And the relay does
+> perform two cryptographic operations, on a *credential* rather than on a blob,
+> to decide who may drain a mailbox; its zero-knowledge property is about
+> payloads, not about primitives
+> ([ADR-0031](0031-a-signed-wrap-is-independent-of-its-channel.md)). Everything
+> else below stands: the Noise IK/XX transport and its framing, the discovery
+> ladder, blob opacity, expiry and caps, and the relay being off by default.
 
 ## Context
 
