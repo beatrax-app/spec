@@ -108,12 +108,23 @@ backup. It is **not** a defence against an attacker who has the file, has time,
 and cares — the plaintext set is too informative for that. The product's copy
 must say so.
 
-### Known gap — operating-system key custody
+### Key custody, and what each platform gives it
 
-Custody adapters for the platform keychains are registered but **not wired**.
-Until they are, the unlocked key follows session custody on every platform, with
-no operating-system-level protection. Recorded as outstanding rather than
-described as working.
+The unlocked data key is held by the platform's key store and the session holds
+only an opaque handle to it: Keychain Services on macOS and iOS, DPAPI on
+Windows, the Android Keystore, and a keyring-backed secret service on Linux
+([F3](../f-platform/f3-auth-and-app-lock.md)). This protects the transient
+unlocked copy only. The durable wraps stay passphrase-derived and custody never
+touches them.
+
+Linux is the one platform where "is a store available" is not the answer. With
+no keyring reachable the shell falls back to a fixed-password store whose key is
+published in its own upstream source; it reports itself available, and it does
+encrypt. Custody there is **reported as unprotected** rather than assumed
+protected, and the routes that would persist a wrap of the data key refuse. The
+key stays where it was, because refusing to encrypt would strand every blob an
+earlier build wrote on that machine — the connector secrets and the biometric
+wrap among them. What changes is the claim, not the bytes.
 
 ### Mobile backup exclusion, and how far it reaches
 
@@ -180,7 +191,7 @@ an answer in either direction.
 | **E4-R20** | Epoch delivery MUST be idempotent on epoch identity, and no key material may ever be logged. |
 | **E4-R21** | A passphrase change MUST re-wrap the keyring, and a failed re-wrap MUST raise a critical alert. |
 | **E4-R22** | The product's own copy MUST state honestly what at-rest encryption does and does not protect. |
-| **E4-R23** | Unwired operating-system key custody MUST be documented as outstanding rather than implied to work. |
+| **E4-R23** | *(Withdrawn)* Unwired operating-system key custody MUST be documented as outstanding rather than implied to work. Withdrawn 2026-09-05: custody is wired on both shells, so there is no unwired custody left to document. What stands in its place — a platform store that answers and does not protect — is [F3-R37](../f-platform/f3-auth-and-app-lock.md#acceptance-criteria). |
 | **E4-R24** | *(Withdrawn)* The absence of a mobile backup-exclusion bridge MUST be documented. Withdrawn 2026-09-05: the bridge exists and the mobile build applies it, so there is no absence left to document. What the requirement was for moves to `E4-R25`. |
 | **E4-R25** | The mobile backup-exclusion bridge's reach MUST be documented per platform: what it excludes, whether the build applies it or a person must, and any path holding user data that it does not cover. |
 

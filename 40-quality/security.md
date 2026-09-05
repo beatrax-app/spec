@@ -12,7 +12,7 @@ that follow.
 
 | Threat | Defence |
 |--------|---------|
-| **A copied database file** | At-rest encryption of identifying columns, behind a passphrase-derived key released by the app-lock ([E4](../10-functional/features/e-sync/e4-at-rest-encryption.md)) |
+| **A copied database file** | At-rest encryption of identifying columns, behind a passphrase-derived key released by the app-lock ([E4](../10-functional/features/e-sync/e4-at-rest-encryption.md)), with the unlocked copy of that key held by the operating system's key store rather than by the session ([F3-R33](../10-functional/features/f-platform/f3-auth-and-app-lock.md#acceptance-criteria)) |
 | **A cloud-backed device backup** | The same, with the honest caveat below |
 | **A lost or stolen device** | The app-lock, plus revocation that rotates the group key ([E2](../10-functional/features/e-sync/e2-device-pairing.md)) |
 | **An observer on the network** | Mutually authenticated, forward-secret sessions ([E3](../10-functional/features/e-sync/e3-transport.md)) |
@@ -118,10 +118,8 @@ Recorded rather than described as solved:
 
 | Item | Status |
 |------|--------|
-| Operating-system key custody | Registered, **not wired**. The unlocked key follows session custody on every platform ([F3](../10-functional/features/f-platform/f3-auth-and-app-lock.md)). No longer a deferral: `F3-R33` is [in v2.0 scope and being built](../00-overview/roadmap.md#3--the-three-latent-risks-no-longer-deferred). |
+| A Linux desktop with no keyring | Custody is wired on every platform ([F3-R33](../10-functional/features/f-platform/f3-auth-and-app-lock.md#acceptance-criteria)). Where no keyring is reachable the shell falls back to a store whose key is public, so that machine is **reported as unprotected** rather than credited with custody, and biometric enrolment refuses there ([F3-R37](../10-functional/features/f-platform/f3-auth-and-app-lock.md#acceptance-criteria)). The reader has no passive surface telling them; they learn it by attempting an enrolment. |
 | Mobile backup exclusion | A bridge exists and the mobile build applies it. Android is covered app-wide and reaches every release build. On iOS no pipeline builds an artefact, and whether the exclusion covers the file the app actually opens is [an open question](../10-functional/features/e-sync/e5-mobile-peer.md#open-questions-and-known-gaps) ([E4-R25](../10-functional/features/e-sync/e4-at-rest-encryption.md#acceptance-criteria)). |
-| Per-user connector secrets | A single global secrets file with no per-user keying; a blocker on second-user activation ([A6](../10-functional/features/a-ingestion/a6-open-banking.md)). No longer a deferral: `A6-R20` and `A6-R21` are [in v2.0 scope and being built](../00-overview/roadmap.md#3--the-three-latent-risks-no-longer-deferred). |
-| Lock on window close | Not verified to act on the focused window's session ([F1](../10-functional/features/f-platform/f1-desktop-shell.md)). |
 
 ## Related
 

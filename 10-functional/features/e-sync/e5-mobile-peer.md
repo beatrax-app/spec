@@ -81,6 +81,16 @@ log at each step rather than accumulated in memory. In the import case,
 completion additionally requires that the key epochs have arrived and the log has
 been re-projected.
 
+**A first sync can finish short of the household's whole history**, and it says
+so rather than blocking. A phone that has just paired has confirmed itself and
+its peer and nothing else, so the peer withholds every author the phone cannot
+yet verify — a third device, or one the peer removed. Setup still completes:
+this screen has no cancel and no dismiss, the act that ends such a hold lives on
+the device list behind it, and for a removed author there is no act at all, so
+blocking would leave the reader on a screen with no way forward. The honest
+answer is a completion that names what is held and under what condition it would
+arrive, not a gate nobody can pass.
+
 ### Ongoing sync
 
 A sync attempt tries the local network first with one bounded retry, then falls
@@ -129,6 +139,7 @@ v2.0 ships without an Android pass is a release call, and nobody has made it.
 | An enclave entry missing after a device restore | Falls back to passphrase unlock. |
 | Backgrounding during initial sync | Resumes from the durable cursor. |
 | No network during initial sync | The blocking screen waits; it does not report completion. |
+| A first sync that finishes with entries withheld | Setup completes, and the confirmation names what is held rather than reporting a whole history. |
 | A background pull with no unlocked identity | Skips cleanly. |
 | Mobile data with the pause preference set | No sync until a suitable network. |
 
@@ -162,6 +173,7 @@ v2.0 ships without an Android pass is a release call, and nobody has made it.
 | **E5-R24** | Mobile local notification delivery MUST be verified on real hardware before being advertised. |
 | **E5-R25** | Two-device pairing MUST be verified on real hardware before the import flow is advertised as device-verified. |
 | **E5-R26** | A failure to persist the key to platform secure storage MUST fail closed: the key MUST NOT be written to the session store in cleartext as a fallback, and the failure is surfaced rather than hidden. |
+| **E5-R27** | *(Open)* Initial sync MUST NOT report a complete history while a peer has declared operations withheld. The expected count MUST include what was declared held, and the completion screen MUST say how many entries are held and under what condition they would arrive. Not yet satisfied — completion sets the expected count equal to the applied count, so the ratio is 100 by construction and nothing on the setup path reads the withheld report at all. |
 
 > All three hardware gates have been taken, on an iPhone 12 mini running iOS
 > 26.5.2. `E5-R23` and `E5-R24` on 2026-09-04; `E5-R25` on 2026-09-05, verified

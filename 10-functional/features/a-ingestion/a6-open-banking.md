@@ -37,6 +37,26 @@ Secrets are written atomically — temporary file, flush, permission, rename —
 a crash mid-write cannot leave a partial credential. They are never stored in
 the database.
 
+### One registration, one secret per bank, one store per person
+
+The credential store is addressed by **who** and by **which bank**: one
+permission-protected file per user account, holding the aggregator registration
+that user made once and one record per connected bank — that bank's session, its
+consent expiry and its authentication host. Two banks share one registration and
+hold two consents, so linking a second bank leaves the first one fetchable and on
+its own schedule. The bank a consent callback is finishing travels in the
+callback's own state rather than in the store, because a store that could only
+hold one answer could not say which.
+
+Every read and every write of credential material names a user. There is no
+address to a credential in the store that does not, so reading another account's
+connector secret is unrepresentable rather than discouraged — including from the
+scheduled fetch, which takes the owner from the connection it is syncing rather
+than from whoever is signed in.
+
+Deleting an account removes that account's connector file, not only the
+device-wide sweep that runs for the last account on a device.
+
 ### Account information only, structurally
 
 The access scope covers balances, transactions, and accounts. **There is no
@@ -90,8 +110,9 @@ surfaces a guided file-import affordance and the statement-ready nudge from
 
 ## States
 
-A connection is either enabled or not, with a consent expiry. There is no named
-lifecycle beyond that.
+A connection is either enabled or not, with a consent expiry. A user may hold
+several connections at once, each with its own consent expiry, and one expiring
+says nothing about the others. There is no named lifecycle beyond that.
 
 ## Edge cases
 
@@ -102,28 +123,8 @@ lifecycle beyond that.
 | Consent expired | The scheduled sync is a no-op; an alert tells the user to re-link. |
 | The aggregator returns a pending transaction | Dropped. |
 | The aggregator returns a booked transaction the user already imported by file | Classified as duplicate by fingerprint; no new row. |
-| The user disconnects | Every connection row is cleared, not just the active one. |
-
-### Known limitation — one live session at a time
-
-The connection records are keyed per user and institution, but the secrets store
-currently holds exactly **one** live aggregator session. Linking a second bank
-rebinds the session to the second bank while the first connection row remains
-enabled and schedulable.
-
-The failure is loud rather than silent — the fetch path fails with a clear
-message rather than fetching the wrong bank — and disconnecting clears every
-row. But **only one bank is usably connected at a time.** The real fix is a
-per-connection secret sub-record or a single-active-connection guard, and it is
-outstanding.
-
-### Known limitation — the secrets file is not per-user keyed
-
-The secrets file is global to the installation with no per-user keying. The
-runtime logs a warning when more than one user exists; it does not fail closed.
-This is safe while the product ships single-user and is a **blocker on any real
-second-user activation** — see
-[ADR-0008](../../../00-overview/decisions/0008-multi-user-belongstouser.md).
+| A second bank is linked | The first bank keeps its session, consent and schedule; both remain fetchable. |
+| The user disconnects | Every connection row is cleared, not just the active one, and the reader's whole secrets file is deleted. |
 
 ## Acceptance criteria
 
@@ -148,23 +149,20 @@ second-user activation** — see
 | **A6-R17** | Disconnecting MUST clear every connection row for the user, not only the active one. |
 | **A6-R18** | Egress and scope constraints MUST be covered by tests that fail if the constraint regresses. |
 | **A6-R19** | Where no aggregator connection is possible for a source, the surface MUST offer a guided file-import path rather than implying a connection exists. |
-| **A6-R20** | *(Open)* Per-connection credential storage MUST exist before a second bank can be usably connected. Not yet satisfied — see [Known limitation](#known-limitation--one-live-session-at-a-time). |
-| **A6-R21** | *(Open)* Per-user credential keying MUST exist before a second user account is activated. Not yet satisfied — see [Known limitation](#known-limitation--the-secrets-file-is-not-per-user-keyed). |
+| **A6-R20** | Connector credentials MUST be stored per connection. Linking a second bank MUST leave the first bank's session, consent and schedule intact, and both MUST be fetchable. |
+| **A6-R21** | Connector credentials MUST be keyed per user, and the store MUST offer no address to credential material that does not name a user, so one account cannot read another's connector secret by any path — including the scheduled fetch and any console command. |
 
-> `A6-R20` and `A6-R21` are stated as requirements because they are the
-> conditions under which the feature is correct, and recorded as unsatisfied
-> because they are.
+> **`A6-R20` and `A6-R21` were satisfied together on 2026-09-05.** They are two
+> axes of one file, and splitting them would have meant migrating that file
+> twice. Both were carried as accepted deferrals on the reasoning that v2.0 ships
+> single-user with one bank; that reasoning was withdrawn, and closing the two
+> removed the condition rather than the symptom.
 >
-> **They are no longer deferred.** Both were carried as accepted deferrals on the
-> reasoning that v2.0 ships single-user with one bank, which made each a
-> documented limitation rather than a defect. That reasoning is withdrawn: both
-> are [in v2.0 scope and being built](../../../00-overview/roadmap.md#3--the-three-latent-risks-no-longer-deferred).
-> Single-user and single-bank were the *condition* the deferral rested on, and
-> closing these two removes the condition rather than the symptom.
->
-> The requirements stay marked *(Open)* and the two "Known limitation" sections
-> above stay as written, because the code is not merged. What changed is the
-> schedule, not the state — and the state is what those sections describe.
+> A store written before the keying is adopted rather than discarded: its owner
+> is derived from the connection row naming the institution it holds, or from the
+> only account on the installation where it names none, and a store that answers
+> neither question is left exactly where it is. No shape of it forces a
+> re-authorisation.
 
 ## Related
 

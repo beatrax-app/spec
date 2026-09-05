@@ -73,6 +73,27 @@ authentication, never epoch delivery, never anything else a paired device may
 do. Removal takes an introduced device off the list exactly as it takes a
 paired one off.
 
+### Signed work travels further than the identity that signed it
+
+A device serves catch-up for **every author it holds a signing key for** — one
+it paired with, whatever became of that pairing, and one it knows only through
+an introduction it confirmed. Relaying signed data grants nobody anything: the
+receiving device verifies every operation against a key it confirmed itself, and
+one it cannot verify is held exactly as before. The relay is a courier, not a
+second voucher.
+
+Relaying the *identity* onward is the opposite, and it does not happen. Only a
+device this one has itself paired with may be introduced, because a vouch made
+on the strength of a vouch is a chain, and a chain launders the two-party
+ceremony the whole grant rests on. So an author reachable here only through an
+introduction is counted in the withheld report **with no identity beside it**,
+which is why that report has to reach a reader on its own.
+
+The household's only voucher is not necessarily its only holder. Two phones that
+each paired with the desktop and never with each other both confirm what the
+desktop introduces, and from then on either can hold history the other can read.
+Retire the desktop and, without this, that history would be stranded for good.
+
 ### Removal is a security operation
 
 Removing a device revokes its trust, mints a fresh at-rest key epoch, and
@@ -122,6 +143,8 @@ A pairing moves `pending` → `awaiting_confirm` → `confirmed`, falling to
 | Operations signed by a device the receiver cannot verify | Not sent, and the count withheld is reported to the receiver. |
 | An introduction the reader never confirms | Nothing verifies against it, and the operations it would have unlocked stay with the peer that holds them. |
 | An introduction naming a device the reader already paired with | The pairing stands; a weaker grant cannot widen or narrow it. |
+| An author this device knows only through a confirmed introduction | Its operations are served to any device that can verify them; its identity is never relayed onward. |
+| An author this device removed, whose history a peer still needs | Still served. Removal is one reader's decision about their own trust, not a deletion of what that device wrote. |
 
 ## Acceptance criteria
 
@@ -144,23 +167,28 @@ A pairing moves `pending` → `awaiting_confirm` → `confirmed`, falling to
 | **E2-R15** | The pre-confirmation handshake MUST be able to propagate over the relay for devices that cannot see each other. |
 | **E2-R16** | A single state machine MUST own pairing state, with pending, awaiting-confirmation, confirmed, and expired states. |
 | **E2-R17** | The trust boundary — that a paired device is trusted, and revocation does not retroactively protect — MUST be stated to the user in plain language. |
-| **E2-R18** | *(Open)* A confirmed device MAY relay another confirmed device's public identity. A relayed identity MUST be stored unconfirmed, MUST name the device that vouched for it, and MUST verify nothing until the reader confirms it. Not yet satisfied — no device relays an identity today, and there is no unconfirmed store to put one in. |
-| **E2-R19** | *(Open)* A relayed identity, once confirmed, MUST grant signature verification only — never transport authentication, epoch delivery, or any other capability of a paired device. Not yet satisfied — there is no relayed identity yet for the boundary to hold around, and until there is, this asserts a property the product does not have. |
-| **E2-R20** | *(Open)* Catch-up MUST NOT send an operation whose author the receiving device has declared it cannot verify, and MUST report to that device how many operations were withheld and for which author. Not yet satisfied — a catch-up request does not yet say which authors the asking device can verify, so the answering side has nothing to filter on. |
-| **E2-R21** | *(Open)* A catch-up cursor MUST NOT advance over an operation whose author the receiving device could not verify, so that confirming an introduction later still delivers it. Not yet satisfied — a cursor advances over every entry the session admitted, including ones the merge layer then refused. |
+| **E2-R18** | A confirmed device MAY relay another confirmed device's public identity. A relayed identity MUST be stored unconfirmed, MUST name the device that vouched for it, and MUST verify nothing until the reader confirms it. |
+| **E2-R19** | A relayed identity, once confirmed, MUST grant signature verification only — never transport authentication, epoch delivery, or any other capability of a paired device. Where the reader has paired with that device, in either direction, the pairing answers for it and the relayed identity grants nothing. The grant is to the reader; what the reader may then serve for an author it can verify is E2-R22. |
+| **E2-R20** | Catch-up MUST NOT send an operation whose author the receiving device has declared it cannot verify, and MUST report to that device how many operations were withheld and for which author. The count MUST be taken over the authors the answering device could have served (E2-R22), so that an author it can verify and the asker cannot is reported rather than absent. The report MUST reach a reader on the receiving device whether or not an identity for that author accompanies it. |
+| **E2-R21** | A catch-up cursor MUST NOT advance over an operation whose author the receiving device could not verify, so that confirming an introduction later still delivers it. |
+| **E2-R22** | Catch-up MUST serve operations for every author the answering device holds a signing key for — a device it paired with, in any state of that pairing, and a device it holds only through a confirmed introduction — narrowed by what the receiving device has declared it can verify (E2-R20). The answering device MUST NOT relay that author's identity onward: only a device it has itself paired with may be introduced. |
 
-> **`E2-R18` through `E2-R21` are in v2.0 scope and are being built.** Until
-> 2026-09-05 they were classified nowhere: not in the roadmap's outstanding list,
-> not in its post-v2.0 backlog, and not among
-> [the v2.0 manifest's goals](../../../70-operations/versions/2.0.0.toml). That
-> is worse than being deferred — a deferral is a decision, and this was an
-> omission, so nothing scheduled them and nothing had declined them either. The
-> gap is recorded on the [roadmap](../../../00-overview/roadmap.md#4--relayed-device-identity)
-> rather than quietly closed.
+> **`E2-R18` through `E2-R21` are satisfied**, and `E2-R22` with them. The four
+> shipped on 2026-09-05 and were hardened the same day: the withheld count now
+> reaches a reader whether or not an identity accompanies it, an introduction can
+> no longer outlive the removal of the device it names, and the cursor hold is
+> proved as a sequence — one frame carrying a verifiable author beside an
+> unverifiable one, a confirmation, and the same operations landing on the next
+> exchange. `E2-R22` widened what a device relays for on the same day.
 >
-> They stay marked *(Open)*, and the "Not yet satisfied" clauses stay as written,
-> because the code is not merged. What changed is the classification, not the
-> state.
+> **The markers stood for a day longer than the state did, and that is worth
+> keeping visible.** They were added on 2026-09-05 at 03:31 and the code that
+> satisfies them merged at 03:48; the ruling that classified them into v2.0 scope
+> was written thirteen hours after that and still said "the code is not merged",
+> because it was recording a schedule rather than reading the branch. Two
+> separate readers had to reconcile this page's classification with its state,
+> and neither time did a check do it. What closes that is the manifest gate,
+> which now refuses a goal whose page and whose roadmap bucket disagree.
 
 ## Related
 

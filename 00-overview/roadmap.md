@@ -239,34 +239,31 @@ direct-download channel this is additive to.
 
 Three requirements were carried in the product repo's deferred register as
 **accepted deferrals** — documented, unscheduled, and judged safe because v2.0
-ships single-user with one bank connection. That judgement is reversed. All
-three are in v2.0 scope and are being built now.
+ships single-user with one bank connection. That judgement was reversed on
+2026-09-05, and all three closed the same day. **This bucket now has no
+outstanding items.**
 
-| Requirement | The risk it closes |
+| Requirement | The risk it closed |
 |-------------|--------------------|
-| [A6-R20](../10-functional/features/a-ingestion/a6-open-banking.md#acceptance-criteria) | Per-connection credential storage. One live aggregator session exists system-wide, so linking a second bank rebinds the session to it. |
-| [A6-R21](../10-functional/features/a-ingestion/a6-open-banking.md#acceptance-criteria) | Per-user credential keying. The connector's secrets file is global to the installation and warns rather than failing closed when a second user exists. |
-| [F3-R33](../10-functional/features/f-platform/f3-auth-and-app-lock.md#acceptance-criteria) | Operating-system key custody on desktop and mobile. The adapters are registered and unwired, so the unlocked key follows session custody everywhere. |
+| [A6-R20](../10-functional/features/a-ingestion/a6-open-banking.md#acceptance-criteria) | Per-connection credential storage — **done**. Credentials are held per connection, so linking a second bank leaves the first one fetchable and on its own schedule. |
+| [A6-R21](../10-functional/features/a-ingestion/a6-open-banking.md#acceptance-criteria) | Per-user credential keying — **done**. The store offers no address to credential material that does not name a user, the scheduled fetch included. |
+| [F3-R33](../10-functional/features/f-platform/f3-auth-and-app-lock.md#acceptance-criteria) | Operating-system key custody — **done** on both shells; the session holds an opaque handle and the platform store holds the key. What the wiring exposed is `F3-R37`: a Linux desktop with no keyring answered exactly like one with a keyring, and is now reported as unprotected instead. |
 
 What the deferral actually rested on was the product staying single-user and
 single-bank — which is a **current limitation, not a design choice**
 ([ADR-0008](decisions/0008-multi-user-belongstouser.md)). Closing the three
-removes the condition rather than the symptom, and it unblocks the
-shared-household surface that was sitting behind `A6-R21` in the backlog below.
-
-The requirements stay marked *(Open)* in their feature documents and the
-"Known limitation" sections stay as written: the code is not merged, and the
-work that merges it will propose its own wording. What changed here is the
-schedule, not the state.
+removed the condition rather than the symptom, and it removes the dependency the
+shared-household surface was sitting behind in the backlog below.
 
 ### 4 — Relayed device identity
 
-[E2-R18, E2-R19, E2-R20 and E2-R21](../10-functional/features/e-sync/e2-device-pairing.md#acceptance-criteria)
+[E2-R18 through E2-R22](../10-functional/features/e-sync/e2-device-pairing.md#acceptance-criteria)
 — a confirmed device introducing another, the weaker grant that introduction
-carries, and the two catch-up rules that stop an unverifiable author's
-operations being dropped on the floor
+carries, the two catch-up rules that stop an unverifiable author's operations
+being dropped on the floor, and the widened relay that carries an author's work
+to any device able to read it
 ([ADR-0027](decisions/0027-a-confirmed-device-may-introduce-another.md)) — are
-in v2.0 scope and are being built now.
+**done**, all five on 2026-09-05.
 
 > **They were previously in neither bucket, and that was a defect in this
 > page.** They appeared in neither the outstanding list above nor the
@@ -278,11 +275,34 @@ in v2.0 scope and are being built now.
 > were in none. Recorded rather than quietly corrected, because the next
 > requirement to fall through will fall through the same gap.
 
-They stay marked *(Open)* in [E2](../10-functional/features/e-sync/e2-device-pairing.md)
-for the same reason as the three above: the classification changed, the state
-did not.
+The classification above was written thirteen hours after the code that
+satisfies the first four had merged, and it said the code was not merged. That
+is the same defect one layer up: a bucket is only worth having if something
+reads the branch before writing in it. What reads it now is
+[the manifest gate](../70-operations/versions/2.0.0.toml), which refuses a goal
+whose feature page and whose roadmap bucket disagree.
 
-### 5 — Release-readiness carry-over
+### 5 — What a peer will not send, and the surfaces that report it
+
+The relay in section 4 is built; what a reader is told about what a peer
+**cannot** send is not. Five requirements are open, and four of them are being
+built as one change.
+
+- [E6-R13, E6-R14, E6-R15 and E6-R16](../10-functional/features/e-sync/e6-sync-status.md#acceptance-criteria)
+  — a withheld status of its own, where it ranks, one classification behind every
+  surface that reports a hold, and copy that stays true for a hold no reader can
+  act on.
+- [E5-R27](../10-functional/features/e-sync/e5-mobile-peer.md#acceptance-criteria)
+  — a first sync that does not report a whole history it is short of.
+
+And one that belongs to no change at all, recorded here because it is in no
+other bucket:
+[F1-R15](../10-functional/features/f-platform/f1-desktop-shell.md#acceptance-criteria),
+the background-process crash alert. Its rolling counter does not survive the
+request that writes it, so the threshold is never crossed and the alert has
+never fired on any build.
+
+### 6 — Release-readiness carry-over
 
 Not phases, but they gate a tag. Tracked in
 [70-operations/versions/2.0.0.toml](../70-operations/versions/2.0.0.toml) and in
@@ -325,7 +345,7 @@ as an outstanding item, which is where a closed gap belongs.
 |------|-------|
 | **Public API and scripting interface** | A local read plus scoped-write API for scripting and third-party integration, mirroring what Actual Budget offers. Must stay loopback-bound and token-gated — never off-machine — or it contradicts [P1](vision.md#p1--nothing-leaves-the-machine). Requirements undefined. |
 | **SMTP-based password reset** | Deliberately deferred. Three SMTP-free reset paths already ship; adding outbound mail means an OAuth-scope upgrade, a deliverability surface, and an online-to-reset requirement. Reopens only on evidence the existing paths fail real users. See [ADR-0010](decisions/0010-recovery-codes-no-smtp.md). |
-| **A real shared-household surface** | The schema has been multi-user-ready since the first phase, and the second-user activation is an authentication-and-UI change rather than a migration. Its blocker — the per-user secret isolation of `A6-R21` — is [now in v2.0 scope](#3--the-three-latent-risks-no-longer-deferred), so what keeps this out of v2.0 is its own size rather than a dependency. It remains a milestone of its own. See [ADR-0008](decisions/0008-multi-user-belongstouser.md). |
+| **A real shared-household surface** | The schema has been multi-user-ready since the first phase, and the second-user activation is an authentication-and-UI change rather than a migration. Its blocker — the per-user secret isolation of `A6-R21` — is [gone](#3--the-three-latent-risks-no-longer-deferred) as of 2026-09-05, so what keeps this out of v2.0 is its own size rather than a dependency. It remains a milestone of its own. See [ADR-0008](decisions/0008-multi-user-belongstouser.md), whose negative consequence and revisit condition both name that blocker and are [left standing as a dated record](../90-appendix/provenance.md#where-sources-disagreed). |
 | **PostgreSQL** | Possible, not planned. No SQLite-specific schema features are used, so the migration stays a config change plus a dump and load. Shipping it pre-emptively would import every operational cost SQLite exists to avoid. See [ADR-0005](decisions/0005-sqlite-wal.md). |
 
 ---
