@@ -100,14 +100,14 @@ never caches a transaction list to disk.
 | **F6-R3** | Every downloaded binary MUST be verified against the manifest's declared hash before any install step. |
 | **F6-R4** | No update path may skip signature or hash verification. |
 | **F6-R5** | Stable and preview channels MUST both exist, with stable as the default. |
-| **F6-R6** | A manifest older than the staleness threshold MUST raise a banner that does not offer an install. |
+| **F6-R6** | Where update checking is enabled, a manifest older than the staleness threshold MUST raise a banner that does not offer an install; where it is disabled, no staleness banner may be raised. |
 | **F6-R7** | Skipped versions MUST persist per user and MUST NOT resurface. |
 | **F6-R8** | Update checking MUST be disableable, and with it disabled no outbound call may occur from this feature. |
 | **F6-R9** | The update request MUST carry no user-identifying data. |
 | **F6-R10** | Every release MUST publish checksums and the signed manifest, and the manual verification recipe MUST be documented. |
 | **F6-R11** | The health endpoint MUST return a deterministic object with no timestamp. |
 | **F6-R12** | The health endpoint MUST be authentication-free but loopback-restricted. |
-| **F6-R13** | Every non-loopback request MUST be refused with not-found. A gate the operator has explicitly widened ([ARCH-R22](../../../20-architecture/README.md)) is the one exception; a bundle nobody has widened MUST refuse. |
+| **F6-R13** | Every non-loopback request MUST be refused with not-found. A gate the operator has explicitly widened ([ARCH-R22](../../../20-architecture/README.md)) is the one exception; a bundle nobody has widened MUST refuse. This governs the application's own HTTP surface; the sync listener is a separate process on its own port, deliberately not loopback-bound, whose gate is the mutually-authenticated handshake ([E3](../e-sync/e3-transport.md)). |
 | **F6-R14** | Loopback detection MUST cover the full loopback range, the IPv6 loopback, and the IPv4-mapped IPv6 form, compared in binary form. |
 | **F6-R15** | A request with no server address MUST pass, for command-line and test contexts. |
 | **F6-R16** | Every authenticated response MUST carry a no-store cache directive. |

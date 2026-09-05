@@ -192,7 +192,7 @@ it were not.
 | **F8-R18** | Every permission the shipped artefact requests MUST have a named consumer in shipped code, verified against the merged artefact rather than the source manifest. |
 | **F8-R19** | No permission a store restricts to a use Beatrax does not make may be requested. |
 | **F8-R20** | No store build may carry a reachable path that downloads or installs application code. |
-| **F8-R21** | A store build MUST name the store as its update channel, and MUST NOT present the desktop's self-update copy or controls on any surface. |
+| **F8-R21** | A store build MUST name the store as its update channel, and MUST NOT present the desktop's self-update copy or controls on any surface. A surface that switches its sentence on the platform but renders the control unconditionally does not satisfy this. |
 | **F8-R22** | No dependency reaching a shipped mobile artefact may carry analytics, telemetry, or crash reporting, enforced by test across the mobile plugin manifests as well as the package manifests. |
 | **F8-R23** | The review notes MUST describe, specifically, that the first launch creates a local account, that signup closes afterwards, that the app-lock credential is the reviewer's own, and how to load sample data. |
 | **F8-R24** | Sample data offered for review MUST be reachable through an explicit control and MUST NOT be any real person's data. |

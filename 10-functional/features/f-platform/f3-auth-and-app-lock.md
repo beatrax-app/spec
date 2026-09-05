@@ -134,7 +134,7 @@ needs the key that a locked session does not have.
 
 | ID | Requirement |
 |----|-------------|
-| **F3-R1** | The first account created MUST be the owner, and signup MUST close once any account exists. |
+| **F3-R1** | Signup MUST close once any account exists, and the owner MUST be the surviving account created first; deleting the owner MUST promote the oldest remaining account rather than leave the instance unadministered ([F8-R25](f8-app-store-distribution.md)). |
 | **F3-R2** | The existence check MUST be repeated inside the creating transaction, under a write lock, so concurrent signups cannot both succeed. |
 | **F3-R3** | A partner MUST be created with a forced password change on first sign-in. |
 | **F3-R4** | The owner MUST be able to reset the partner; the partner MUST NOT be able to reset the owner. |
@@ -148,13 +148,13 @@ needs the key that a locked session does not have.
 | **F3-R12** | Every recovery attempt MUST write an audit record, and a failure against an unknown username MUST record no user. |
 | **F3-R13** | The recovery mismatch message MUST be constant regardless of whether the username existed. |
 | **F3-R14** | A command-line reset path MUST exist as the last resort and MUST require access to the machine. |
-| **F3-R15** | No outbound mail capability may exist in the shipped bundle. |
+| **F3-R15** | No first-party code may construct, queue or send mail, and the shipped bundle MUST configure no deliverable mail transport. The framework's own mailer is present and unreachable; an architecture test MUST assert both halves. |
 | **F3-R16** | Enabling the app-lock MUST mint a fresh data key wrapped under both the code and the account password. |
 | **F3-R17** | Enabling or disabling the lock MUST clear every biometric enrolment. |
 | **F3-R18** | Changing the code MUST re-wrap the encryption keyring. |
 | **F3-R19** | A wrong code MUST escalate a backoff and MUST sign the user out at a hard cap, raising an alert. |
 | **F3-R20** | A corrupted key wrap MUST be a non-counting failure and MUST raise an alert. |
-| **F3-R21** | A successful unlock MUST re-arm every biometric credential. |
+| **F3-R21** | A successful code unlock MUST re-arm every biometric credential; a successful biometric assertion MUST re-arm only the credential that made it, and an unlock through the recovery wrap MUST re-arm none. |
 | **F3-R22** | Biometric enrolment MUST require an existing code and MUST validate both the relying party and the full origin. |
 | **F3-R23** | Each biometric credential MUST have its own wrap secret. |
 | **F3-R24** | A repeatedly failing biometric credential MUST disarm until the next successful code unlock. |
@@ -164,12 +164,12 @@ needs the key that a locked session does not have.
 | **F3-R28** | Code digits MUST NOT be held in a serialisable component property or a form input. |
 | **F3-R29** | A user with no lock enabled MUST never be veiled or locked, enforced on both client and server. |
 | **F3-R30** | Key custody MUST be pluggable per platform, MUST pass through where unavailable, and MUST fall back to a code unlock where it cannot recover the key. |
-| **F3-R31** | Sign-in MUST unlock the session where the recovery wrap succeeds, and MUST start locked where it does not. |
+| **F3-R31** | Where the app-lock is enabled, sign-in MUST unlock the session where the recovery wrap succeeds and MUST start locked where it does not; where it is not enabled, sign-in MUST leave the session unlocked. |
 | **F3-R32** | Biometric enrolment MUST NOT be exempt from the lock. |
 | **F3-R33** | *(Open)* Operating-system key custody MUST be wired on desktop and mobile. Registered but not yet wired. |
 | **F3-R34** | The authentication path MUST equalise work on the account-not-found branch, performing and discarding a hash of equivalent cost, so response time does not distinguish a missing username from a wrong password. |
 | **F3-R35** | A password change or recovery reset MUST invalidate the account's other sessions. |
-| **F3-R36** | The app-lock wraps of the data key MUST use a memory-hard KDF at MODERATE limits, and the PIN MUST be at least six digits, so a stolen database file resists offline brute-force of the wrap key; hardware-backed key custody (F3-R33) remains the outstanding defence. |
+| **F3-R36** | The app-lock wraps of the data key MUST use a memory-hard KDF at MODERATE limits, and the PIN MUST be six to ten digits, so a stolen database file resists offline brute-force of the wrap key; hardware-backed key custody (F3-R33) remains the outstanding defence. |
 
 ## Related
 

@@ -15,7 +15,7 @@ long-form statement it points at.
 |------|----------|
 | **The database** | Every parsed transaction from every ingested statement, card statement, processor export, and matched receipt; accounts, categories, counterparties, rules, budgets, goals, pots, tax tags; and derived state — chain links, recurring detections, alerts, forecasts, notifications, the operation log. |
 | **Source artefacts** | The original files the user uploaded and the raw messages the mail scanner fetched. |
-| **Secrets** | Provider tokens and connector credentials, in a filesystem-permission-protected directory. **Never in the database.** |
+| **Secrets** | Two custody models. Open-banking connector credentials live in a filesystem-permission-protected directory, never in the database (F7-R7). OAuth client secrets and token blobs are database columns, encrypted at rest (F7-R16) — a token bound to the account row it belongs to travels with that row and is revoked by the provider. |
 | **Backups** | Snapshots, on the same machine. |
 | **Logs and audit rows** | On disk, local only. |
 
@@ -53,8 +53,13 @@ Three bounded exceptions apply to **operational artefacts**, not user data:
 | Backups | Pruned to a bounded set of recent daily and weekly snapshots. A pre-restore snapshot is exempt. The owner can keep more by copying them elsewhere. |
 | Notifications | Pruned after a long window ([C8](../10-functional/features/c-insight/c8-notifications.md)). |
 | Failed-job records | Pruned only on explicit command, which refuses a zero duration. |
+| Log files | Rotated daily and discarded after a bounded number of days — fourteen by default, set by `LOG_DAILY_DAYS`. The Dev Console's "today" and "yesterday" tailing reads the same rotated files, so it can only ever show what has not yet been discarded. |
+| Superseded forecast runs | A completed projection supersedes the previous run for the same horizon, and the daily sweep deletes what it replaced. Every reader takes the newest run, so nothing reads a superseded one. |
 
-Alerts, logs, and audit rows are kept.
+**That table is the whole list.** Alerts and audit rows are kept, and no other
+job deletes anything. A deletion that is not in the table is a defect, not an
+undocumented feature — which is the point of writing it as exhaustive
+([F7-R6](../10-functional/features/f-platform/f7-data-locations.md#acceptance-criteria)).
 
 ## How a user exports
 
@@ -72,10 +77,15 @@ users who want one click.
 
 ## How a user deletes
 
-**The only mechanism is deleting the files**, and that is deliberate. There is no
-in-application wipe button, because the user owns the filesystem and the
-filesystem is authoritative — a button that deleted rows while leaving the file
-would be worse than nothing.
+**Deleting the files is the mechanism for the installation**, and that is
+deliberate: the user owns the filesystem and the filesystem is authoritative, so
+a button that deleted rows while leaving the file would be worse than nothing.
+
+Deleting an **account** is a separate matter and there is a control for it, in
+Settings, confirmed by password and available to every account. It removes that
+account's rows, files, recovery codes, sync identity and keyring
+([F8-R25](../10-functional/features/f-platform/f8-app-store-distribution.md#acceptance-criteria)).
+What does not exist is a button that wipes the whole installation.
 
 The documented procedure names every path: the database and its journal files,
 the artefacts, the backups, the secrets.

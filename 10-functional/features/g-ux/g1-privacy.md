@@ -107,7 +107,7 @@ Data locations, export, and deletion are first-class and documented in
 | **G1-R7** | No outbound mail capability may exist in the shipped bundle, enforced by architecture test. |
 | **G1-R8** | Payment initiation MUST be structurally absent, not merely disabled. |
 | **G1-R9** | The community corpus MUST ship inside the application; no corpus fetch may occur. |
-| **G1-R10** | Every non-loopback request MUST be refused with not-found. A gate the operator has explicitly widened ([ARCH-R22](../../../20-architecture/README.md)) is the one exception; a bundle nobody has widened MUST refuse. |
+| **G1-R10** | Every non-loopback request MUST be refused with not-found. A gate the operator has explicitly widened ([ARCH-R22](../../../20-architecture/README.md)) is the one exception; a bundle nobody has widened MUST refuse. This governs the application's own HTTP surface; the sync listener is a separate process on its own port, deliberately not loopback-bound, whose gate is the mutually-authenticated handshake ([E3](../e-sync/e3-transport.md)). |
 | **G1-R11** | Every authenticated response MUST carry a no-store cache directive. |
 | **G1-R12** | The offline application shell MUST NOT cache financial pages. |
 | **G1-R13** | External links MUST pass an HTTPS check and a host allow-list before being opened. |

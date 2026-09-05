@@ -102,11 +102,18 @@ the next one.
 category trends all depend on the full history, and there is no job that prunes
 ledger rows.
 
-Two bounded exceptions apply to operational artefacts rather than user data:
-backups are pruned on a documented schedule ([F4](f4-backup-restore.md)), and
-notifications are pruned after a long window ([C8](../c-insight/c8-notifications.md)).
-Failed-job records are pruned only on explicit command. Logs rotate daily and
-are discarded after a bounded number of days. Alerts and audit rows are kept.
+Five bounded exceptions apply, all to operational artefacts rather than user
+data, and the five are the whole list: backups are pruned on a documented
+schedule ([F4](f4-backup-restore.md)); notifications after a long window
+([C8](../c-insight/c8-notifications.md)); failed-job records only on explicit
+command; log files rotate daily and are discarded after a bounded number of days,
+fourteen by default; and a completed forecast run supersedes the previous run for
+the same horizon, which the daily sweep then deletes. Alerts and audit rows are
+kept.
+
+The list is exhaustive on purpose. An exception list that is not declared
+exhaustive cannot catch an undeclared member, and the deletion that mattered
+most here was one nobody had written down.
 
 An operational artefact is something the product generated for its own running —
 a backup, a notification, a log file, a failed-job record. A ledger table is
@@ -182,14 +189,15 @@ this document cannot keep.
 | **F7-R3** | The bundle MUST NOT hold user data inside its own installation directory, neither written there at runtime nor carried there from the machine that built it. |
 | **F7-R4** | Reinstalling or updating MUST NOT touch user data. |
 | **F7-R5** | Ledger history MUST be retained indefinitely; no automatic pruning of ledger rows may exist. |
-| **F7-R6** | Retention exceptions MUST be limited to operational artefacts — records the product generated for its own running, never a ledger table and never a row a ledger row references — and MUST be documented. |
+| **F7-R6** | Retention exceptions MUST be limited to operational artefacts — records the product generated for its own running, never a ledger table and never a row a ledger row references — and MUST be documented in [90-appendix/data-retention.md](../../../90-appendix/data-retention.md). |
+| **F7-R17** | That list MUST be exhaustive: every automatic deletion the product performs MUST appear in it, and a deletion absent from it is a defect rather than an undocumented feature. A list that is not declared exhaustive cannot catch an undeclared member. |
 | **F7-R7** | Open-banking connector credentials MUST live in a filesystem-permission-protected directory, never in the database. |
 | **F7-R8** | A backup export MUST be self-contained for the database and openable by any compatible tool. |
 | **F7-R9** | The documentation MUST state that source artefacts are outside the backup and MUST name the directory. |
-| **F7-R10** | A single export action MUST bundle the latest backup and the artefact directory. |
+| **F7-R10** | *(Open)* A single export action MUST bundle the latest backup and the artefact directory. Not yet satisfied — the interface's own help string says it will arrive, and the two paths are exported separately today. |
 | **F7-R11** | Deletion MUST be by removing files, and the procedure MUST name every path. |
 | **F7-R12** | Uninstalling MUST NOT delete user data, and this MUST be stated plainly to the user. |
-| **F7-R13** | The set of third parties any data reaches MUST be exactly the optional outbound calls the user enabled. |
+| **F7-R13** | The third parties any data reaches MUST be exactly the release host of the update check, plus the endpoints of the optional outbound calls the user enabled — no others, and each MUST appear in the catalogue ([G1-R1](../g-ux/g1-privacy.md)). |
 | **F7-R14** | With every optional feature and the update check disabled, the application MUST make no outbound call. |
 | **F7-R15** | A shipped bundle MUST NOT contain build-time secrets or working-directory artefacts from the machine that built it, and the copy that produces it MUST be bounded by an explicit exclusion list rather than by `.gitignore`. |
 | **F7-R16** | An OAuth client secret or token blob held in the database MUST be encrypted at rest, never stored as a plaintext column. |

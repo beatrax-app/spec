@@ -121,7 +121,7 @@ Recorded as an open follow-up rather than described as working.
 | **F1-R9** | A file opened while signed out MUST be remembered and resumed after sign-in. |
 | **F1-R10** | Every platform's file-open path MUST converge on the same intake gate. |
 | **F1-R11** | The close-behaviour choice MUST be stored per user and re-validated against the allowed options. |
-| **F1-R12** | Either close outcome MUST lock the application immediately, with no grace period. |
+| **F1-R12** | Either close outcome MUST lock the application immediately, with no grace period, where the user has the app-lock enabled; where they do not, no close outcome may lock or veil the session ([F3-R29](f3-auth-and-app-lock.md)). |
 | **F1-R13** | Notification delivery MUST consult suppression, then window focus, then the per-device detail preference. |
 | **F1-R14** | A focused window MUST suppress the operating-system notification. |
 | **F1-R15** | Repeated background-process exits within a rolling window MUST raise an alert; a single crash MUST NOT. |

@@ -137,7 +137,7 @@ Both are recorded as outstanding rather than described as working.
 |----|-------------|
 | **E4-R1** | A per-user group key MUST encrypt the registered sensitive columns. |
 | **E4-R2** | The keyring MUST be append-only so ciphertext from earlier epochs stays readable. |
-| **E4-R3** | The key MUST be derived from the user's passphrase through a memory-hard function. |
+| **E4-R3** | The group key MUST be minted from a cryptographic random source and held wrapped under a key derived from the app-lock credential through a memory-hard function. The key itself MUST NOT be derived from any credential, so changing a credential re-wraps rather than re-encrypts ([F3-R16](../f-platform/f3-auth-and-app-lock.md)). |
 | **E4-R4** | The key MUST be released by the app-lock; a locked device MUST hold unreadable ciphertext. |
 | **E4-R5** | A single registry MUST define the encrypted column set. |
 | **E4-R6** | A regression guard MUST fail the build if a registered column is read or written raw. |
