@@ -21,16 +21,42 @@ written for a product with a server, and this one has none.
 
 ### Scope
 
-Two stores: the **iOS App Store** and **Google Play**, for the mobile client
-only. Direct download stays the channel for the desktop bundle
-([F1](f1-desktop-shell.md)) and is not retired by either listing.
+**All four stores**, and direct download retained wherever it remains possible:
+the **Mac App Store**, the **Microsoft Store**, the **iOS App Store** and
+**Google Play** ([ADR-0032](../../../00-overview/decisions/0032-all-four-stores-additive-to-direct-download.md)).
 
-The **Mac App Store** and the **Microsoft Store** are out of scope. The desktop
-bundle embeds a static interpreter and relies on two hardened-runtime
-relaxations to map it; the sandbox a Mac App Store build must run under ignores
-one of them, so that listing needs a different runtime strategy rather than a
-submission. Recorded here so the question is closed rather than reopened every
-cycle.
+Store distribution is **additive**. Where a sandboxed store build and a
+direct-download build can both ship for a platform, both ship; direct download
+stays the channel for the desktop bundle ([F1](f1-desktop-shell.md)) and is not
+retired by any listing.
+
+#### The Mac App Store is a runtime problem, not a submission
+
+This page previously scoped two stores — the mobile pair — and put the two
+desktop stores out. The scope is overruled; the finding that produced it is not,
+and it is the most important thing on this page for anyone planning the work:
+
+> The desktop bundle embeds a static interpreter and relies on two
+> hardened-runtime relaxations to map it; the sandbox a Mac App Store build must
+> run under ignores one of them, so that listing needs a **different runtime
+> strategy** rather than a submission.
+
+That still holds. What changed is what follows from it. It was previously the
+reason the listing was declined; it is now the listing's cost, stated rather
+than hidden. The Mac App Store listing is preceded by a runtime change nobody
+has scoped, and it is the largest unknown in the release — a build that cannot
+map its interpreter under the sandbox is not a build that can be submitted and
+fixed later. Nothing here claims the other three are cheap; what it claims is
+that they are submissions against the work below, and this one is not.
+
+Two further unknowns apply to any sandboxed build, desktop or mobile, and are
+not answered by the scope decision: whether it keeps a user-data path that
+survives upgrades, and whether local-network discovery survives the sandbox.
+They are engineering unknowns, answerable only by building a sandboxed bundle
+and measuring one, and `F8-R26` makes them blocking for that platform's listing
+copy — a capability that is dead under a sandbox may not be described as though
+it were not. They are recorded in
+[90-appendix/open-questions.md](../../../90-appendix/open-questions.md).
 
 ### The paid-identity trade is already made
 
@@ -43,7 +69,9 @@ against a registered team. Every one of those is a paid, renewable identity,
 already held.
 
 What the licence rationale describes — shipping unsigned and explaining the
-dialogue — is the history, not the present. The specification has to say which
+dialogue — is the history, not the present, and
+[that page now says so](../../../90-appendix/license-rationale.md#the-exception-store-distribution-and-what-it-costs)
+rather than being contradicted by this one. The specification has to say which
 identities are held and when each expires, because an expiry nobody is watching
 stops releases, and a store listing turns that from an inconvenience into an
 outage.
@@ -167,6 +195,8 @@ it were not.
 | A paired device still holding the data | Stated plainly; deletion is device-scoped and says so. |
 | An optional feature off | Nothing is sent, and the declaration says so. |
 | A capability that does not work on one platform | Not claimed in that platform's listing. |
+| A platform that can carry both a store build and a direct-download build | Both ship. A listing is additive; it never retires the direct channel. |
+| A Mac App Store build that cannot map its interpreter under the sandbox | Not submitted. The runtime strategy is the prerequisite, not something review is asked to overlook. |
 
 ## Acceptance criteria
 
@@ -198,6 +228,8 @@ it were not.
 | **F8-R24** | Sample data offered for review MUST be reachable through an explicit control and MUST NOT be any real person's data. |
 | **F8-R25** | Account deletion MUST be reachable in the application by every account that can be created, MUST remove that account's sync identity, operation log and keyring so a peer cannot restore it, and MUST state that a paired device keeps its own copy. |
 | **F8-R26** | A store listing MUST NOT claim a protection the product does not provide, MUST NOT describe a smaller outbound surface than the catalogue, and MUST NOT describe a capability that does not work on that platform. |
+| **F8-R27** | All four store listings — Mac App Store, Microsoft Store, iOS App Store and Google Play — are in scope, and a store build MUST be additive: where a platform can carry both a store build and a direct-download build, both MUST ship. |
+| **F8-R28** | A Mac App Store submission MUST NOT be attempted until the bundle can map its interpreter under the App Sandbox without the hardened-runtime relaxation that sandbox ignores. The prerequisite is a runtime strategy, and a build that cannot satisfy it MUST NOT be submitted on the expectation of fixing it after review. |
 
 ## Related
 

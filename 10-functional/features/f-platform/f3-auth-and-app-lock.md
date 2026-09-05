@@ -171,6 +171,15 @@ needs the key that a locked session does not have.
 | **F3-R35** | A password change or recovery reset MUST invalidate the account's other sessions. |
 | **F3-R36** | The app-lock wraps of the data key MUST use a memory-hard KDF at MODERATE limits, and the PIN MUST be six to ten digits, so a stolen database file resists offline brute-force of the wrap key; hardware-backed key custody (F3-R33) remains the outstanding defence. |
 
+> **`F3-R33` is no longer deferred.** Operating-system key custody was carried as
+> an accepted deferral in the product's deferred register; it is now
+> [in v2.0 scope and being built](../../../00-overview/roadmap.md#3--the-three-latent-risks-no-longer-deferred)
+> on both desktop and mobile. It stays marked *(Open)* and the "registered but
+> not yet wired" description above stays as written, because that is still what
+> the product does. What changed is the schedule, not the state. Until it lands,
+> `F3-R36` is the defence that stands between a stolen database file and the
+> wrap key.
+
 ## Related
 
 - [ADR-0010](../../../00-overview/decisions/0010-recovery-codes-no-smtp.md) · [ADR-0008](../../../00-overview/decisions/0008-multi-user-belongstouser.md)

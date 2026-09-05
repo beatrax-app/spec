@@ -57,7 +57,7 @@ publish, labelling, triage, and awaiting-maintainer.
 
 Integrity checks run on every change here. Identifiers must resolve; duplicates
 fail; broken links fail. The specification is not exempt from the discipline it
-imposes ([GOV-R11](../50-governance/canonical-spec.md#the-gov-r-namespace)).
+imposes ([GOV-R11](../50-governance/README.md#the-gov-r-namespace)).
 
 **The governance gate does not run on this repository**, and cannot: a change
 introducing a requirement cannot cite an identifier that already exists on the

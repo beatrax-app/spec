@@ -21,7 +21,7 @@ that follow.
 | **A hostile input file** | Typed parse failures, disabled external-entity resolution, size and line caps, archive-bomb and traversal guards, and pattern-length caps on user-supplied match expressions ([C9-R23](../10-functional/features/c-insight/c9-community-corpus.md#acceptance-criteria)) |
 | **A hostile aggregator response** | Host allow-list before credentials, HTTPS only, no redirects, private-address rejection |
 | **A tampered update** | Signature verification before anything is read from a manifest, hash verification before any install |
-| **Cross-user data access** | Structural user scoping, explicit filters in background contexts, not-found on every cross-user surface, and a default scope that fails closed on an unauthenticated web request ([ARCH-R21](../20-architecture/README.md#the-arch-r-namespace)) |
+| **Cross-user data access** | Structural user scoping, explicit filters in background contexts, not-found on every cross-user surface, and a default scope that fails closed on an unauthenticated web request ([ARCH-R21](../20-architecture/README.md#the-arch-r-namespace)). Every authenticated `GET` route — all seventy-six, enumerated against the live router rather than against a list — has been probed or reasoned; the pass that closed this found and fixed a real cross-user leak in the developer console's "Last command" tile. |
 | **Credential leakage into logs** | Three-point scrubbing with cache invalidation on rotation ([F5](../10-functional/features/f-platform/f5-dev-console.md)) |
 | **Credential leakage into rendered pages** | A registry-backed architecture test on serialisable component properties |
 | **Script injected via rendered financial text** | A nonce-based Content-Security-Policy on authenticated responses, so bank- and email-derived text renders as data and cannot execute even if an output sink is missed |
@@ -118,11 +118,10 @@ Recorded rather than described as solved:
 
 | Item | Status |
 |------|--------|
-| Operating-system key custody | Registered, **not wired**. The unlocked key follows session custody on every platform ([F3](../10-functional/features/f-platform/f3-auth-and-app-lock.md)). |
+| Operating-system key custody | Registered, **not wired**. The unlocked key follows session custody on every platform ([F3](../10-functional/features/f-platform/f3-auth-and-app-lock.md)). No longer a deferral: `F3-R33` is [in v2.0 scope and being built](../00-overview/roadmap.md#3--the-three-latent-risks-no-longer-deferred). |
 | Mobile backup exclusion | No native bridge exists; the on-device database sits on a cloud-backed path, mitigated by at-rest encryption ([E5](../10-functional/features/e-sync/e5-mobile-peer.md)). |
-| Per-user connector secrets | A single global secrets file with no per-user keying; a blocker on second-user activation ([A6](../10-functional/features/a-ingestion/a6-open-banking.md)). |
+| Per-user connector secrets | A single global secrets file with no per-user keying; a blocker on second-user activation ([A6](../10-functional/features/a-ingestion/a6-open-banking.md)). No longer a deferral: `A6-R20` and `A6-R21` are [in v2.0 scope and being built](../00-overview/roadmap.md#3--the-three-latent-risks-no-longer-deferred). |
 | Lock on window close | Not verified to act on the focused window's session ([F1](../10-functional/features/f-platform/f1-desktop-shell.md)). |
-| Cross-user route probes | A handful of authenticated routes registered before their probes were written ([00-overview/roadmap.md](../00-overview/roadmap.md#3--release-readiness-carry-over)). |
 
 ## Related
 

@@ -17,7 +17,7 @@ from scratch.
 3. **Numbers are permanent and never reused.** A withdrawn ADR is marked
    withdrawn in place.
 4. **Cite them as `ADR-NNNN`.** CI resolves every citation against the files in
-   this directory ([GOV-R11](../../50-governance/canonical-spec.md#the-gov-r-namespace)).
+   this directory ([GOV-R11](../../50-governance/README.md#the-gov-r-namespace)).
 
 ## Provenance
 
@@ -63,6 +63,7 @@ of them invent a decision that was not already made.
 | [0029](0029-the-applier-enforces-the-writers-sum-invariant.md) | The applier enforces the writer's sum invariant, and refuses rather than resolves | Accepted | New |
 | [0030](0030-the-tag-governs-the-workflow-not-what-it-reads.md) | The major tag governs the workflow definition, not what the workflow reads | Accepted | New |
 | [0031](0031-a-signed-wrap-is-independent-of-its-channel.md) | A signed epoch wrap is trusted on its signature, not on its channel | Accepted | Supersedes part of [0016](0016-noise-transport-zero-knowledge-relay.md) |
+| [0032](0032-all-four-stores-additive-to-direct-download.md) | All four stores, and direct download is not retired | Accepted | Supersedes part of [0006](0006-nativephp-desktop-shell.md) and [0019](0019-asymmetric-release-publish.md) |
 
 > **Not here:** the spec's own governance rules. Those are not architectural —
 > no component's design depends on them. They live in

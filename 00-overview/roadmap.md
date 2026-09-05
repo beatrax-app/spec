@@ -198,27 +198,97 @@ Feature: [E5](../10-functional/features/e-sync/e5-mobile-peer.md).
 
 ### 2 — App-store publishing and distribution
 
-Not started; no plans written. The scope is genuinely undecided — see the
-[open questions](#open-questions) below.
+**Scope is decided: all four stores, and direct download is retained wherever it
+remains possible.** The Mac App Store, the Microsoft Store, the App Store and
+Google Play — and where a sandboxed store build and a direct-download build can
+both ship for a platform, both ship. Store distribution is **additive**, not a
+replacement ([ADR-0032](decisions/0032-all-four-stores-additive-to-direct-download.md)).
 
-Feature: [F1](../10-functional/features/f-platform/f1-desktop-shell.md) covers
-today's direct-download distribution; store distribution is additive to it.
+One of the four is not a submission. The desktop bundle embeds a static
+interpreter and relies on two hardened-runtime relaxations to map it, and the
+sandbox a Mac App Store build must run under ignores one of them, so that
+listing needs a different runtime strategy before it needs a submission. It is
+the largest unknown in this release. What the other three cost is not yet
+measured, and the specification does not claim it is small
+([F8](../10-functional/features/f-platform/f8-app-store-distribution.md)).
 
-### 3 — Release-readiness carry-over
+Feature: [F8](../10-functional/features/f-platform/f8-app-store-distribution.md),
+with [F1](../10-functional/features/f-platform/f1-desktop-shell.md) covering the
+direct-download channel this is additive to.
+
+> **This page was the stale one, and by more than a ruling.**
+> [F8](../10-functional/features/f-platform/f8-app-store-distribution.md) was
+> accepted on 2026-09-04 with twenty-six requirements, a scope, and a finding
+> that the paid-identity trade had already been made — while this section still
+> read "not started; no plans written" and the open question below still asked
+> which stores. A roadmap that lags an Accepted feature page by that much is a
+> governance defect of its own: the feature page is authoritative about its own
+> feature, and a reader who starts here is told the opposite of what is true.
+> The same rot may sit elsewhere on this page.
+
+### 3 — The three latent risks, no longer deferred
+
+Three requirements were carried in the product repo's deferred register as
+**accepted deferrals** — documented, unscheduled, and judged safe because v2.0
+ships single-user with one bank connection. That judgement is reversed. All
+three are in v2.0 scope and are being built now.
+
+| Requirement | The risk it closes |
+|-------------|--------------------|
+| [A6-R20](../10-functional/features/a-ingestion/a6-open-banking.md#acceptance-criteria) | Per-connection credential storage. One live aggregator session exists system-wide, so linking a second bank rebinds the session to it. |
+| [A6-R21](../10-functional/features/a-ingestion/a6-open-banking.md#acceptance-criteria) | Per-user credential keying. The connector's secrets file is global to the installation and warns rather than failing closed when a second user exists. |
+| [F3-R33](../10-functional/features/f-platform/f3-auth-and-app-lock.md#acceptance-criteria) | Operating-system key custody on desktop and mobile. The adapters are registered and unwired, so the unlocked key follows session custody everywhere. |
+
+What the deferral actually rested on was the product staying single-user and
+single-bank — which is a **current limitation, not a design choice**
+([ADR-0008](decisions/0008-multi-user-belongstouser.md)). Closing the three
+removes the condition rather than the symptom, and it unblocks the
+shared-household surface that was sitting behind `A6-R21` in the backlog below.
+
+The requirements stay marked *(Open)* in their feature documents and the
+"Known limitation" sections stay as written: the code is not merged, and the
+work that merges it will propose its own wording. What changed here is the
+schedule, not the state.
+
+### 4 — Relayed device identity
+
+[E2-R18, E2-R19, E2-R20 and E2-R21](../10-functional/features/e-sync/e2-device-pairing.md#acceptance-criteria)
+— a confirmed device introducing another, the weaker grant that introduction
+carries, and the two catch-up rules that stop an unverifiable author's
+operations being dropped on the floor
+([ADR-0027](decisions/0027-a-confirmed-device-may-introduce-another.md)) — are
+in v2.0 scope and are being built now.
+
+> **They were previously in neither bucket, and that was a defect in this
+> page.** They appeared in neither the outstanding list above nor the
+> [post-v2.0 backlog](#post-v20-backlog), and neither in
+> [the v2.0 manifest's goals](../70-operations/versions/2.0.0.toml). A
+> requirement in neither list is not "unclassified" — it is invisible: nothing
+> schedules it, and nothing has declined it either. The buckets on this page
+> only mean anything if every requirement is in exactly one of them, and four
+> were in none. Recorded rather than quietly corrected, because the next
+> requirement to fall through will fall through the same gap.
+
+They stay marked *(Open)* in [E2](../10-functional/features/e-sync/e2-device-pairing.md)
+for the same reason as the three above: the classification changed, the state
+did not.
+
+### 5 — Release-readiness carry-over
 
 Not phases, but they gate a tag. Tracked in
 [70-operations/versions/2.0.0.toml](../70-operations/versions/2.0.0.toml) and in
 the [definition of done](../40-quality/definition-of-done.md):
 
-- A small set of known-latent risks recorded in the product repo's deferred
-  register — chiefly the single global open-banking secrets file with no
-  per-user keying, the single live Enable Banking session versus a
-  per-connection schema, and desktop/mobile OS-keychain key custody being
-  registered but unwired. Each is documented in the feature it belongs to.
-- Cross-user isolation route probes for a handful of authenticated GET routes
-  that were registered before their probes were written.
 - The v2.0 upgrade note for the category-linked-pot retirement, which is a
   user-visible breaking change and needs release-note prominence.
+
+The cross-user isolation route probes that stood here are **done**. The pass
+enumerated all seventy-six authenticated `GET` routes against the live router
+rather than against a list, probed or reasoned every one, and found and fixed a
+real cross-user leak in the developer console's "Last command" tile on the way.
+It is recorded as a defence in
+[40-quality/security.md](../40-quality/security.md#the-threat-model) rather than
+as an outstanding item, which is where a closed gap belongs.
 
 ---
 
@@ -230,7 +300,7 @@ the [definition of done](../40-quality/definition-of-done.md):
 |------|-------|
 | **Public API and scripting interface** | A local read plus scoped-write API for scripting and third-party integration, mirroring what Actual Budget offers. Must stay loopback-bound and token-gated — never off-machine — or it contradicts [P1](vision.md#p1--nothing-leaves-the-machine). Requirements undefined. |
 | **SMTP-based password reset** | Deliberately deferred. Three SMTP-free reset paths already ship; adding outbound mail means an OAuth-scope upgrade, a deliverability surface, and an online-to-reset requirement. Reopens only on evidence the existing paths fail real users. See [ADR-0010](decisions/0010-recovery-codes-no-smtp.md). |
-| **A real shared-household surface** | The schema has been multi-user-ready since the first phase, and the second-user activation is an authentication-and-UI change rather than a migration. But it is a milestone of its own, and it is blocked behind the per-user secret-isolation work listed above. See [ADR-0008](decisions/0008-multi-user-belongstouser.md). |
+| **A real shared-household surface** | The schema has been multi-user-ready since the first phase, and the second-user activation is an authentication-and-UI change rather than a migration. Its blocker — the per-user secret isolation of `A6-R21` — is [now in v2.0 scope](#3--the-three-latent-risks-no-longer-deferred), so what keeps this out of v2.0 is its own size rather than a dependency. It remains a milestone of its own. See [ADR-0008](decisions/0008-multi-user-belongstouser.md). |
 | **PostgreSQL** | Possible, not planned. No SQLite-specific schema features are used, so the migration stays a config change plus a dump and load. Shipping it pre-emptively would import every operational cost SQLite exists to avoid. See [ADR-0005](decisions/0005-sqlite-wal.md). |
 
 ---
@@ -239,22 +309,26 @@ the [definition of done](../40-quality/definition-of-done.md):
 
 Genuinely unresolved. Recorded here rather than guessed at.
 
-### What is in scope for app-store publishing?
+### Does a sandboxed build keep its data, and can it still find a peer?
 
-Phase 20 has a title and no plan. The open sub-questions:
+The two sub-questions the store-scope ruling did **not** settle, kept here
+because they are the ones that could still change what a store build is allowed
+to claim:
 
-- Which stores? The Mac App Store, the Microsoft Store, and the mobile stores
-  are four different review processes with four different sandboxing
-  constraints, and the mobile client's LAN-direct sync and background-pull
-  behaviour interact with all of them.
-- Does store distribution force paid signing identities, which
-  [the licence rationale](../90-appendix/license-rationale.md#why-no-paid-signing-certificates)
-  currently declines? A store listing may make that trade different.
-- Does a sandboxed build still get an `~/Library/Application Support` path that
-  survives upgrades, and does mDNS discovery survive the sandbox?
+- Does a sandboxed build keep a user-data path that survives upgrades?
+- Does local-network discovery survive the sandbox?
 
-Nothing in the sources answers these. They must be answered before Phase 20 can
-be planned.
+Neither is a call anybody can make. They are engineering unknowns, answerable
+only by building a sandboxed bundle and measuring it, and the decision to ship
+all four store listings is what makes them urgent rather than academic. A
+capability that is dead under a sandbox may not be described in that platform's
+listing ([F8-R26](../10-functional/features/f-platform/f8-app-store-distribution.md#acceptance-criteria)),
+so an unmeasured answer is a listing that cannot honestly be written.
+
+*Which stores, and whether store distribution forces paid signing identities,
+were the other two sub-questions here. Both are answered — see
+[ADR-0032](decisions/0032-all-four-stores-additive-to-direct-download.md) and
+section 2 above.*
 
 ### Does the codebase's own phase numbering carry into the spec?
 

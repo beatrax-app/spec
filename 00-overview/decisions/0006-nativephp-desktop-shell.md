@@ -1,8 +1,21 @@
 # ADR-0006: NativePHP as the desktop shell
 
-**Status:** Accepted
+**Status:** Accepted; the "absence of paid OS signing" claim below is superseded
+by [ADR-0032](0032-all-four-stores-additive-to-direct-download.md)
 **Date:** 2026-05-27
 **Graduated from:** product-repo Phase 17, decision D-32
+
+> **One claim in this record no longer holds, and one revisit condition has
+> fired.** Paid signing identities are held, so the updater's verification chain
+> is not the sole binary-integrity signal it is described as below. And
+> app-store distribution has reached the sandboxing constraint the last
+> "revisit if" bullet anticipated: a Mac App Store build's sandbox ignores one
+> of the two hardened-runtime relaxations the bundle relies on to map its static
+> interpreter, so that listing needs a different runtime strategy
+> ([ADR-0032](0032-all-four-stores-additive-to-direct-download.md),
+> [F8](../../10-functional/features/f-platform/f8-app-store-distribution.md)).
+> The decision — NativePHP as the desktop shell — stands, as does everything
+> else below.
 
 ## Context
 
