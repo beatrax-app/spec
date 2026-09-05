@@ -48,7 +48,9 @@ call at all.
 
 Every request whose server address is not a loopback address is refused with
 not-found ([F6](../f-platform/f6-updates.md)). The application is not
-accidentally reachable from the network even if a port is exposed.
+*accidentally* reachable from the network even if a port is exposed: a
+self-hoster who wants it reachable widens the gate deliberately, and the default
+is loopback only ([ARCH-R22](../../../20-architecture/README.md)).
 
 Every authenticated response carries a no-store cache directive, so a browser
 does not write a transaction list to disk.
@@ -85,7 +87,7 @@ Data locations, export, and deletion are first-class and documented in
 | Situation | Behaviour |
 |-----------|-----------|
 | Every optional feature off, updates off | Zero outbound calls. |
-| A request from a non-loopback address | Not-found. |
+| A request from a non-loopback address | Not-found, unless the operator widened the gate. |
 | An external link with a non-allow-listed host | Refused before the shell is invoked. |
 | Running outside the desktop shell | External-link opening no-ops with a logged URL. |
 | A dependency introducing telemetry transitively | Caught by the release gate. |
@@ -104,7 +106,7 @@ Data locations, export, and deletion are first-class and documented in
 | **G1-R7** | No outbound mail capability may exist in the shipped bundle, enforced by architecture test. |
 | **G1-R8** | Payment initiation MUST be structurally absent, not merely disabled. |
 | **G1-R9** | The community corpus MUST ship inside the application; no corpus fetch may occur. |
-| **G1-R10** | Every non-loopback request MUST be refused with not-found. |
+| **G1-R10** | Every non-loopback request MUST be refused with not-found. A gate the operator has explicitly widened ([ARCH-R22](../../../20-architecture/README.md)) is the one exception; a bundle nobody has widened MUST refuse. |
 | **G1-R11** | Every authenticated response MUST carry a no-store cache directive. |
 | **G1-R12** | The offline application shell MUST NOT cache financial pages. |
 | **G1-R13** | External links MUST pass an HTTPS check and a host allow-list before being opened. |

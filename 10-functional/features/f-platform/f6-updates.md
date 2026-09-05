@@ -88,7 +88,7 @@ never caches a transaction list to disk.
 | A manifest older than the staleness threshold | A staleness banner with no install offer. |
 | A version the user skipped | Does not resurface. |
 | Update checking disabled | No outbound call. |
-| A non-loopback request to any route | Not-found. |
+| A non-loopback request to any route | Not-found, unless the operator widened the gate. |
 | A probe checking the health body | Byte-stable across calls. |
 
 ## Acceptance criteria
@@ -107,7 +107,7 @@ never caches a transaction list to disk.
 | **F6-R10** | Every release MUST publish checksums and the signed manifest, and the manual verification recipe MUST be documented. |
 | **F6-R11** | The health endpoint MUST return a deterministic object with no timestamp. |
 | **F6-R12** | The health endpoint MUST be authentication-free but loopback-restricted. |
-| **F6-R13** | Every non-loopback request MUST be refused with not-found. |
+| **F6-R13** | Every non-loopback request MUST be refused with not-found. A gate the operator has explicitly widened ([ARCH-R22](../../../20-architecture/README.md)) is the one exception; a bundle nobody has widened MUST refuse. |
 | **F6-R14** | Loopback detection MUST cover the full loopback range, the IPv6 loopback, and the IPv4-mapped IPv6 form, compared in binary form. |
 | **F6-R15** | A request with no server address MUST pass, for command-line and test contexts. |
 | **F6-R16** | Every authenticated response MUST carry a no-store cache directive. |
