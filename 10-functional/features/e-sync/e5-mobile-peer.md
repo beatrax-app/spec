@@ -2,9 +2,10 @@
 
 **Status:** Accepted · **Area:** E — Sync and devices
 
-> **This is the last feature outstanding before v2.0 can ship.** Ten of eleven
-> plans are complete; the final one is surface-parity smoke testing plus
-> real-device acceptance on both mobile platforms. See the
+> **This is the last feature outstanding before v2.0 can ship.** Its three
+> hardware gates — `E5-R23`, `E5-R24`, `E5-R25` — have been taken. What remains
+> of the final plan is surface-parity smoke testing and device acceptance on
+> Android. See the
 > [roadmap](../../../00-overview/roadmap.md#1--mobile-client-as-a-fully-synced-peer).
 
 ---
@@ -97,21 +98,26 @@ sync-now action.
 
 ## Open questions and known gaps
 
-**No backup-exclusion bridge.** On one platform the on-device database sits on a
-cloud-backed path with no way to mark it excluded. At-rest encryption
-([E4](e4-at-rest-encryption.md)) mitigates this; it does not eliminate it. A
-native bridge is required and does not exist.
+The three hardware gates this section used to hold open are taken; what they
+found is recorded under the requirements table. Two questions took their place.
 
-**Local notification delivery is not hardware-verified.** The plugin is
-installed and the adapter is wired, but the on-device proof that a banner
-actually fires is outstanding. Whether v2.0 advertises mobile notifications or
-ships them present-but-unadvertised is an **undecided product question** — see
-the [roadmap](../../../00-overview/roadmap.md#open-questions).
+**Which file the iOS backup exclusion covers.** A backup-exclusion bridge exists
+and the mobile build applies it ([E4](e4-at-rest-encryption.md)). On Android it
+is app-wide and reaches every release build. On iOS it sets a per-URL exclusion
+on the application-support tree the native shell creates, on the stated premise
+that the database lives there — while the mobile bootstrap repoints the live
+connection to a path under the documents directory, and nothing sets the
+exclusion on that one. The 2026-09-04 check confirmed an on-device database
+excluded from iCloud backup; it did not record which of the two files it read,
+and they are not the same file. A re-check naming the path is what settles it.
+`E5-R23` stands on the check that was run, and this is recorded beside it rather
+than resolved in either direction.
 
-**Real-device pairing acceptance is outstanding.** The cross-device handshake
-works at the code level with full round-trip coverage, but two-device hardware
-acceptance has not been run, and the "import from another device" flow should not
-be advertised as device-verified until it has.
+**Android device acceptance is not recorded.** All three gates were taken on one
+handset, an iPhone 12 mini. Nothing here records the same passes on Android, and
+the final plan still names device acceptance on both. The requirements ask for
+real hardware rather than for each platform, so they are met as written; whether
+v2.0 ships without an Android pass is a release call, and nobody has made it.
 
 ## Edge cases
 

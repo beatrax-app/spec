@@ -37,7 +37,7 @@ scripts/         the CI automation
 |--------|------|
 | `spec_check.py` | The governance gate. Verifies a change cites an identifier that exists on the canonical spec. |
 | `spec_refs.py` | Builds the sticky pull-request comment linking each cited identifier to its defining file. |
-| `integrity.py` | This repository's own gate: identifiers resolve, none are duplicated, no internal link is broken. |
+| `integrity.py` | This repository's own gate: identifiers resolve, none are duplicated, no internal link is broken, and no link's `#fragment` names a heading that is not there. |
 | `dco_check.py` | Verifies every commit carries a sign-off matching its author. |
 | `commit_lint.py` | Verifies conventional commit subjects. |
 | `gen_codeowners.py` | Generates a repository's `CODEOWNERS` from the maintainer registry. |
@@ -63,6 +63,26 @@ imposes ([GOV-R11](../50-governance/README.md#the-gov-r-namespace)).
 introducing a requirement cannot cite an identifier that already exists on the
 canonical spec, because it *is* the change that creates it. Citations here are
 checked by the integrity script against the tree under review instead.
+
+### What the link gates do and do not cover
+
+A link has two halves and they were gated by different things, which is how two
+links pointing at a heading that had moved to another file survived from the
+founding commit. `integrity.py` read the file half and threw the fragment away;
+`lychee` runs without fragment checking; markdownlint's `MD051` sees same-file
+anchors only, which is the half that was never broken. The fragment check now
+lives beside the file check, in one gate that answers the whole question
+([REPO-R55](#requirements)).
+
+It covers **relative links between Markdown files in this repository, and
+same-file anchors**, matched against the anchors the headings generate. It does
+**not** cover an absolute URL: a link into another repository's rendered pages is
+checked for the page by `lychee` and for the anchor by nobody, because the target
+is not in this tree to read. It reads headings rather than rendered HTML, so a
+hand-written HTML anchor would not be found; none exist here.
+
+It runs in the pre-push hook as well as in CI, so a dangling fragment is caught
+before the push rather than after it.
 
 ## Conventions
 
@@ -94,6 +114,7 @@ it; their citations are read by the integrity check like any other.
 | **REPO-R19** | Every document MUST carry a status. |
 | **REPO-R20** | The documentation site MUST be link-checked before it is built, so a published page never contains a broken internal link. |
 | **REPO-R21** | Where a decision is genuinely unmade, the document MUST record it under an explicit open-question heading rather than inventing an answer. |
+| **REPO-R55** | Every internal Markdown link's `#fragment` MUST resolve to a heading in the file it names, checked in the same gate as the file half. The check covers relative links between this repository's Markdown files and same-file anchors; a fragment on an absolute URL is out of its reach and MUST NOT be implied to be covered. |
 
 ## Related
 

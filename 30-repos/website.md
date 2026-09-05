@@ -23,7 +23,7 @@ only surface where overstating things is tempting.
 | Source-available, **not** open source | The licence is not OSI-approved, and the distinction has real consequences ([90-appendix/license-rationale.md](../90-appendix/license-rationale.md)) |
 | Local-first, with the outbound surface named | The claim is checkable and should be presented as checkable ([G1](../10-functional/features/g-ux/g1-privacy.md)) |
 | That sync is peer-to-peer and end-to-end encrypted, and what the relay can see | Overstating it would be the worst kind of dishonesty for this product |
-| That the installers are unsigned, and why | The user meets the warning anyway; better they meet the reason first |
+| Which installers carry a signing identity and which do not | Only Linux ships unsigned now ([20-architecture/platform-matrix.md](../20-architecture/platform-matrix.md)); a site still saying all of them are unsigned tells a macOS reader something false about the thing they are about to download |
 | Which platforms are supported, including the Intel exception | [20-architecture/platform-matrix.md](../20-architecture/platform-matrix.md) |
 
 It must **not** claim protections the product does not provide
@@ -56,7 +56,7 @@ Screenshots come from the product repository.
 | **REPO-R39** | The site MUST describe Beatrax as source-available and MUST NOT describe it as open source. |
 | **REPO-R40** | The site MUST name the outbound-call surface rather than only claiming local-first. |
 | **REPO-R41** | The site MUST state what a sync relay can and cannot observe. |
-| **REPO-R42** | The site MUST state that installers are unsigned and MUST explain why. |
+| **REPO-R42** | The site MUST state which platforms' installers carry a signing identity and which do not, and MUST explain the first-launch warning wherever one is still raised. It MUST NOT describe an installer as unsigned that the release build refuses to publish unsigned. |
 | **REPO-R43** | The site MUST NOT claim a protection the product does not provide. |
 | **REPO-R44** | The site MUST consume shared brand primitives and MUST NOT introduce its own. |
 | **REPO-R45** | Screenshots MUST come from the product repository and SHOULD be refreshed when a release materially changes a surface. |

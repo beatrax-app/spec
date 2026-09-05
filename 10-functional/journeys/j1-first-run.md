@@ -3,9 +3,8 @@
 **Status:** Accepted
 
 > The hardest moment in the product. Someone has downloaded an application from
-> a maintainer they do not know, been warned by their operating system, and now
-> has to hand it their entire banking history. Everything about this journey has
-> to earn that.
+> a maintainer they do not know, and now has to hand it their entire banking
+> history. Everything about this journey has to earn that.
 
 ---
 
@@ -15,16 +14,24 @@ A downloaded installer. No account, no data, no configuration.
 
 ## The path
 
-### 1. Install, past the warning
+### 1. Install
 
-The installer runs. On two of the three platforms the operating system warns
-that the application is not signed by a paid developer identity, because it is
-not ([the rationale](../../90-appendix/license-rationale.md#why-no-paid-signing-certificates)).
+The installer runs. On macOS and on Windows it carries a paid developer
+identity — with notarisation on macOS — and the release build refuses to publish
+one that does not, so the first-launch dialogue those two platforms used to
+raise is gone
+([ADR-0032](../../00-overview/decisions/0032-all-four-stores-additive-to-direct-download.md),
+[F8-R2](../features/f-platform/f8-app-store-distribution.md#acceptance-criteria)).
+Linux ships unsigned and raises no such dialogue.
 
-The published install instructions walk the exact click sequence per platform
-and **explain why the warning appears** rather than telling the user to ignore
-it. A user who is told to click past a security warning without a reason has
-learned a bad habit; one who is told why has learned something true.
+Where a platform does warn, the published install instructions walk the exact
+click sequence and **explain why the warning appears** rather than telling the
+user to ignore it. A user who is told to click past a security warning without a
+reason has learned a bad habit; one who is told why has learned something true.
+That was the whole of this step until paid identities were adopted
+([the rationale](../../90-appendix/license-rationale.md#why-no-paid-signing-certificates)),
+and it is kept because it is still how the honesty is meant to work, not because
+the warning is still there.
 
 *Exercises: [F1](../features/f-platform/f1-desktop-shell.md).*
 
@@ -142,7 +149,7 @@ the system is not sure about, and saying so is [P4](../../00-overview/vision.md#
 
 | Failure | Why it is fatal |
 |---------|-----------------|
-| The install warning is not explained | The user either abandons, or learns to click past warnings. Both are bad outcomes. |
+| An install warning that is raised is not explained | The user either abandons, or learns to click past warnings. Both are bad outcomes. |
 | A wrong format selection produces a stack trace | The user concludes the product is broken on their first interaction. |
 | Recovery codes are shown without an acknowledgement | The user loses them and discovers it a year later. |
 | The first import partially commits | A state nobody designed, in the ledger, before the user has any way to judge what is wrong. |
