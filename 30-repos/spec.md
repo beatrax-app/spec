@@ -76,15 +76,18 @@ checked by the integrity script against the tree under review instead.
 
 **All identifiers are permanent and never reused.** A withdrawn one is marked
 withdrawn in place, because commits and version manifests reference it. They
-belong in commit trailers and pull-request bodies — **never in code comments**
-([ADR-0011](../00-overview/decisions/0011-code-comment-policy.md)).
+belong in commit trailers and pull-request bodies — **never in an implementation
+repository's code comments**
+([ADR-0011](../00-overview/decisions/0011-code-comment-policy.md)). The gate
+scripts here are the exception, because a gate that enforces a rule should name
+it; their citations are read by the integrity check like any other.
 
 ## Requirements
 
 | ID | Requirement |
 |----|-------------|
 | **REPO-R14** | This repository MUST contain no shipped code. |
-| **REPO-R15** | Integrity checks MUST run on every change: every identifier resolves, none is duplicated, no internal link is broken. |
+| **REPO-R15** | Integrity checks MUST run on every change: every identifier resolves, none is duplicated, no internal link is broken. The citation scan MUST read every file that can carry a citation — the Markdown tree, the shared workflow definitions, and the gate scripts — because an identifier invented in a file nothing reads is indistinguishable from one that exists. |
 | **REPO-R16** | Requirement identifiers MUST be permanent; a withdrawn one MUST be marked in place and never reused. |
 | **REPO-R17** | Every reusable workflow the organisation shares MUST be defined here and nowhere else. |
 | **REPO-R18** | The maintainer registry and the label set MUST live here and be the only source for every repository. |

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate a version is stageable — OPS-R30, OPS-R52.
+"""Validate a version is stageable — OPS-R14, OPS-R15, OPS-R16.
 
 Refuses unless the version's manifest exists and is `planned`, no other version
 is already `staged`/`releasable` (the train is serial), and every goal is a
@@ -48,7 +48,7 @@ def main() -> int:
         sys.exit(f"::error::{manifest.name} is '{data.get('status')}', not planned")
     clash = in_flight(manifest.name)
     if clash:
-        sys.exit(f"::error::{clash}; one version at a time (OPS-R52)")
+        sys.exit(f"::error::{clash}; one version at a time (OPS-R15)")
     unknown = [g for g in data.get("goals", []) if g not in defined_ids()]
     if unknown:
         sys.exit(f"::error::goals not defined in the spec: {', '.join(unknown)}")

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Enforce conventional-commit subjects on PR commits (OPS-R11), so the
+"""Enforce conventional-commit subjects on PR commits (GOV-R16), so the
 generated changelog stays clean. Usage: commit_lint.py <base_sha> <head_sha>
 """
 import subprocess, sys, re

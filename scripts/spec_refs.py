@@ -4,7 +4,7 @@
 Companion to spec_check.py: spec-check *enforces* that citations exist; this
 *surfaces* them as clickable links (with the requirement text) for a sticky PR
 comment that the workflow updates in place on every push. See 50-governance/.
-Any change to this script cites GOV-R32.
+Any change to this script cites GOV-R22.
 
 Usage:
   spec_refs.py --spec-dir <spec checkout> --text-file <PR body+commits> \

@@ -28,8 +28,15 @@ def md_files():
 def citing_files():
     """Everything that may carry a citation. Workflow headers cite identifiers
     as freely as the prose does, and nothing read them: two invented ids and a
-    third that had drifted sat there from the founding commit onwards."""
-    return md_files() + sorted((ROOT / ".github" / "workflows").glob("*.yml"))
+    third that had drifted sat there from the founding commit onwards.
+
+    The gate scripts are the same class of file and were the same blind spot.
+    Six invented identifiers sat in them, one of which check_stageable.py
+    printed into the build's own error message — the script whose job is
+    refusing a manifest that cites an identifier the spec does not define."""
+    return (md_files()
+            + sorted((ROOT / ".github" / "workflows").glob("*.yml"))
+            + sorted((ROOT / "scripts").glob("*.py")))
 
 
 def defined_reqs():
@@ -55,15 +62,16 @@ def undefined_citations(defset, adrs):
     problems = []
     for p in citing_files():
         text = p.read_text(encoding="utf-8")
-        # Only report the first stray citation per file; the rest is noise.
-        for rid in REQ_CITE.findall(text):
-            if rid not in defset:
-                problems.append(f"{p.relative_to(ROOT)}: cites undefined {rid}")
-                break
-        for a in ADR_CITE.findall(text):
-            if int(a) not in adrs:
-                problems.append(f"{p.relative_to(ROOT)}: cites undefined ADR-{a}")
-                break
+        # One line per file, naming every distinct stray it carries. Reporting
+        # only the first hid a sibling in two of the four files that had one,
+        # so a fix guided by the output left the file still failing.
+        stray = sorted({r for r in REQ_CITE.findall(text) if r not in defset})
+        if stray:
+            problems.append(f"{p.relative_to(ROOT)}: cites undefined {', '.join(stray)}")
+        stray_adrs = sorted({int(a) for a in ADR_CITE.findall(text) if int(a) not in adrs})
+        if stray_adrs:
+            named = ", ".join(f"ADR-{a:04d}" for a in stray_adrs)
+            problems.append(f"{p.relative_to(ROOT)}: cites undefined {named}")
     return problems
 
 

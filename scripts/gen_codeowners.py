@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate a repo's CODEOWNERS from the single maintainers registry (OPS-R17).
+"""Generate a repo's CODEOWNERS from the single maintainers registry (OPS-R7).
 Usage: gen_codeowners.py <repo-name>   ->  prints CODEOWNERS to stdout.
 """
 import sys, tomllib, pathlib
