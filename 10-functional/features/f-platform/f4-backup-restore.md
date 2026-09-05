@@ -127,7 +127,7 @@ maintenance command should refuse rather than confirm.
 | **F4-R13** | Diagnostic exit codes MUST distinguish clean, warning, and critical. |
 | **F4-R14** | Backup staleness beyond a threshold MUST raise a warning and a rate-limited alert. |
 | **F4-R15** | Alerts MUST be ordered by severity with a chronological tie-break and MUST cover both user-scoped and installation-wide alerts. |
-| **F4-R16** | Alerts MUST never be deleted; acknowledgement MUST be a one-way stamp through a single sanctioned writer. |
+| **F4-R16** | Alerts MUST never be deleted by any retention, acknowledgement or maintenance path, and acknowledgement MUST be a one-way stamp through a single sanctioned writer. Deleting an account removes that account's own alerts with its other rows ([F8-R25](f8-app-store-distribution.md)); that is the only sanctioned removal. |
 | **F4-R17** | Boot-time configuration-drift detection MUST be de-duplicated against restarts. |
 | **F4-R18** | The install command MUST run migrations, create the first account if absent, and always raise the installed event. |
 | **F4-R19** | Re-running install MUST NOT overwrite an existing account's password. |

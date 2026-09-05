@@ -101,7 +101,7 @@ The starting-balance card has its own states, listed in
 |----|-------------|
 | **F2-R1** | The wizard MUST cover welcome, the connector steps, first import, budgets, tax country, and a finish. |
 | **F2-R2** | Connector, budget, and tax steps MUST be skippable; welcome, first import, and finish MUST NOT. |
-| **F2-R3** | Per-step progress MUST be recorded and MUST resume at the first incomplete step. |
+| **F2-R3** | Per-step progress MUST be recorded, and returning MUST resume at the step already in progress, or at the first pending step where none is. The resumed step MUST satisfy the jump guard ([F2-R6](#acceptance-criteria)), so a step made unreachable by a later insertion reopens at the earliest pending step instead. |
 | **F2-R4** | Progress initialisation MUST be insert-only and MUST be idempotent. |
 | **F2-R5** | A step added after a user completed the wizard MUST seed as skipped. |
 | **F2-R6** | Jumping to a step MUST require that the step exists and every prior step is done or skipped. |
