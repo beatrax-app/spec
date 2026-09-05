@@ -131,8 +131,8 @@ peer is findable ([B9](../b-ledger/b9-search.md)).
 | **E1-R1** | Every local mutation MUST be captured as an entry in an append-only log. |
 | **E1-R2** | Every entry MUST be signed by the originating device's own key. |
 | **E1-R3** | Entries MUST be ordered by a hybrid logical clock giving a total order across devices without a coordinator. |
-| **E1-R4** | Entry payloads MUST be encoded as plain data unconditionally; a schema skew MUST fail loudly. |
-| **E1-R5** | A stored null MUST be the tombstone sentinel and MUST NOT be confusable with a literal null value. |
+| **E1-R4** | Entry payloads MUST be encoded as plain data, with a null value as the single exception: it is stored as an absent value rather than encoded. A schema skew MUST fail loudly. |
+| **E1-R5** | A stored null MUST mean "no value". The operation kind, not the stored value, MUST distinguish a field cleared to null from a row tombstone, and that distinction MUST have its own test. |
 | **E1-R6** | The database MUST be reproducible by replaying the merged log from scratch, and rebuild MUST be a supported operation. |
 | **E1-R7** | Rebuild MUST be safe in the presence of schema enforcement triggers. |
 | **E1-R8** | Merge strategy MUST be declared per table and per field in a central registry. |
@@ -141,10 +141,10 @@ peer is findable ([B9](../b-ledger/b9-search.md)).
 | **E1-R11** | Delete-wins behaviour MUST be configurable per table, defaulting to deletes winning. |
 | **E1-R12** | Imported rows MUST deduplicate via the existing import fingerprint rather than a sync-specific mechanism. |
 | **E1-R13** | The replayer MUST NOT throw; a refused entry MUST be quarantined with a reason. |
-| **E1-R14** | Quarantine reasons MUST distinguish wrong user, unknown device, bad signature, unknown table, incomplete creation, strategy error, and undecryptable payload. |
+| **E1-R14** | Quarantine reasons MUST come from a closed, versioned set that at minimum distinguishes wrong user, unknown table, unknown column, unknown device, bad signature, incomplete creation, strategy error, undecryptable payload, missing reference, a delete blocked by a reference, an impossible date, a primary-key collision, and a split that would overfill its transaction. |
 | **E1-R15** | The user-scope check MUST be the replayer's first guard. |
 | **E1-R16** | Every write the replayer performs MUST carry an explicit user filter. |
-| **E1-R17** | Quarantined entries MUST be visible on a read-only health surface. |
+| **E1-R17** | Quarantined entries MUST be visible on a read-only health surface. A non-zero count MUST additionally reach a reader with no developer flag, because a quarantined entry can be a transaction, a split or a move that is simply not there. |
 | **E1-R18** | The capture listener MUST never throw; a capture failure MUST NOT break the user's action. |
 | **E1-R19** | The merge registry MUST be verified against the real schema by test. |
 | **E1-R20** | A cascading change MUST emit a compensating operation rather than relying on peers to re-derive the cascade. |
