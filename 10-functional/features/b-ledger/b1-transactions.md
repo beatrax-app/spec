@@ -120,9 +120,10 @@ un-reconcile returning to cleared.
 
 | ID | Requirement |
 |----|-------------|
-| **B1-R1** | Exactly one sanctioned write path MUST exist into the transactions table, and it MUST be enforced by architecture test. |
-| **B1-R2** | Exactly one sanctioned write path MUST exist for the category column. |
-| **B1-R3** | Imported transactions MUST NOT be editable or deletable; user-authored transactions MUST be deletable by their owner. |
+| **B1-R1** | Exactly one sanctioned path MUST exist by which a transaction is created, and it MUST be enforced by architecture test. Each column another feature owns — category, counterparty, type, reconciliation status, pair pointer, split legs — MUST have exactly one sanctioned writer of its own, named by that feature's requirements. |
+| **B1-R2** | The category column MUST have exactly two sanctioned writers: the category writer for every assignment, and the split writer for the un-split survivor (B7-R9). Every other caller MUST route through the category writer. |
+| **B1-R3** | The columns an import took from its source — amounts, currencies, dates, description, source identifiers — MUST NOT be editable, and an imported transaction MUST NOT be deletable. The columns Beatrax layers on top — category, counterparty, note, tax tag, split legs, type, reconciliation status, pair pointer — remain writable through their own sanctioned writers. |
+| **B1-R23** | A user-authored transaction MUST be deletable by its owner unless it is reconciled, where deletion is refused like every other edit (B8-R9). |
 | **B1-R4** | Every monetary value MUST be stored as a minor-unit integer plus a currency code and handled as exact money. |
 | **B1-R5** | A transaction MUST preserve both its native and settled amounts, and the derived rate where they differ. |
 | **B1-R6** | Reading an absent money column MUST raise; it MUST NOT return zero. |
@@ -135,7 +136,7 @@ un-reconcile returning to cleared.
 | **B1-R13** | List pagination MUST use a cursor over a stable ordering. |
 | **B1-R14** | Infinite-scroll surfaces MUST cap accumulated rows. |
 | **B1-R15** | Reclassifying a paired transaction to a non-transfer type MUST break the pair. |
-| **B1-R16** | A reconciled transaction MUST be locked against every mutating action. |
+| **B1-R16** | A reconciled transaction MUST refuse every user-initiated edit of its own fields — re-categorising, notes, splitting, tax tagging, reclassification, and deletion. |
 | **B1-R17** | An account MUST carry a kind, a currency, a starting balance, and a display name. |
 | **B1-R18** | Accounts whose source format carries no real identifier MUST receive a synthetic one. |
 | **B1-R19** | An account slug MUST incorporate enough of the account identifier to make collisions improbable. |

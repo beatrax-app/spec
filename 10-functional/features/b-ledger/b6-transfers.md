@@ -74,7 +74,7 @@ The sweep runs **after** the retyping healing pass in
 | ID | Requirement |
 |----|-------------|
 | **B6-R1** | The matcher MUST be deterministic: the same inputs MUST produce the same decision. |
-| **B6-R2** | The matcher MUST be the only sanctioned writer of the transaction pair pointer for self-transfers. |
+| **B6-R2** | The matcher MUST be the only writer that sets the pair pointer. Clearing it is permitted to the reclassification path (B1-R15), the delete path, and the sync merge, and to nothing else. |
 | **B6-R3** | Pairing MUST require the same user, equal and opposite amounts in the same currency, booking dates within the window, both legs typed as opposite transfer directions, and neither already paired. |
 | **B6-R4** | Both legs MUST be written bidirectionally inside one transaction; a partial pair MUST NOT be able to land. |
 | **B6-R5** | Re-running the matcher for an already-paired row MUST be a no-op. |

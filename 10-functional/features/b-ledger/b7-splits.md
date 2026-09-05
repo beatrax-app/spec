@@ -109,7 +109,7 @@ movement; splitting one of them is not a meaningful operation.
 | **B7-R6** | Saving a split MUST apply an identity-preserving diff, never delete-all-then-reinsert. |
 | **B7-R7** | Amounts MUST be entered as absolute values with the sign implied by the parent. |
 | **B7-R8** | The save MUST be gated on the unallocated remainder reaching exactly zero. |
-| **B7-R9** | Un-splitting MUST remove every leg and restore the parent's own category. |
+| **B7-R9** | Un-splitting MUST remove every leg and MUST leave the parent carrying one of the categories its legs held, chosen by the caller; a surviving category that is not one of the current legs' MUST be refused. |
 | **B7-R10** | Each leg MUST support its own category, note, and tax tag. |
 | **B7-R11** | Splits MUST apply only to non-transfer transactions. |
 | **B7-R12** | Re-importing the source of a split transaction MUST leave the split intact. |

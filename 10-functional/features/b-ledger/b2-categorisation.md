@@ -22,10 +22,12 @@ learns from their corrections.
 category. **Memory** records that this user, for this normalised merchant name,
 chose this category — and grows every time they correct something.
 
-Both layers produce candidates; the highest-scoring candidate wins. Scoring is
-by specificity: an exact match beats memory, memory beats a prefix match, a
-prefix beats a substring. At equal score the rule beats the memory, so an
-explicit rule the user wrote always overrides a habit the system inferred.
+The two layers are consulted in order rather than scored against each other.
+Rules run first; memory is consulted only where no fired rule carried a category
+action. So an explicit rule the user wrote always overrides a habit the system
+inferred, unconditionally rather than as a tie-break. Between fired rules, order
+is the user's own priority and then the rule id, and the last category action in
+that order wins.
 
 All comparison is case-insensitive and Unicode-safe, and string matching happens
 in application code rather than in SQL pattern syntax — which is both an
@@ -36,10 +38,10 @@ afterwards.
 
 ### Uncategorised is an honest answer
 
-If nothing clears the confidence bar, the transaction is left uncategorised and
-lands in the triage queue. Assigning a wrong category silently mistrains the
-memory layer and corrupts every downstream total, so Beatrax would rather say
-nothing.
+A transaction that matched no rule and no memory is left uncategorised and lands
+in the triage queue. Assigning a wrong category silently mistrains the memory
+layer and corrupts every downstream total, so Beatrax would rather say nothing
+than guess.
 
 The dashboard surfaces how many transactions need categorising, so the work does
 not accumulate invisibly.
@@ -117,12 +119,12 @@ be made at the rule or memory level rather than one row at a time.
 | ID | Requirement |
 |----|-------------|
 | **B2-R1** | Categorisation MUST be deterministic; no model inference and no network call may be involved. |
-| **B2-R2** | At most one category assignment MUST be produced per transaction, chosen by specificity score. |
-| **B2-R3** | Exact matches MUST outrank memory, memory MUST outrank prefix matches, and prefix MUST outrank substring. |
-| **B2-R4** | At equal score, a rule MUST beat a memory. |
+| **B2-R2** | At most one category assignment MUST be produced per transaction. |
+| **B2-R3** | A fired rule MUST outrank a merchant memory unconditionally; memory is consulted only where no fired rule carries a category action. |
+| **B2-R4** | Between fired rules, order MUST be by user-set priority then by rule id, and the last category action in that order MUST win. |
 | **B2-R5** | String matching MUST be case-insensitive, Unicode-safe, and performed in application code rather than SQL pattern syntax. |
 | **B2-R6** | Evaluation order MUST be deterministic, established in the query and not re-sorted afterwards. |
-| **B2-R7** | A transaction whose best candidate does not clear the confidence bar MUST be left uncategorised. |
+| **B2-R7** | A transaction matching no rule and no memory MUST be left uncategorised rather than assigned a guess. |
 | **B2-R8** | The count of uncategorised transactions MUST be surfaced to the user. |
 | **B2-R9** | A manual categorisation MUST record or strengthen a merchant memory. |
 | **B2-R10** | A manual choice contradicting a still-active rule MUST be surfaced to the user; a choice diverging only from memory MUST NOT be. |

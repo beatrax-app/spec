@@ -106,13 +106,13 @@ no query and no rate disclosure.
 | **B10-R1** | Every transaction MUST preserve both its native and settled amount and currency, and the derived rate where they differ. |
 | **B10-R2** | The user MUST be able to switch the transaction list between settled-only and original-currency views. |
 | **B10-R3** | Adding two different currencies MUST raise rather than producing a total. |
-| **B10-R4** | A multi-currency total MUST be presented per currency unless the user explicitly asked for conversion. |
+| **B10-R4** | A total spanning several currencies MUST NOT be produced by adding minor units across them. It MUST either convert each currency at its own disclosed rate into the base currency (B10-R5, B10-R6) or render one line per currency; a surface offering both modes MUST default to conversion. |
 | **B10-R5** | The user MUST be able to choose a base reporting currency, and every roll-up MUST render in it. |
 | **B10-R6** | For any converted figure the user MUST be able to see the rate, its source, and its as-of date. |
 | **B10-R7** | Rate providers MUST be consulted in priority order with a bundled offline provider as the final fallback. |
 | **B10-R8** | Online rate fetching MUST be off by default. |
 | **B10-R9** | Conversion MUST work with no network connection. |
-| **B10-R10** | A repeatedly failing provider MUST be skipped for a period rather than retried on every request. |
+| **B10-R10** | A repeatedly failing online provider MUST be skipped for a period rather than retried on every request. The bundled offline provider MUST NOT be circuit-broken: it is the fallback B10-R9 rests on, and its failures are not transient. |
 | **B10-R11** | If every provider is unavailable, the caller MUST fall back to original currencies; a rate MUST NOT be invented. |
 | **B10-R12** | Rates MUST be keyed by the date the feed reports, never by the current date. |
 | **B10-R13** | A rate value outside a plausible range MUST be logged and skipped, not stored. |
