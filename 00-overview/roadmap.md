@@ -186,9 +186,9 @@ resumable initial sync, and shows sync status.
 **Outstanding:** the final plan — full surface-parity smoke test, the as-is
 invariant, and real-device UAT on iPhone and Android.
 
-One human-only gate sits inside this: real two-device pairing UAT on hardware,
-which also gates advertising the "import from another device" flow as
-device-verified.
+That gate is taken. Real two-device pairing UAT ran on hardware on 2026-09-05
+and passed twice from a clean install, so the "import from another device" flow
+may be advertised as device-verified.
 
 The other two hardware checks were taken on 2026-09-04, on an iPhone 12 mini
 running iOS 26.5.2: the local-notification plugin fires a real OS banner, and
