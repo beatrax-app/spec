@@ -82,7 +82,7 @@ A pairing moves `pending` → `awaiting_confirm` → `confirmed`, falling to
 | An unconfirmed device's operations arriving | Quarantined, not applied. |
 | Two devices that cannot see each other | The handshake propagates over the relay. |
 | App-lock engaged during key generation | Generation is gated; it does not proceed without the unlock. |
-| A device removed and then re-paired | It is a new pairing, and it receives only the current key epoch. |
+| A device removed and then re-paired | It is a new pairing, mutually confirmed afresh, and it receives the whole keyring — every epoch, the current one last. A device holding only the current epoch could neither read history nor rebuild from the log (E4-R2, E1-R6), and re-pairing is a new grant of trust rather than a partial restoration of the old one. |
 
 ## Acceptance criteria
 

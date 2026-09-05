@@ -84,9 +84,15 @@ Guards, in order:
 | Missing device key | No confirmed device matches. |
 | Forged signature | Verification failed. |
 | Unknown table | Not in the allow-list. |
+| Unknown column | The table is allowed; the column is not in the registry. |
 | Incomplete creation | Field set against a non-existent row where creation is required. |
 | Strategy error | The merge strategy failed. |
 | Decrypt failed | No known epoch decrypts the payload. |
+| Missing reference | A row the entry points at has not arrived. |
+| Delete blocked by reference | A tombstone would orphan a row that still points at it. |
+| Impossible date | A date the schema or the calendar cannot hold. |
+| Primary-key collision | Two devices minted the same key ([ADR-0025](../../00-overview/decisions/0025-primary-key-collisions-are-quarantined.md)). |
+| Split would overfill transaction | Applying the leg would break the parent's sum invariant ([ADR-0029](../../00-overview/decisions/0029-the-applier-enforces-the-writers-sum-invariant.md)). |
 
 Every write the replayer performs carries an explicit user filter.
 

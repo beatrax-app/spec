@@ -78,7 +78,7 @@ sit in one place, so "how is sync configured" is one screen rather than four.
 | **E6-R4** | Each device's last successful exchange MUST be shown as a concrete time. |
 | **E6-R5** | A device that has never synced MUST be shown as never synced, not as a zero interval. |
 | **E6-R6** | A manual sync action MUST be available. |
-| **E6-R7** | Quarantined operations MUST be visible with their reasons on a read-only, user-scoped surface. |
+| **E6-R7** | Quarantined operations MUST be visible with their reasons on a read-only, user-scoped surface. The per-entry detail MAY live in the developer console; the count and its plain-language warning MUST NOT. |
 | **E6-R8** | The quarantine surface MUST NOT offer a force-apply action. |
 | **E6-R9** | An unreachable peer MUST read as offline, not as error. |
 | **E6-R10** | A cryptographic verification failure MUST read as error. |

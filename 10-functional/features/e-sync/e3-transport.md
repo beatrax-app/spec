@@ -128,7 +128,7 @@ client never listens — it dials out only ([E5](e5-mobile-peer.md)).
 | **E3-R4** | Frames MUST be length-prefixed with hard caps on frame size and operations per frame. |
 | **E3-R5** | Every receive MUST carry a timeout. |
 | **E3-R6** | Discovery MUST offer local-network discovery, manual host entry, and relay fallback, in that order. |
-| **E3-R7** | The relay MUST contain no cryptographic operation, and this MUST be asserted by test. |
+| **E3-R7** | The relay MUST perform no cryptographic operation on a blob and MUST never look inside one — no libsodium call and no decode of a blob's contents anywhere in its code path, asserted by test. The sole primitives it may use are the digest and constant-time comparison that authorise a drain (E3-R8, E3-R22), which touch the credential and never the payload. |
 | **E3-R8** | Draining a mailbox MUST require a per-device credential; a relay-wide token MUST NOT be accepted. |
 | **E3-R9** | A credential scoped to one device MUST NOT be able to drain or delete another device's mailbox. |
 | **E3-R10** | Delivered and undelivered blobs MUST expire on documented schedules. |
