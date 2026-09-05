@@ -44,6 +44,35 @@ as trusted: their keys are what the merge layer verifies signatures against
 ([E1](e1-change-capture.md)), and an unconfirmed device's operations are
 quarantined rather than applied.
 
+### A device the household can no longer pair with
+
+A phone is replaced. The new one pairs with the desktop and receives
+everything, but it never paired with the phone it replaced, so it holds no key
+for it and every operation that phone signed is unverifiable to it — permanently,
+because the second party to that ceremony no longer exists.
+
+Two things answer this, and they are one mechanism.
+
+**Catch-up sends nothing the receiver cannot verify.** The request names the
+authors the asking device can verify; the answer carries only those, and says
+how many operations it withheld and for which author. A device therefore never
+quarantines an operation it was never going to be able to read, and the
+narrowing this causes is a number on the asking device's screen rather than a
+silence.
+
+**A confirmed device may introduce another.** For an author it withheld and has
+itself confirmed, it relays that device's public identity. The relayed identity
+arrives as an *introduction*: stored unconfirmed, listed as introduced-by the
+device that vouched for it, shown with a fingerprint derived here from the key
+that arrived, and verifying nothing at all until the reader confirms it.
+
+Confirming an introduction is not pairing and is deliberately weaker. It is one
+reader on one device, because the other end of the original ceremony is gone,
+and what it grants is signature verification and only that — never transport
+authentication, never epoch delivery, never anything else a paired device may
+do. Removal takes an introduced device off the list exactly as it takes a
+paired one off.
+
 ### Removal is a security operation
 
 Removing a device revokes its trust, mints a fresh at-rest key epoch, and
@@ -66,6 +95,13 @@ rotates the key going forward but does not un-see what was already synced.
 This is stated plainly rather than implied, because the safety-number
 confirmation is the whole defence and the user needs to know that it matters.
 
+**A device you confirm from an introduction was vouched for by a device you
+paired with.** There is no second screen to compare against, and the trust
+being extended is the trust already placed in the voucher. That is why an
+introduction grants reading old signatures and nothing further: a compromised
+paired device can offer a key, and the worst it can then do is make history it
+already had the power to write appear verifiable.
+
 ## States
 
 A pairing moves `pending` → `awaiting_confirm` → `confirmed`, falling to
@@ -83,6 +119,9 @@ A pairing moves `pending` → `awaiting_confirm` → `confirmed`, falling to
 | Two devices that cannot see each other | The handshake propagates over the relay. |
 | App-lock engaged during key generation | Generation is gated; it does not proceed without the unlock. |
 | A device removed and then re-paired | It is a new pairing, mutually confirmed afresh, and it receives the whole keyring — every epoch, the current one last. A device holding only the current epoch could neither read history nor rebuild from the log (E4-R2, E1-R6), and re-pairing is a new grant of trust rather than a partial restoration of the old one. |
+| Operations signed by a device the receiver cannot verify | Not sent, and the count withheld is reported to the receiver. |
+| An introduction the reader never confirms | Nothing verifies against it, and the operations it would have unlocked stay with the peer that holds them. |
+| An introduction naming a device the reader already paired with | The pairing stands; a weaker grant cannot widen or narrow it. |
 
 ## Acceptance criteria
 
@@ -107,6 +146,8 @@ A pairing moves `pending` → `awaiting_confirm` → `confirmed`, falling to
 | **E2-R17** | The trust boundary — that a paired device is trusted, and revocation does not retroactively protect — MUST be stated to the user in plain language. |
 | **E2-R18** | A confirmed device MAY relay another confirmed device's public identity. A relayed identity MUST be stored unconfirmed, MUST name the device that vouched for it, and MUST verify nothing until the reader confirms it. |
 | **E2-R19** | A relayed identity, once confirmed, MUST grant signature verification only — never transport authentication, epoch delivery, or any other capability of a paired device. |
+| **E2-R20** | Catch-up MUST NOT send an operation whose author the receiving device has declared it cannot verify, and MUST report to that device how many operations were withheld and for which author. |
+| **E2-R21** | A catch-up cursor MUST NOT advance over an operation whose author the receiving device could not verify, so that confirming an introduction later still delivers it. |
 
 ## Related
 

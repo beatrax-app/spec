@@ -1,6 +1,6 @@
 # ADR-0027: A confirmed device may introduce another, and the reader confirms it
 
-**Status:** Proposed
+**Status:** Accepted
 **Date:** 2026-09-03
 
 ## Context
@@ -49,11 +49,31 @@ The trust statement E2-R17 already requires gains a sentence: a device you
 confirm this way was vouched for by a device you paired with, and you are
 trusting that pairing rather than a ceremony with the device itself.
 
+**The catch-up filter ships with it, not instead of it.** A sender must not
+offer an op whose author the receiver cannot verify. That is only decidable if
+the receiver says which authors it can verify, so the catch-up request carries
+that list, and the sender withholds every other author. The two halves are one
+mechanism rather than two: the authors a sender withholds are exactly the
+authors it may introduce, so the same exchange that narrows the delta names the
+device whose confirmation would widen it again.
+
+Two properties follow, and both are load-bearing:
+
+- **The narrowing is not silent.** A withheld author is reported to the
+  receiver with a count, and the receiver holds that count against the
+  introduction it can act on. The alternatives table calls silence this
+  option's cost; this is the price of removing it.
+- **A watermark MUST NOT advance over an op the receiver did not admit.** A
+  cursor is a claim to have consumed history. Spending it on an op that
+  quarantined makes the refusal permanent, and an introduction confirmed
+  afterwards would then rescue nothing — the ops it can now verify are already
+  behind the cursor and no peer will offer them again.
+
 ## Alternatives
 
 | Alternative | Why it lost |
 | --- | --- |
-| Send no op the receiver cannot verify — filter at catch-up | Cheaper, needs no change here at all, and it removes the false alarm. It also silently narrows what a device holds: the receiver's log no longer contains the history, so a later reprojection is built from less than the household has. Worth doing anyway as a defence, but it answers the symptom. |
+| Send no op the receiver cannot verify — filter at catch-up, *and nothing else* | Not rejected — adopted, as the paragraph above says, and it is not sufficient alone. On its own it answers the symptom: the receiver's log no longer contains the history, so a later reprojection is built from less than the household has, and nothing on any screen says which device's history is missing or how to get it back. It is the defence; the introduction is the repair. |
 | Drop rather than quarantine an op from a device with no key | Same objection, and it makes E2-R13 conditional on a state the reader cannot see. A refusal that is not recorded is the failure mode [ADR-0025](0025-primary-key-collisions-are-quarantined.md) was written about. |
 | Re-pair every peer by hand after a replacement | The status quo. It does not work: the replaced phone is *gone*, so there is no second party to pair with. The 155 entries stay quarantined however many pairings the reader performs. |
 | Relay the key and trust it automatically | Removes the ceremony rather than moving it, and makes a compromised paired device able to introduce a key of its own choosing that verifies history silently. |
@@ -87,7 +107,7 @@ trusting that pairing rather than a ceremony with the device itself.
 ## Related
 
 - [E2 Device pairing](../../10-functional/features/e-sync/e2-device-pairing.md) —
-  E2-R7, E2-R8, E2-R12, E2-R13, E2-R14, E2-R17
+  E2-R7, E2-R8, E2-R12, E2-R13, E2-R14, E2-R17, E2-R18, E2-R19, E2-R20, E2-R21
 - [ADR-0015](0015-multi-master-p2p-sync.md) — the threat model this sits inside
 - [ADR-0024](0024-peer-row-id-aliases.md) — the re-capture that already covers
   the row data, which is why this is about a false alarm and not about loss
