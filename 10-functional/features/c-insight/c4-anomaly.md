@@ -120,7 +120,7 @@ machine.
 | **C4-R12** | A synthetic large reason from the new-merchant detector MUST be excluded from suppression matching. |
 | **C4-R13** | Suppression rules MUST be visible and removable in settings. |
 | **C4-R14** | Removing a rule from settings MUST leave the alert dismissed; undoing from the alert MUST remove every rule it created and re-open the alert. |
-| **C4-R15** | Dismissed-to-open MUST be the only backward transition, and it MUST exist only for the undo path. |
+| **C4-R15** | The lifecycle MUST be drift's ([C3-R10](c3-drift-alerts.md)) with exactly one added edge: dismissed to open. That edge MUST exist only for the undo path, and no other edge may differ. |
 | **C4-R16** | Acknowledged MUST be terminal, and the state machine MUST NOT provide a general escape hatch. |
 | **C4-R17** | Detection MUST run on the queue and MUST NOT slow an import. |
 | **C4-R18** | First activation MUST run a one-time full-history backfill, claimed atomically so a crash does not cause a re-run. |

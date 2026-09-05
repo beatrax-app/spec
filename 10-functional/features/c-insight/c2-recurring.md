@@ -145,7 +145,7 @@ append-only audit trail. Transitions take a row lock with a busy timeout.
 | **C2-R18** | External reads of series occurrences MUST go through the feature's own public query surface. |
 | **C2-R19** | Cross-user reads and writes MUST return not-found. |
 | **C2-R20** | The series cadence vocabulary MUST be closed to weekly, monthly, quarterly, yearly, and irregular; it MUST be expressed as one named type rather than as free strings, and the stored column MUST be constrained to that set. |
-| **C2-R21** | The next expected date MUST be one step of the inferred cadence past the most recent occurrence, taken in that cadence's own calendar unit rather than as a number of days. For a monthly, quarterly, or yearly series the day of the month MUST be read off the series' first observed occurrence and clamped to the target month. An irregular series MUST have no next expected date. |
+| **C2-R21** | The next expected date MUST be one step of the inferred cadence past the most recent occurrence, taken in that cadence's own calendar unit rather than as a number of days. For a monthly, quarterly, or yearly series the day of the month MUST be the series' billing day, clamped to the target month. The billing day MUST be read only from occurrences that were not themselves clamped — a posting on its month's last day evidences a billing day of at least that, never exactly that — taking the most frequent such day, and where every occurrence is clamped, the largest of them. An irregular series MUST have no next expected date. |
 
 ## Related
 

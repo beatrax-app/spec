@@ -101,7 +101,7 @@ excluded from the roll-up entirely.
 | **C1-R5** | Navigation badge counts MUST be computed once per render and briefly cached, not one query per badge. |
 | **C1-R6** | A missing backing table MUST count as zero rather than raising. |
 | **C1-R7** | A summary card with nothing to show MUST render nothing rather than an empty state, and MUST be carried in the position summary as an absent value rather than as a card of zeroes, so the renderer can tell it from a card whose figure is genuinely zero. |
-| **C1-R8** | A single canonical position summary MUST compose net worth, budget status, upcoming charges, and shortfall risk. |
+| **C1-R8** | A single canonical position summary MUST compose net worth, budget status, upcoming charges, and shortfall risk. Shortfall risk MUST distinguish no shortfall, shortfall ahead, and not yet computed, so a horizon no completed run has covered is never reported as safety. |
 | **C1-R9** | The position summary MUST be composed from other features' public surfaces, never from raw queries against their tables. |
 | **C1-R10** | The position summary MUST equal the figure the dashboard renders. |
 | **C1-R11** | A user with no data MUST receive a fully-populated summary — every figure, count, and collection present and zero or empty, never null. Card-shaped members are the sole exception and MUST be absent when there is nothing to show, because C1-R7 governs them and an absent card is how it expresses "render nothing". |

@@ -28,12 +28,18 @@ Comparing in the series's own currency is what stops a foreign-currency
 subscription from raising an alert every month because the exchange rate moved.
 A genuine price rise in the original currency **is** flagged, currency and all.
 
-### The effective threshold has a floor
+### The effective threshold is resolved by precedence
 
-The threshold is the greatest of the per-series override, the user's global
-setting, and a hard floor. The floor exists so that a careless global setting
-cannot silence drift entirely — the user can make alerts less sensitive, not
-switch them off by accident.
+The per-series override wins where one is set; otherwise the user's global
+setting; otherwise a documented default. Precedence rather than a maximum,
+because taking the greatest would mean an override could only ever make a series
+*less* sensitive, and an override that cannot tighten is half a control.
+
+What stops a careless setting silencing drift is not a floor but the option set:
+both the global and the override choose from a closed list with a bounded
+maximum and no "off" value. A threshold is a minimum movement required to alert,
+so a low one is merely noisy — the direction that can actually silence drift is a
+high one, and the list is what bounds it.
 
 The per-series override is edited inline wherever the series appears.
 
@@ -115,13 +121,13 @@ writes an append-only audit row.
 | **C3-R1** | Drift MUST be evaluated only for approved and cadence-changed series. |
 | **C3-R2** | Comparison MUST be performed in the series's own currency. |
 | **C3-R3** | An exchange-rate-only movement MUST NOT raise an alert; a genuine rise in the original currency MUST. |
-| **C3-R4** | The effective threshold MUST be the greatest of the per-series override, the user's global setting, and a hard floor. |
-| **C3-R5** | A user-global setting below the floor MUST NOT silence drift. |
+| **C3-R4** | The effective threshold MUST be resolved by precedence rather than by comparison: the per-series override where one is set, otherwise the user's global setting, otherwise a documented default. An override MUST be able to make one series more sensitive as well as less. |
+| **C3-R5** | The values the global setting and the per-series override may take MUST be a closed, documented set with a bounded maximum and no "off" value, so drift cannot be switched off by accident. The threshold that judged a movement, and which of the three sources supplied it, MUST be recorded on the alert. |
 | **C3-R6** | An alert MUST carry the previous amount, the current amount, the signed difference, and the annualised impact. |
 | **C3-R7** | Evaluation MUST be idempotent for a given series and latest occurrence. |
 | **C3-R8** | A previous amount of zero MUST NOT produce a division; no alert MUST be raised. |
 | **C3-R9** | A single state machine MUST be the sole writer of alert state, enforced by architecture test, a runtime transition map, and database triggers. |
-| **C3-R10** | Permitted transitions MUST be: open to acknowledged, snoozed, or dismissed-as-cancelled; snoozed to open, acknowledged, or dismissed-as-cancelled. Acknowledged and dismissed-as-cancelled MUST be terminal. |
+| **C3-R10** | Permitted transitions MUST be: open to acknowledged, snoozed, or dismissed-as-cancelled; snoozed to open, acknowledged, dismissed-as-cancelled, or snoozed again. Acknowledged and dismissed-as-cancelled MUST be terminal. Snoozed to snoozed is a real move rather than a no-op: C3-R14 returns a lapsed snooze to the open view, from which re-snoozing is reachable. |
 | **C3-R11** | Every transition MUST write an append-only audit row. |
 | **C3-R12** | Modelling a cancellation MUST create a forecast scenario and MUST NOT modify the alert. |
 | **C3-R13** | Marking as already cancelled MUST be a distinct transition from acknowledging. |

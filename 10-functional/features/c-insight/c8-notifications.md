@@ -121,14 +121,14 @@ in the application and by database trigger.
 
 | ID | Requirement |
 |----|-------------|
-| **C8-R1** | All eight trigger kinds MUST land in one inbox with a navigation badge. |
+| **C8-R1** | Every trigger kind MUST land in one inbox with a navigation badge. The set MUST be expressed as one named type, and the table above MUST list it in full. |
 | **C8-R2** | Notification identity MUST be derived deterministically from user, trigger kind, subject, and occurrence key. |
 | **C8-R3** | Each trigger MUST define an occurrence key that identifies one instance of its event. |
 | **C8-R4** | The same logical event produced twice MUST result in exactly one notification. |
 | **C8-R5** | A bulk import MUST produce exactly one coalesced notification. |
 | **C8-R6** | The notification row MUST always be written; delivery suppression MUST NOT prevent persistence. |
-| **C8-R7** | Delivery MUST be decided in one place, in the order: seeding flag, per-trigger toggle, quiet hours. |
-| **C8-R8** | Delivery MUST be suppressed while the application window has focus. |
+| **C8-R7** | Whether an operating-system notification appears MUST be decided in two stages and nowhere else: a platform-independent stage evaluating, in order, a seeding flag, the per-trigger toggle, then quiet hours; and the delivery adapter's own stage. No third site may suppress delivery. |
+| **C8-R8** | The delivery adapter's stage MUST suppress delivery while the application window has focus, and MUST run only once the platform-independent stage has already answered yes. |
 | **C8-R9** | Preferences MUST be scoped per user and per device. |
 | **C8-R10** | An unpaired device MUST receive defaults on read and MUST no-op on write. |
 | **C8-R11** | Notifications and their read state MUST be captured for sync and merged across devices. |
