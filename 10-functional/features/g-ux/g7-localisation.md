@@ -2,15 +2,15 @@
 
 **Status:** Accepted · **Area:** G — Cross-cutting UX
 
-> **This notice is stale, and saying so is the point.** It was written when the
-> feature ran ahead of the product. Localisation has since shipped: two languages
-> are live and thirty modules carry translated strings. The *(Open)* markers below
-> have not been revisited requirement by requirement, so several of them now
-> understate what the product does — the mirror image of the failure this notice
-> was written to avoid, and just as misleading to a reader deciding what is built.
-> Each remaining marker needs verifying against the implementation before v2.0;
-> until that pass runs, treat a marker here as unverified rather than as evidence
-> the behaviour is missing.
+> **Verified on 2026-09-05, one requirement at a time.** This document once
+> carried a notice saying nothing here shipped and marking every requirement
+> below *(Open)*. The feature had shipped since — a closed registry of locales,
+> live translations across the module tree — so the markers understated the
+> product, which misleads a reader deciding what is built exactly as badly as
+> the opposite would. Each was then checked against the implementation and
+> cleared only where there is evidence, named in the pull request that cleared
+> it. **One marker stands: G7-R11**, and it stands because the requirement is
+> genuinely unmet, with the two places named in the row itself.
 
 ---
 
@@ -156,21 +156,21 @@ transition back short of clearing the preference.
 
 | ID | Requirement |
 |----|-------------|
-| **G7-R1** | *(Open)* The interface MUST support English (`en`) and Dutch (`nl`), with English as the source and fallback locale. |
-| **G7-R2** | *(Open)* Adding a further locale MUST require only its registration and its translations; the detect–select–apply mechanism MUST NOT change per locale. |
-| **G7-R3** | *(Open)* On a first visit, before any preference exists, the active locale MUST be the best supported match against the request's `Accept-Language` preference. |
-| **G7-R4** | *(Open)* Where `Accept-Language` yields no supported locale, the active locale MUST default to English, and this MUST NOT be treated as an error. |
-| **G7-R5** | *(Open)* A language preference MUST be stored per user on the user record, alongside the existing theme preference. |
-| **G7-R6** | *(Open)* Once a user language preference is set, it MUST take precedence over detection on every subsequent request. |
-| **G7-R7** | *(Open)* Detection MUST apply only while no user preference exists; it MUST NOT override a stored preference. |
-| **G7-R8** | *(Open)* The language preference MUST persist across sessions without re-detection. |
-| **G7-R9** | *(Open)* A language switcher MUST live in Settings, in the same family as the Appearance/theme setting. |
-| **G7-R10** | *(Open)* Changing the language MUST take effect across the interface immediately, without discarding the user's place or data. |
-| **G7-R11** | *(Open)* Every user-facing string MUST be translatable; no user-facing copy may be pinned to a single language beyond a locale's reach. |
-| **G7-R12** | *(Open)* A key absent in the active locale MUST fall back to its English value, never to a raw key, a blank, or a placeholder. |
-| **G7-R13** | *(Open)* The active locale MUST be reflected in the document's language attribute for assistive technology. |
-| **G7-R14** | *(Open)* Language detection and selection MUST NOT add an outbound call or send the user's locale off the machine. |
-| **G7-R15** | *(Open)* Where English gives two screens distinct titles, a locale MUST NOT collapse them to one; where that language has a single word for both, the title MUST carry a distinguishing word. |
+| **G7-R1** | The supported locales MUST be a closed registry with English as both the source and the fallback locale, and English and Dutch MUST be among them. |
+| **G7-R2** | Adding a further locale MUST require only its registration and its translations; the detect–select–apply mechanism MUST NOT change per locale. |
+| **G7-R3** | On a first visit, before any preference exists, the active locale MUST be the best supported match against the request's `Accept-Language` preference. |
+| **G7-R4** | Where `Accept-Language` yields no supported locale, the active locale MUST default to English, and this MUST NOT be treated as an error. |
+| **G7-R5** | A language preference MUST be stored per user on the user record, alongside the existing theme preference. |
+| **G7-R6** | Once a user language preference is set, it MUST take precedence over detection on every subsequent request. |
+| **G7-R7** | Detection MUST apply only while no user preference exists; it MUST NOT override a stored preference. |
+| **G7-R8** | The language preference MUST persist across sessions without re-detection. |
+| **G7-R9** | A language switcher MUST live in Settings, in the same family as the Appearance/theme setting. |
+| **G7-R10** | Changing the language MUST take effect across the interface immediately, without discarding the user's place or data. |
+| **G7-R11** | *(Open)* Every user-facing string MUST be translatable; no user-facing copy may be pinned to a single language beyond a locale's reach. Not yet satisfied — two reference tables render a seeded `name` column directly: tax deduction categories, seeded in the jurisdiction's language, and the currency reference table, seeded in English. Both need the treatment `categories` already has, where an untouched default re-resolves through a key and a reader's own rename stays verbatim. |
+| **G7-R12** | A key absent in the active locale MUST fall back to its English value, never to a raw key, a blank, or a placeholder. |
+| **G7-R13** | The active locale MUST be reflected in the document's language attribute for assistive technology. |
+| **G7-R14** | Language detection and selection MUST NOT add an outbound call or send the user's locale off the machine. |
+| **G7-R15** | Where English gives two screens distinct titles, a locale MUST NOT collapse them to one; where that language has a single word for both, the title MUST carry a distinguishing word. |
 
 ## Related
 
