@@ -58,6 +58,7 @@ of them invent a decision that was not already made.
 | [0024](0024-peer-row-id-aliases.md) | A peer's row id is reconciled by a durable alias, not by making ids device-independent | Accepted | New |
 | [0025](0025-primary-key-collisions-are-quarantined.md) | A create the primary key refuses is quarantined when the row already there is a different row | Accepted | New |
 | [0026](0026-an-id-two-devices-cannot-both-compute-is-minted.md) | An id two devices cannot both compute is minted, not derived | Accepted | New |
+| [0027](0027-a-confirmed-device-may-introduce-another.md) | A confirmed device may introduce another, and the reader confirms it | Accepted | New |
 | [0028](0028-a-split-leg-carries-its-own-identity.md) | A split leg carries an identity of its own, and the set conflict stays open | Accepted | New |
 | [0029](0029-the-applier-enforces-the-writers-sum-invariant.md) | The applier enforces the writer's sum invariant, and refuses rather than resolves | Accepted | New |
 | [0030](0030-the-tag-governs-the-workflow-not-what-it-reads.md) | The major tag governs the workflow definition, not what the workflow reads | Accepted | New |
