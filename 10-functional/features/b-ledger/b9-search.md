@@ -82,7 +82,8 @@ with token autocompletion and recent searches.
 
 | ID | Requirement |
 |----|-------------|
-| **B9-R1** | The index MUST cover counterparty name, description, and tax note. |
+| **B9-R1** | The index MUST cover the counterparty name as stored, the description, and the tax note. It MUST NOT carry the alias-resolved display name (B4-R15), which has no write on the transaction to key a refresh to. |
+| **B9-R18** | Where a stored name and its resolved display name differ, the search surface MUST say that matching is against the statement's own text, so a reader who renamed a merchant is not told the transactions do not exist. |
 | **B9-R2** | The index MUST be updated synchronously in the same transaction as the write that caused it. |
 | **B9-R3** | An index write failure MUST roll back the causing write; it MUST NOT be swallowed. |
 | **B9-R4** | Indexed fields MUST be separated by a token the tokeniser cannot index, so matches cannot cross field boundaries. |

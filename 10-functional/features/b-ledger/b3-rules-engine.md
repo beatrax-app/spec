@@ -131,7 +131,7 @@ before.
 | **B3-R10** | Deleting a rule MUST NOT retroactively undo assignments it made. |
 | **B3-R11** | The matcher MUST be side-effect-free and MUST be shared unchanged between the import and re-apply paths. |
 | **B3-R12** | Rule and action ordering MUST be deterministic. |
-| **B3-R13** | At import, actions MUST fold onto the in-flight transaction with no database write, no event, and no sync capture. |
+| **B3-R13** | At import, actions MUST fold onto the in-flight transaction: no write to the transactions table, no event, and no sync capture for the transaction. The rule's own hit counter (B2-R17) is the one write the import path is permitted. |
 | **B3-R14** | Tax tagging MUST be skipped at import and applied only on re-apply. |
 | **B3-R15** | On re-apply, every field write MUST be delegated to the product's existing public writers. |
 | **B3-R16** | Conflicting actions of the same type MUST resolve last-writer-wins by execution order. |

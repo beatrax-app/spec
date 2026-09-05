@@ -104,13 +104,14 @@ uncleared ──▶ cleared ──▶ reconciled
 | **B8-R6** | The bulk transition MUST re-derive the affected set inside the operation. |
 | **B8-R7** | A non-zero difference MUST be surfaced plainly and MUST NOT be auto-corrected. |
 | **B8-R8** | Un-reconciling MUST return rows to cleared. |
-| **B8-R9** | Every mutating action MUST refuse a reconciled transaction. |
+| **B8-R9** | Every user-initiated mutating action MUST refuse the reconciled transaction it names. The lock MUST NOT bind: the status writer's own un-reconcile (B8-R8); a referential repair clearing a pointer to a removed record (B4-R23); the retyping healing pass (B5-R16); a write to the partner of the named row (B1-R15, and the survivor of a deleted leg); or an arriving sync operation (B8-R11). |
+| **B8-R16** | That exemption list MUST be exhaustive and each entry MUST name the requirement mandating it; a writer reaching a reconciled row for any other reason is a defect. |
 | **B8-R10** | Reconciliation status MUST survive re-import of the same source unchanged. |
 | **B8-R11** | Reconciliation status MUST be captured for sync and merged per field. |
 | **B8-R12** | The balance query MUST expose the current balance, the cleared balance, and the cleared balance as of a date. |
 | **B8-R13** | Status transitions MUST go through a single sanctioned writer. |
 | **B8-R14** | Cross-user reads and writes MUST return not-found. |
-| **B8-R15** | The single-currency assumption in the cleared balance MUST be documented rather than silently assumed. |
+| **B8-R15** | Every balance the query exposes MUST be denominated per settled currency and MUST NOT add minor units across them (B10-R3). An account holding rows in more than one currency MUST report one figure per currency, and a starting balance MUST anchor only the currency it was stated in. |
 
 ## Related
 

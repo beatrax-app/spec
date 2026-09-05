@@ -125,11 +125,11 @@ under uncertainty is the correct default.
 | ID | Requirement |
 |----|-------------|
 | **B4-R1** | Resolution MUST walk a fixed precedence chain and stop at the first match. |
-| **B4-R2** | A transfer between the user's own accounts MUST NOT create a counterparty record. |
+| **B4-R2** | A transfer between the user's own accounts MUST resolve to the account and MUST NOT create a counterparty record; self_account is therefore a resolution outcome, never a stored row. |
 | **B4-R3** | Known institution identifiers MUST be resolved before merchant matching. |
 | **B4-R4** | Merchant matching MUST be attempted before the personal-identifier heuristic. |
 | **B4-R5** | The personal-identifier heuristic MUST require a checksum-valid account number and the absence of company markers. |
-| **B4-R6** | The type set MUST be closed and enforced at the database layer. |
+| **B4-R6** | The type set MUST be closed and enforced at the database layer. Only the types resolution can store are reachable in a real install, and a reader-facing filter or profile for self_account MUST NOT be offered where it can only ever be empty. |
 | **B4-R7** | A slug MUST be derived from the display name alone; an account identifier MUST NOT appear in any slug or route. |
 | **B4-R8** | The index view's data shape MUST NOT carry an account identifier at all. |
 | **B4-R9** | Slugs MUST be unique per user, resolved by suffix walk with a database-level guarantee underneath. |

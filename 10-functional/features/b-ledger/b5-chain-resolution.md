@@ -165,7 +165,7 @@ test and by database trigger.
 
 | ID | Requirement |
 |----|-------------|
-| **B5-R1** | The resolver MUST NOT write to the transactions table except the pair pointer and the documented retyping pass, and this MUST be enforced by architecture test. |
+| **B5-R1** | The resolver MUST NOT write to the transactions table except the documented retyping pass, and this MUST be enforced by architecture test. |
 | **B5-R2** | Every resolver pass MUST be idempotent: re-running against the same data MUST produce the same links. |
 | **B5-R3** | Funding-chain resolution MUST try the deterministic, direct, and fuzzy arms in that order, first match wins. |
 | **B5-R4** | Only the deterministic arm may produce a link at full confidence; the fuzzy arm MUST be capped below it. |
@@ -177,7 +177,7 @@ test and by database trigger.
 | **B5-R10** | A settlement outside tolerance MUST write a candidate with no partner and an explicit tolerance marker. |
 | **B5-R11** | An overpayment MUST record a credit carried forward to the next open statement. |
 | **B5-R12** | Refunds posting after a statement closes MUST chain to the original purchase and carry a credit forward. |
-| **B5-R13** | Three confirmations of one signature MUST promote every remaining candidate with that signature, marked as resolved by the learnt rule. |
+| **B5-R13** | Three confirmations of one signature MUST promote every remaining candidate with that signature that has a concrete partner, marked as resolved by the learnt rule. A partnerless candidate (B5-R10) MUST be left as it stands. |
 | **B5-R14** | The interface MUST distinguish deterministic, confirmed-from-suggestion, and learning-loop provenance. |
 | **B5-R15** | Rejecting a pair MUST NOT demote confirmed links and MUST NOT block the confirmation counter, but the pair MUST never be proposed again. |
 | **B5-R16** | The retyping healing pass MUST run before the chain resolvers, MUST be idempotent, and MUST NOT touch the pair pointer. |
@@ -186,7 +186,7 @@ test and by database trigger.
 | **B5-R19** | Every run MUST write an audit record; a final-retry failure MUST record the failure with a truncated error. |
 | **B5-R20** | Card-statement state MUST have exactly one sanctioned mutator, enforced by architecture test. |
 | **B5-R21** | Link state and kind MUST be enforced at the database layer as well as the application layer. |
-| **B5-R22** | A link with no partner MUST NOT be promotable; the attempt MUST raise a typed error. |
+| **B5-R22** | A link with no partner MUST NOT be promotable by any path. A direct attempt MUST raise a typed error; the learning loop MUST exclude it rather than raise, so one partnerless hint cannot abort a whole promotion. |
 | **B5-R23** | The chain walk MUST follow edges in both directions, MUST be depth-bounded, and MUST guard against cycles. |
 | **B5-R24** | Only confirmed and candidate links MUST be followed by the walk. |
 | **B5-R25** | Cross-user reads and writes MUST return not-found. |
