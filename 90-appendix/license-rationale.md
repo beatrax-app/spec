@@ -162,5 +162,6 @@ engineering unknowns rather than decisions, and they stay recorded as open in
 ## Related
 
 - [ADR-0003](../00-overview/decisions/0003-hippocratic-3-0-license.md) · [ADR-0019](../00-overview/decisions/0019-asymmetric-release-publish.md)
+- [ADR-0032](../00-overview/decisions/0032-all-four-stores-additive-to-direct-download.md) — the store-distribution decision that narrowed the signing stance above
 - [60-brand/trademark.md](../60-brand/trademark.md) · [30-repos/website.md](../30-repos/website.md)
 - [F6 Updates and release verification](../10-functional/features/f-platform/f6-updates.md)

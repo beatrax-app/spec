@@ -233,6 +233,7 @@ it were not.
 
 ## Related
 
+- [ADR-0032](../../../00-overview/decisions/0032-all-four-stores-additive-to-direct-download.md) — the scope decision this page implements
 - [F1 Desktop shell and packaging](f1-desktop-shell.md) — the direct-download channel this is additive to
 - [F6 Updates and release verification](f6-updates.md) · [F7 Data locations, export and deletion](f7-data-locations.md)
 - [E5 The mobile client as a synced peer](../e-sync/e5-mobile-peer.md)

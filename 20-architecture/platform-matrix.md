@@ -105,6 +105,6 @@ by a submission
 
 ## Related
 
-- [ADR-0006](../00-overview/decisions/0006-nativephp-desktop-shell.md) · [ADR-0019](../00-overview/decisions/0019-asymmetric-release-publish.md)
+- [ADR-0006](../00-overview/decisions/0006-nativephp-desktop-shell.md) · [ADR-0019](../00-overview/decisions/0019-asymmetric-release-publish.md) · [ADR-0032](../00-overview/decisions/0032-all-four-stores-additive-to-direct-download.md)
 - [F1 Desktop shell](../10-functional/features/f-platform/f1-desktop-shell.md) · [E5 Mobile peer](../10-functional/features/e-sync/e5-mobile-peer.md)
 - [70-operations/releasing.md](../70-operations/releasing.md)
