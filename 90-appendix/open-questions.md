@@ -8,6 +8,15 @@ They are recorded here **and** in the document each belongs to. A question
 smoothed over reads better and is worse: nobody knows to check it
 ([GOV-R25](../50-governance/README.md#the-gov-r-namespace)).
 
+**Two kinds of entry live here, and they are kept apart.** Everything under the
+headings that follow is *unresolved*: nobody has made the call, and the entry
+says what would settle it. The final section, [Accepted
+tensions](#accepted-tensions), is the opposite — decisions that **have** been
+made, where two requirements still pull against each other and the cost of
+living with that was judged lower than the cost of resolving it. Filing a settled
+call as an open question is the same defect as smoothing over an unsettled one,
+so an entry that has been decided is moved down rather than left above.
+
 ## Product and release
 
 ### What is in scope for app-store distribution?
@@ -153,6 +162,72 @@ arrives is unasked.
 
 *In: [50-governance/overrides.md](../50-governance/overrides.md#the-solo-caveat) ·
 [70-operations/maintainers.md](../70-operations/maintainers.md)*
+
+## Accepted tensions
+
+**Nothing in this section is waiting on a decision.** Each is a pair of
+requirements that pull against each other, where the pull was examined and
+accepted rather than removed. They are recorded so that a later reader finds the
+reasoning instead of re-opening the argument, and so that the conditions that
+would reverse the judgement are written down rather than remembered.
+
+### A digest cadence of "off" does not stop the digest arriving
+
+The cadence is a preference of the **device** that holds it, but the notification
+row is a **user** artefact: it always persists and it always syncs. A phone set
+to "off" beside a desktop set to weekly still receives the digest in its inbox
+and on its navigation badge. Only the operating-system notification is
+suppressed.
+
+**Accepted.** A per-device preference must not decide whether a user-scoped row
+exists, because the row is the same row on every device and the alternative is a
+device silently withholding history from its peers. What the setting surface owes
+the reader is a sentence saying the inbox entry still arrives — a copy change,
+not a behaviour change.
+
+*Would reverse it:* a genuine per-device notification store, which the sync model
+does not currently have.
+
+*In: [C1-R12](../10-functional/features/c-insight/c1-dashboard.md#acceptance-criteria) ·
+[C8](../10-functional/features/c-insight/c8-notifications.md)*
+
+### The owner can reset a partner, and that is not a privilege boundary
+
+`F3-R4` lets the owner reset a partner's password and forbids the reverse.
+[40-quality/security.md](../40-quality/security.md) says every account is a
+co-equal, fully-trusted operator and that partner accounts are a convenience
+rather than a privilege boundary. Both are accepted, and neither defers to the
+other.
+
+**Accepted, and the threat model is the one that governs.** The path around the
+asymmetry is short — any account may enable developer mode and reach the command
+registry — so the owner-only reset is an affordance, not a control. Household
+co-tenancy is a trust boundary the product deliberately does not police.
+
+*Would reverse it:* multi-tenancy beyond one household, which v2.0 does not ship
+and the licence discourages.
+
+*In: [F3-R4, F3-R5](../10-functional/features/f-platform/f3-auth-and-app-lock.md#acceptance-criteria) ·
+[40-quality/security.md](../40-quality/security.md)*
+
+### A fallback English string is announced in the surrounding locale
+
+`G7-R13` requires the document language attribute to name the active locale.
+`G7-R12` fills a missing key with its English value. So in a partially translated
+locale, English text sits inside a document stamped `lang="nl"` and a screen
+reader pronounces it with Dutch phonetics — which is the defect `G7` itself
+names, and `G5-R14`'s "MUST read as English" is not true for a listener.
+
+**Accepted.** Marking it per string would mean threading fallback provenance
+through every translation call site, and the framework's fallback returns a bare
+string carrying no provenance, so nothing downstream *could* mark it. Coverage is
+therefore governed at the locale level rather than per string.
+
+*Would reverse it:* a translation layer that reports which locale answered a
+lookup, at which point the tagging becomes mechanical.
+
+*In: [G7-R12, G7-R13](../10-functional/features/g-ux/g7-localisation.md#acceptance-criteria) ·
+[G5-R14](../10-functional/features/g-ux/g5-plain-language.md#acceptance-criteria)*
 
 ## Related
 
