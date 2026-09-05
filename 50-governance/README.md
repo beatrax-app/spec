@@ -31,7 +31,7 @@ from.
 | **GOV-R6** | Requirement identifiers MUST NOT appear in the code comments of an implementation repository; they belong in commit trailers and pull-request bodies. The canonical repository's own gate scripts are the exception — a gate names the requirement it enforces — and their citations are checked like every other (REPO-R15). |
 | **GOV-R7** | A contested decision MUST be recorded as a decision record before the change that depends on it merges. |
 | **GOV-R8** | Identifiers MUST be permanent and never reused; a withdrawn one MUST be marked in place. |
-| **GOV-R9** | A decision record MUST NOT be edited once accepted; it MUST be superseded by a new one that links both ways. |
+| **GOV-R9** | A decision record's substance MUST NOT be edited once accepted; it MUST be superseded by a new one. The superseded record MUST carry the back-link that linking both ways requires, and that stamp — a status line naming the superseding record, and a leading note saying which claims no longer hold and which still stand — is the only edit permitted. Its context, decision, alternatives and consequences MUST stand as written. |
 | **GOV-R10** | Requirements MUST NOT be renumbered. |
 | **GOV-R11** | This repository MUST be subject to its own integrity checks. |
 | **GOV-R12** | Routine maintenance — dependencies, formatting, pipeline mechanics — MUST cite this identifier. |
