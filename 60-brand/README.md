@@ -22,7 +22,8 @@ The visual and verbal identity, and the rules both surfaces obey.
 | **DES-R3** | Every primitive MUST have both a light and a dark value. |
 | **DES-R4** | Every themed surface MUST carry a dark companion for every light-mode colour utility, enforced by test in the product. |
 | **DES-R5** | Colour MUST NOT be the only carrier of meaning; status, direction, and severity MUST also carry a label, a shape, or an icon. |
-| **DES-R6** | The voice MUST be British-leaning, calm, and precise, on every surface. |
+| **DES-R6** | The English voice MUST be British-leaning; calm and precise MUST hold on every surface in every locale. |
+| **DES-R13** | A translation MUST carry the register rather than the orthography: no manufactured urgency, no cheerful euphemism for a failure, and no exclamation marks (DES-R7), whatever the language. |
 | **DES-R7** | System copy MUST NOT use exclamation marks or manufactured urgency. |
 | **DES-R8** | Copy MUST NOT claim a protection the implementation does not provide. |
 | **DES-R9** | Motion MUST be restrained and MUST NOT be required to understand a surface. |

@@ -138,7 +138,8 @@ Tax notes are part of the full-text index ([B9](../b-ledger/b9-search.md)), so
 | **D4-R21** | A lost race on the tag uniqueness constraint MUST be caught and retried. |
 | **D4-R22** | Batch tagging MUST filter out reconciled transactions before applying. |
 | **D4-R23** | Tax notes MUST be included in the full-text index. |
-| **D4-R24** | Tax notes MUST be treated as sensitive and encrypted at rest. |
+| **D4-R24** | A tax note's own column MUST be sealed at rest; the note MUST NOT be readable from `tax_transaction_tags` without the key. |
+| **D4-R26** | The plaintext shadow the full-text index necessarily holds MUST be disclosed in the product's own copy rather than described as sealed ([G1-R14](../g-ux/g1-privacy.md), [ADR-0018](../../../00-overview/decisions/0018-amounts-plaintext-at-rest.md)). |
 | **D4-R25** | A cross-user tag target MUST return not-found. |
 
 ## Related

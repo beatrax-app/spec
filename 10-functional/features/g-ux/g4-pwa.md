@@ -80,7 +80,8 @@ first.
 | **G4-R5** | Navigation MUST collapse to a drawer with a top bar at phone width. |
 | **G4-R6** | The transaction list MUST support infinite scroll with a cap on accumulated rows. |
 | **G4-R7** | A manifest and icon set MUST make the application installable in standalone display mode. |
-| **G4-R8** | A service worker MUST serve the application shell and an offline page when the network is unavailable. |
+| **G4-R8** | A service worker MUST serve a self-contained offline page for any navigation attempted while the network is unavailable, never a cached rendering of the surface that was asked for. |
+| **G4-R12** | The service worker MUST precache the versioned static asset set — stylesheet, script bundle, icons and the offline page — and serve it cache-first. No HTML document may enter the cache, so there is no application shell to serve offline and the offline page carries its own styling. |
 | **G4-R9** | The service worker MUST NOT cache financial pages under any circumstances. |
 | **G4-R10** | The service worker MUST be versioned with the application. |
 | **G4-R11** | Charts MUST resize with their container. |

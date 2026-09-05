@@ -84,7 +84,7 @@ that is not being measured.
 | **G3-R2** | Every light-mode colour utility on a themed surface MUST carry a dark companion, enforced by architecture test. |
 | **G3-R3** | The theme MUST follow the operating system where reported, with an explicit user override. |
 | **G3-R4** | Triage queues, the categorisation inbox, and the command palette MUST be fully operable from the keyboard. |
-| **G3-R5** | Shortcut handlers MUST NOT fire while a text input has focus. |
+| **G3-R5** | Global shortcut handlers MUST NOT fire while focus is in a text input, text area, or editable region ([G6-R11](g6-keyboard.md)). |
 | **G3-R6** | Status, direction, and severity MUST carry a non-colour signal in addition to colour. |
 | **G3-R7** | Amounts MUST be formatted for the user's locale, including separators and symbol position. |
 | **G3-R8** | Amount entry MUST accept both decimal-separator conventions. |
