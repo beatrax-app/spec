@@ -112,11 +112,34 @@ must say so.
 
 Custody adapters for the platform keychains are registered but **not wired**.
 Until they are, the unlocked key follows session custody on every platform, with
-no operating-system-level protection. On mobile there is additionally no
-backup-exclusion bridge, so the on-device database sits on a cloud-backed path —
-mitigated, not eliminated, by the at-rest encryption itself.
+no operating-system-level protection. Recorded as outstanding rather than
+described as working.
 
-Both are recorded as outstanding rather than described as working.
+### Mobile backup exclusion, and how far it reaches
+
+A backup-exclusion bridge **exists** — one build script writing both platforms'
+halves — and the mobile build applies it rather than leaving it for somebody to
+remember.
+
+On **Android** it turns off the manifest's backup flag and fills in both rule
+files: the cloud-backup rules and the device-transfer rules, which the platform
+reads independently of the flag, so doing one without the other would still let
+a handset-to-handset transfer carry the database. The packaging command the
+release pipeline runs applies it, so it reaches every release build.
+
+On **iOS** there is no manifest flag; the exclusion is a per-URL resource value
+set as each directory is created, and the patch sets it, reads it back, and logs
+when it does not take. Two things are narrower there. No pipeline builds an iOS
+artefact at all, so the bridge is applied by a local build rather than by CI.
+And it is set on the application-support tree, on the premise that the database
+lives there, while the mobile bootstrap repoints the live connection to a path
+under the documents directory that nothing marks excluded
+([E5](e5-mobile-peer.md#open-questions-and-known-gaps)).
+
+So "no bridge exists" was wrong, and "the on-device database therefore sits
+unprotected on a cloud-backed path" is wrong on Android. What is not established
+is which file the iOS exclusion covers, and that is an open question rather than
+an answer in either direction.
 
 ## Edge cases
 
@@ -158,7 +181,8 @@ Both are recorded as outstanding rather than described as working.
 | **E4-R21** | A passphrase change MUST re-wrap the keyring, and a failed re-wrap MUST raise a critical alert. |
 | **E4-R22** | The product's own copy MUST state honestly what at-rest encryption does and does not protect. |
 | **E4-R23** | Unwired operating-system key custody MUST be documented as outstanding rather than implied to work. |
-| **E4-R24** | The absence of a mobile backup-exclusion bridge MUST be documented. |
+| **E4-R24** | *(Withdrawn)* The absence of a mobile backup-exclusion bridge MUST be documented. Withdrawn 2026-09-05: the bridge exists and the mobile build applies it, so there is no absence left to document. What the requirement was for moves to `E4-R25`. |
+| **E4-R25** | The mobile backup-exclusion bridge's reach MUST be documented per platform: what it excludes, whether the build applies it or a person must, and any path holding user data that it does not cover. |
 
 ## Related
 

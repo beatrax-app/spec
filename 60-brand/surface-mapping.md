@@ -43,7 +43,7 @@ Its obligations are requirements rather than guidance
 - Source-available, **not** open source.
 - Local-first, with the outbound surface **named** rather than merely claimed.
 - Sync described accurately, including what a relay can observe.
-- Installers described as unsigned, with the reason.
+- Which installers are signed and which are not, accurately in both directions.
 - No analytics, no tracking, no third-party embeds.
 
 ## Documentation site

@@ -6,11 +6,19 @@ Verifies:
     Markdown tree and in the shared workflow definitions
   - no requirement ID is defined twice (IDs are permanent and unique, GOV-R8)
   - every internal Markdown link resolves to a real file
+  - every internal link's #fragment resolves to a heading in the target file
+    (REPO-R55)
+
+Scope of the fragment check: relative links between Markdown files in this
+repository, and same-file anchors. It does not follow an absolute URL, so a
+link into another repository's rendered pages is checked by lychee for the
+page and by nobody for the anchor. It reads headings, not rendered HTML, so a
+hand-written HTML anchor would not be found; none exist here.
 
 Exit 0 = clean, 1 = problems found.
 """
 from __future__ import annotations
-import re, sys, pathlib, collections
+import re, sys, pathlib, collections, functools
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 
@@ -19,6 +27,11 @@ REQ_CITE = re.compile(r"\b([A-Z]+\d*-R\d+)\b")
 ADR_FILE = re.compile(r"^0*(\d{3,4})-.*\.md$")
 ADR_CITE = re.compile(r"\bADR-(\d{3,4})\b")
 LINK = re.compile(r"\[[^\]]*\]\((?!https?://|mailto:)([^)#]+)(?:#[^)]*)?\)")
+# The same links, keeping the half LINK throws away. An empty first group is a
+# same-file anchor.
+LINK_FRAG = re.compile(r"\[[^\]]*\]\((?!https?://|mailto:)([^)#]*)#([^)]+)\)")
+FENCE = re.compile(r"^\s{0,3}(`{3,}|~{3,})(.*)$")
+HEADING = re.compile(r"^\s{0,3}#{1,6}\s+(.*?)\s*#*\s*$")
 
 
 def md_files():
@@ -96,11 +109,74 @@ def check_links():
     return problems
 
 
+def heading_slug(raw: str) -> str:
+    """The anchor a rendered heading gets. Matches GitHub's slugger, which is
+    what the links in this tree are written against: inline markup is rendered
+    away first, then everything but word characters, spaces and hyphens is
+    dropped, then spaces become hyphens."""
+    text = re.sub(r"!\[([^\]]*)\]\([^)]*\)", r"\1", raw)
+    text = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", text)
+    text = re.sub(r"\[([^\]]*)\]\[[^\]]*\]", r"\1", text)
+    text = text.replace("`", "").replace("*", "").strip().lower()
+    return re.sub(r"\s", "-", re.sub(r"[^\w\s-]", "", text, flags=re.UNICODE))
+
+
+@functools.lru_cache(maxsize=None)
+def anchors(path: str) -> frozenset[str]:
+    """Every anchor a Markdown file offers. Fenced blocks are skipped: this
+    tree fences shell transcripts and directory listings whose lines start with
+    `#`, and counting those as headings would make a real dangling fragment
+    pass. Two headings slugging the same take `-1`, `-2` in document order, as
+    they do when the page is rendered."""
+    found, seen, fence = set(), collections.Counter(), None
+    for line in pathlib.Path(path).read_text(encoding="utf-8").splitlines():
+        marker = FENCE.match(line)
+        if marker:
+            mark, info = marker.group(1), marker.group(2)
+            if fence is None:
+                fence = mark
+            elif mark[0] == fence[0] and len(mark) >= len(fence) and not info.strip():
+                fence = None
+            continue
+        if fence is not None:
+            continue
+        head = HEADING.match(line)
+        if head:
+            slug = heading_slug(head.group(1))
+            seen[slug] += 1
+            found.add(slug if seen[slug] == 1 else f"{slug}-{seen[slug] - 1}")
+    return frozenset(found)
+
+
+def check_fragments():
+    """A link whose file half resolves and whose #fragment does not is the one
+    breakage nothing here caught: two links to a heading that had moved to
+    another file sat in the tree from the founding commit. check_links() reads
+    the file half and drops the fragment; lychee is run without fragment
+    checking; markdownlint's MD051 sees same-file anchors only, which is the
+    half that was never broken (REPO-R55)."""
+    problems = []
+    for p in md_files():
+        for rel, frag in LINK_FRAG.findall(p.read_text(encoding="utf-8")):
+            rel, frag = rel.strip(), frag.strip()
+            if rel.startswith(".docs/") or "/.docs/" in rel:
+                continue
+            target = p if not rel else (p.parent / rel).resolve()
+            # A broken file half is check_links()' report to make, not this one's.
+            if target.suffix.lower() != ".md" or not target.exists():
+                continue
+            if frag not in anchors(str(target)):
+                where = rel or p.name
+                problems.append(
+                    f"{p.relative_to(ROOT)}: no heading '#{frag}' in {where}")
+    return problems
+
+
 def main() -> int:
     problems = []
     # De-dup the "cites undefined" one-per-file noise into unique messages.
     seen = set()
-    for msg in check_ids() + check_links():
+    for msg in check_ids() + check_links() + check_fragments():
         if msg not in seen:
             seen.add(msg)
             problems.append(msg)

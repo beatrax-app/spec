@@ -119,7 +119,7 @@ Recorded rather than described as solved:
 | Item | Status |
 |------|--------|
 | Operating-system key custody | Registered, **not wired**. The unlocked key follows session custody on every platform ([F3](../10-functional/features/f-platform/f3-auth-and-app-lock.md)). No longer a deferral: `F3-R33` is [in v2.0 scope and being built](../00-overview/roadmap.md#3--the-three-latent-risks-no-longer-deferred). |
-| Mobile backup exclusion | No native bridge exists; the on-device database sits on a cloud-backed path, mitigated by at-rest encryption ([E5](../10-functional/features/e-sync/e5-mobile-peer.md)). |
+| Mobile backup exclusion | A bridge exists and the mobile build applies it. Android is covered app-wide and reaches every release build. On iOS no pipeline builds an artefact, and whether the exclusion covers the file the app actually opens is [an open question](../10-functional/features/e-sync/e5-mobile-peer.md#open-questions-and-known-gaps) ([E4-R25](../10-functional/features/e-sync/e4-at-rest-encryption.md#acceptance-criteria)). |
 | Per-user connector secrets | A single global secrets file with no per-user keying; a blocker on second-user activation ([A6](../10-functional/features/a-ingestion/a6-open-banking.md)). No longer a deferral: `A6-R20` and `A6-R21` are [in v2.0 scope and being built](../00-overview/roadmap.md#3--the-three-latent-risks-no-longer-deferred). |
 | Lock on window close | Not verified to act on the focused window's session ([F1](../10-functional/features/f-platform/f1-desktop-shell.md)). |
 
