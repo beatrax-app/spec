@@ -36,13 +36,16 @@ as a colour ([DES-R5](README.md#the-des-r-namespace)).
 
 ## Contrast
 
-Text and meaningful non-text elements meet a contrast ratio sufficient for
-sustained reading of numeric content in both themes. Amounts and dates are read
-carefully, repeatedly, often on a phone in poor light — the bar is legibility for
-that, not a minimum that technically passes.
+Text and meaningful non-text elements meet **WCAG 2.2 Level AA** in both themes.
+Amounts and dates are read carefully, repeatedly, often on a phone in poor light,
+so AA is the floor rather than the ambition — the bar is legibility for that, not
+a minimum that technically passes.
 
-**No conformance level is currently named as a gate**; see the open question
-below.
+This half was measured rather than asserted. Every foreground/background pair in
+the palette was sampled through a canvas rather than pattern-matched out of the
+stylesheet: a regex over colour utilities cannot read `oklch()`, and a fix
+applied to light mode alone breaks dark mode. 664 failures against the AA ratio
+were taken to zero across both themes.
 
 ## Numbers
 
@@ -75,17 +78,26 @@ confirmation.
 Wide content scrolls inside its own container; the page never scrolls sideways
 ([G4](../10-functional/features/g-ux/g4-pwa.md)).
 
-## Open question
+## Conformance target
 
-**No formal conformance target has been set, and there is no automated
-accessibility audit in the pipeline.**
+**WCAG 2.2 Level AA, stated as the target, and not gating a release.** The
+behavioural half of that decision, and the reasoning for both halves, is
+[G3](../10-functional/features/g-ux/g3-accessibility.md#conformance-target); this
+page carries the visual half.
 
-What is actually in force is the theme-companion architecture test, the
-non-colour-carrier rule, the keyboard requirements, and the locale formatting.
-That is a real set of practices — but it is not a standard, and this page will
-not claim one it is not measuring.
+What is in force here is checkable: the theme-companion architecture test, the
+non-colour-carrier rule, tabular figures and locale formatting, visible focus in
+both themes, and a contrast palette measured against the AA ratio rather than
+eyeballed.
 
-Choosing a target, and deciding whether it gates a release, is undecided.
+**No automated accessibility audit runs in the pipeline.** So AA is a standard
+this page's constraints are chosen against, not a level any build has been
+certified against, and this page states it that way. The distinction is the whole
+point: a page claiming conformance nothing measures is the failure this one was
+written to avoid ([DES-R8](README.md#the-des-r-namespace)). It is recorded as an
+[accepted tension](../90-appendix/open-questions.md#a-conformance-level-is-named-that-nothing-measures)
+rather than as a settled matter, because the pull between naming a standard and
+measuring nothing is real and survives the decision.
 
 ## Related
 

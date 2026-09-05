@@ -101,8 +101,12 @@ yet been released — see the
 [roadmap](../00-overview/roadmap.md#landed-but-unreleased--the-body-of-v20).
 
 The outstanding goals are the mobile peer's remaining acceptance work and
-app-store distribution, the latter of which is
-[not yet scoped](../00-overview/roadmap.md#open-questions).
+app-store distribution. The latter is
+[now scoped](../00-overview/roadmap.md#2--app-store-publishing-and-distribution)
+— all four stores, with direct download retained wherever it remains possible
+([ADR-0032](../00-overview/decisions/0032-all-four-stores-additive-to-direct-download.md))
+— and the manifest also carries the three latent risks and the four relayed-identity
+requirements that were reclassified into v2.0 scope on 2026-09-05.
 
 ## Related
 

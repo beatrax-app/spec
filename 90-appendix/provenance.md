@@ -58,13 +58,14 @@ code**.
 
 ## What was added rather than ported
 
-Nine decision records —
-[ADR-0012](../00-overview/decisions/0012-action-pinning.md) onward — were written
+The decision records from
+[ADR-0012](../00-overview/decisions/0012-action-pinning.md) onward were written
 for this specification. **None invents a decision.** Each records one already
-made and evidenced in the product's code, its pipeline configuration, or its
-planning corpus: action pinning, the organisation split, the merge model, the
-sync topology, the transport, the envelope cutover, the plaintext set, the
-publish asymmetry, and the connector's constraints.
+made and evidenced in the product's code, its pipeline configuration, its
+planning corpus, or a call the product owner took and this repository was asked
+to record: action pinning, the organisation split, the merge model, the sync
+topology, the transport, the envelope cutover, the plaintext set, the publish
+asymmetry, the connector's constraints, and the store-distribution scope.
 
 The `GOV-R`, `ARCH-R`, `Q-R`, `DES-R`, `OPS-R`, and `REPO-R` namespaces are new,
 because the organisation is new. They codify practices already in force.
@@ -79,6 +80,7 @@ Recorded rather than silently resolved:
 | A planning document's headline requirement count disagreed with the count of identifiers it listed | Noted in the source itself. Neither number is used here; this specification counts its own. |
 | Two phase entries covered the same comment-policy work, one recorded complete and one not started | The work is done; the duplicate entry is a planning artefact. Not carried over. |
 | A dependency-version table in the product's stack documentation predates several upgrades | Superseded by the lock file. This specification names versions only where a decision depends on them. |
+| This specification disagreed with **itself** about paid signing identities: [F8](../10-functional/features/f-platform/f8-app-store-distribution.md) recorded them as held and required, while [license-rationale.md](license-rationale.md), [20-architecture/platform-matrix.md](../20-architecture/platform-matrix.md), [F6](../10-functional/features/f-platform/f6-updates.md) and [J1](../10-functional/journeys/j1-first-run.md) all stated the opposite | **F8 is right**, checked against the release workflow, which refuses to publish an unsigned macOS or Windows build. The first two were corrected on 2026-09-05 alongside [ADR-0032](../00-overview/decisions/0032-all-four-stores-additive-to-direct-download.md); F6 and J1 still carry the old claim and are recorded here rather than left to be rediscovered. |
 
 ## Open questions carried forward
 

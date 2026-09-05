@@ -1,7 +1,19 @@
 # ADR-0019: Stable tags publish as drafts; release candidates publish immediately
 
-**Status:** Accepted
+**Status:** Accepted; the "no paid OS-level code signing" premise below is
+superseded by
+[ADR-0032](0032-all-four-stores-additive-to-direct-download.md)
 **Date:** 2026-07-27
+
+> **One claim in this record no longer holds.** Paid signing identities are held
+> on macOS, Windows and both mobile platforms, and the release build refuses to
+> publish without them, so the signed update manifest is no longer the *sole*
+> binary-integrity signal
+> ([ADR-0032](0032-all-four-stores-additive-to-direct-download.md)). Everything
+> else below stands, and the decision itself is unaffected: the asymmetry
+> between a stable tag publishing as a draft and a release candidate publishing
+> immediately rests on the two audiences, not on the signing posture. The cost
+> of a bad publish is lower than this record assumed, not higher.
 
 ## Context
 

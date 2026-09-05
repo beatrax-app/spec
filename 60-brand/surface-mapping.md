@@ -56,9 +56,14 @@ Built from this repository. It inherits the voice and needs no separate identity
 Icon, name, and one-line description. The description says what the product is
 for a household, not what it is technically.
 
-Store listings are **not yet scoped**
-([00-overview/roadmap.md](../00-overview/roadmap.md#open-questions)); when they
-are, they inherit every rule on this page.
+Store listings are scoped: **all four stores**, with direct download retained
+wherever it remains possible
+([ADR-0032](../00-overview/decisions/0032-all-four-stores-additive-to-direct-download.md)).
+They inherit every rule on this page, and
+[F8](../10-functional/features/f-platform/f8-app-store-distribution.md) adds two
+more that bite hardest on a listing: a listing may not describe a capability
+that does not work on that platform, and its privacy answers are derived from
+the outbound-call catalogue rather than written.
 
 ## Release notes
 

@@ -149,6 +149,19 @@ A pairing moves `pending` → `awaiting_confirm` → `confirmed`, falling to
 | **E2-R20** | *(Open)* Catch-up MUST NOT send an operation whose author the receiving device has declared it cannot verify, and MUST report to that device how many operations were withheld and for which author. Not yet satisfied — a catch-up request does not yet say which authors the asking device can verify, so the answering side has nothing to filter on. |
 | **E2-R21** | *(Open)* A catch-up cursor MUST NOT advance over an operation whose author the receiving device could not verify, so that confirming an introduction later still delivers it. Not yet satisfied — a cursor advances over every entry the session admitted, including ones the merge layer then refused. |
 
+> **`E2-R18` through `E2-R21` are in v2.0 scope and are being built.** Until
+> 2026-09-05 they were classified nowhere: not in the roadmap's outstanding list,
+> not in its post-v2.0 backlog, and not among
+> [the v2.0 manifest's goals](../../../70-operations/versions/2.0.0.toml). That
+> is worse than being deferred — a deferral is a decision, and this was an
+> omission, so nothing scheduled them and nothing had declined them either. The
+> gap is recorded on the [roadmap](../../../00-overview/roadmap.md#4--relayed-device-identity)
+> rather than quietly closed.
+>
+> They stay marked *(Open)*, and the "Not yet satisfied" clauses stay as written,
+> because the code is not merged. What changed is the classification, not the
+> state.
+
 ## Related
 
 - [ADR-0015](../../../00-overview/decisions/0015-multi-master-p2p-sync.md) — the topology and threat model

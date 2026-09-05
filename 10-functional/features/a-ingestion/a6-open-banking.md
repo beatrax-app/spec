@@ -153,9 +153,18 @@ second-user activation** — see
 
 > `A6-R20` and `A6-R21` are stated as requirements because they are the
 > conditions under which the feature is correct, and recorded as unsatisfied
-> because they are. They are release-readiness items on the
-> [roadmap](../../../00-overview/roadmap.md#3--release-readiness-carry-over),
-> not v2.0 blockers, because v2.0 ships single-user with one bank.
+> because they are.
+>
+> **They are no longer deferred.** Both were carried as accepted deferrals on the
+> reasoning that v2.0 ships single-user with one bank, which made each a
+> documented limitation rather than a defect. That reasoning is withdrawn: both
+> are [in v2.0 scope and being built](../../../00-overview/roadmap.md#3--the-three-latent-risks-no-longer-deferred).
+> Single-user and single-bank were the *condition* the deferral rested on, and
+> closing these two removes the condition rather than the symptom.
+>
+> The requirements stay marked *(Open)* and the two "Known limitation" sections
+> above stay as written, because the code is not merged. What changed is the
+> schedule, not the state — and the state is what those sections describe.
 
 ## Related
 

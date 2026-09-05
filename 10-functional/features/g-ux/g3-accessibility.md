@@ -65,16 +65,30 @@ The product's visual language is calm by intent
 ([60-brand](../../../60-brand/)). Charts have quiet defaults, animation is
 restrained, and nothing moves that does not need to.
 
-## Open question
+## Conformance target
 
-**No formal conformance target has been set.** The product repository's own
-documentation records accessibility improvements as in scope for contributions
-and enforces the theme-companion rule mechanically, but it does not name a
-conformance level, and there is no automated audit in the pipeline.
+**The target is WCAG 2.2 Level AA. It is stated, and it does not gate a
+release.**
 
-Setting one — and deciding whether it gates a release — is undecided. This page
-records the practices that are actually in force rather than claiming a standard
-that is not being measured.
+The two halves of that are separate decisions and both were taken deliberately.
+
+Naming AA is honest rather than aspirational: the requirements above already
+carry most of it, and the contrast half was measured and closed — every
+foreground/background pair in the palette was sampled through a canvas rather
+than pattern-matched out of the stylesheet, and 664 failures against the AA
+ratio were taken to zero in both themes. A regex over colour utilities cannot
+read `oklch()`, and a light-only fix breaks dark mode; the measurement had to
+be done on rendered colour, and it was.
+
+Not gating a release is the honest half of the same statement. **No automated
+audit runs in the pipeline**, so AA is a target the product is built to, not a
+level any build has been certified against. Calling it a gate would mean a tag
+could claim conformance that nothing measured — the failure this page exists to
+avoid. Requirements G3-R1 through G3-R11 are individually enforced, several of
+them by architecture test; AA is the standard they are chosen against.
+
+Adding a pipeline audit and promoting AA to a release gate is a live option and
+would be the natural next step. It is not a precondition for v2.0.
 
 ## Acceptance criteria
 
@@ -91,7 +105,7 @@ that is not being measured.
 | **G3-R9** | Every authenticated surface MUST be legible and operable at phone width. |
 | **G3-R10** | Wide content MUST scroll inside its own container; the page body MUST NOT scroll horizontally. |
 | **G3-R11** | Animation MUST be restrained and MUST NOT be required to understand a surface. |
-| **G3-R12** | *(Open)* A conformance target MUST be chosen and stated. Not yet decided — see [Open question](#open-question). |
+| **G3-R12** | A conformance target MUST be chosen and stated. It is WCAG 2.2 Level AA, and it MUST be stated as a target the product is built to rather than a level a build has been certified against, for as long as no audit runs in the pipeline ([Conformance target](#conformance-target)). |
 
 ## Related
 

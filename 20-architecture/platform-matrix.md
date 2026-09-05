@@ -8,8 +8,8 @@ What runs where, and what differs.
 
 | Target | Form | Status |
 |--------|------|--------|
-| **macOS** | Disk image, ad-hoc signed | Shipped |
-| **Windows** | Installer, unsigned | Shipped |
+| **macOS** | Disk image, signed by a developer identity and notarised | Shipped |
+| **Windows** | Installer, signed through a hosted signing service | Shipped |
 | **Linux** | Portable image and native package, unsigned | Shipped |
 | **Mobile** | Native shell rendering the same interface | v2.0, [E5](../10-functional/features/e-sync/e5-mobile-peer.md) |
 | **Self-hosted** | The application on a machine the household controls, reached over their own network | Shipped; off-loopback access is opt-in and defaults to loopback (ARCH-R23) |
@@ -77,17 +77,34 @@ checksums ([F6](../10-functional/features/f-platform/f6-updates.md)). Two
 channels: stable, published as a draft for review; preview, published
 immediately ([ADR-0019](../00-overview/decisions/0019-asymmetric-release-publish.md)).
 
-No paid operating-system signing identity is held, and the trade-off is
-documented rather than hidden
-([the rationale](../90-appendix/license-rationale.md#why-no-paid-signing-certificates)).
+**Paid signing identities are held** on macOS, on Windows through a hosted
+signing service, and on both mobile platforms, and the release build refuses to
+publish a bundle without them
+([F8-R2, F8-R3](../10-functional/features/f-platform/f8-app-store-distribution.md#acceptance-criteria)).
+Linux is the exception and ships unsigned. The stance that produced the earlier
+position — that a recurring subscription is a fragile gate on shipping — was not
+found to be wrong; it is now carried rather than avoided, and
+[the rationale](../90-appendix/license-rationale.md#why-no-paid-signing-certificates)
+records what was traded for it.
 
-**Store distribution is not yet scoped.** Which stores, whether they force paid
-signing identities, and whether their sandboxing survives local-network
-discovery and background sync are all
-[open questions](../00-overview/roadmap.md#open-questions).
+**Store distribution is scoped: all four stores, with direct download retained
+wherever it remains possible**
+([ADR-0032](../00-overview/decisions/0032-all-four-stores-additive-to-direct-download.md),
+[F8](../10-functional/features/f-platform/f8-app-store-distribution.md)). A
+store build is additive to the direct-download build, never a replacement for
+it.
+
+Two questions the scope decision does **not** answer remain open, and both are
+measurements rather than calls: whether a sandboxed build keeps a user-data path
+that survives upgrades, and whether local-network discovery survives the
+sandbox. The Mac App Store carries a third constraint of its own — the sandbox
+ignores one of the two hardened-runtime relaxations the bundle needs to map its
+static interpreter, so that listing is preceded by a runtime change rather than
+by a submission
+([90-appendix/open-questions.md](../90-appendix/open-questions.md)).
 
 ## Related
 
-- [ADR-0006](../00-overview/decisions/0006-nativephp-desktop-shell.md) · [ADR-0019](../00-overview/decisions/0019-asymmetric-release-publish.md)
+- [ADR-0006](../00-overview/decisions/0006-nativephp-desktop-shell.md) · [ADR-0019](../00-overview/decisions/0019-asymmetric-release-publish.md) · [ADR-0032](../00-overview/decisions/0032-all-four-stores-additive-to-direct-download.md)
 - [F1 Desktop shell](../10-functional/features/f-platform/f1-desktop-shell.md) · [E5 Mobile peer](../10-functional/features/e-sync/e5-mobile-peer.md)
 - [70-operations/releasing.md](../70-operations/releasing.md)

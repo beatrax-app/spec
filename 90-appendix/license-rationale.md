@@ -73,16 +73,27 @@ Hippocratic License 3.0. The **marks** are neither
 
 ## Why no paid signing certificates
 
+> **This stance has been narrowed, and the heading is kept because the reasoning
+> below is still the reason it was taken.** Paid signing identities **are** now
+> held — on macOS, on Windows through a hosted signing service, and on both
+> mobile platforms — and the release build refuses to publish without them.
+> Store distribution is what changed it
+> ([ADR-0032](../00-overview/decisions/0032-all-four-stores-additive-to-direct-download.md)).
+> What follows is the argument that produced the original position, kept intact,
+> and then the exception that overrides it and what that exception costs.
+
+### The position, and why it was taken
+
 Beatrax ships installers for three desktop platforms. On two of them, the
 first-launch experience for an unsigned application is a security dialogue asking
 the user to confirm they want to run software the operating system cannot tie to
 a paid developer identity.
 
 Two subscriptions would make that dialogue go away: one platform vendor's
-developer identity, and another's hosted signing service. Beatrax subscribes to
+developer identity, and another's hosted signing service. Beatrax subscribed to
 neither.
 
-The reasoning is small and specific:
+The reasoning was small and specific:
 
 1. **Both gate shipping on a recurring subscription.** If it lapses for any
    reason — an expired payment method, a billing email in a spam folder, a
@@ -114,17 +125,43 @@ Users who want to verify a release by hand can: every release publishes
 checksums and the signed manifest, and the recipe reproduces the same chain the
 updater runs.
 
-### The open question
+### The exception: store distribution, and what it costs
 
-**Store distribution may change this trade.** A store listing may require a paid
-identity, and the balance of a recurring-subscription risk against reaching users
-who will never sideload is genuinely different.
+**A store listing requires a paid identity, and all four store listings are now
+in scope** — the Mac App Store, the Microsoft Store, the App Store and Google
+Play, with direct download retained wherever it remains possible
+([ADR-0032](../00-overview/decisions/0032-all-four-stores-additive-to-direct-download.md),
+[F8](../10-functional/features/f-platform/f8-app-store-distribution.md)). There
+is no version of a store listing that does not carry one. The stance above
+therefore holds for the direct-download channel's *reasoning* and no longer holds
+as a description of what the project pays for.
 
-That is unresolved, along with the rest of store distribution
-([00-overview/roadmap.md](../00-overview/roadmap.md#open-questions)).
+**Nothing in the reasoning was found to be wrong.** That is the part worth
+stating plainly, because it is tempting to narrow a stance by quietly deciding
+its argument was weak. It was not.
+
+| The original objection | What happened to it |
+|------------------------|---------------------|
+| Both gate shipping on a recurring subscription | **Still true, and now carried rather than avoided.** A lapsed payment method or a missed identity-verification renewal stops a release, and with a listing it stops an update reaching users who have no other channel. The mitigation is bookkeeping: every identity the pipeline requires is recorded with its expiry ([F8-R3](../10-functional/features/f-platform/f8-app-store-distribution.md#acceptance-criteria)). |
+| Neither provides binary integrity the update path does not already provide | **Still true.** The signed manifest and per-binary hashes are unchanged, and they remain what a direct-download install verifies against. A vendor signature is now an additional signal rather than a replacement for one. |
+| The dialogue is a one-time cost the user can pass themselves | **True, and no longer the whole picture.** It is a cost only the users who arrive by direct download can pass. It is not passable by a phone user, and it is not passable on a machine configured to refuse software the operating system cannot attribute. |
+
+What was traded, stated plainly: **a release process that could not be stopped by
+a billing failure, for reaching users who cannot or will not sideload.** The
+first was a real property and it is gone. It was given up deliberately, and the
+condition that would prove the objection right — a lapse actually blocking a
+release — is written into ADR-0032's revisit list rather than left to be
+rediscovered.
+
+Two sub-questions of the original store-distribution question are **not** settled
+by any of this: whether a sandboxed build keeps a user-data path that survives
+upgrades, and whether local-network discovery survives the sandbox. Both are
+engineering unknowns rather than decisions, and they stay recorded as open in
+[open-questions.md](open-questions.md).
 
 ## Related
 
 - [ADR-0003](../00-overview/decisions/0003-hippocratic-3-0-license.md) · [ADR-0019](../00-overview/decisions/0019-asymmetric-release-publish.md)
+- [ADR-0032](../00-overview/decisions/0032-all-four-stores-additive-to-direct-download.md) — the store-distribution decision that narrowed the signing stance above
 - [60-brand/trademark.md](../60-brand/trademark.md) · [30-repos/website.md](../30-repos/website.md)
 - [F6 Updates and release verification](../10-functional/features/f-platform/f6-updates.md)

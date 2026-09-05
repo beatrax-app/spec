@@ -17,36 +17,50 @@ living with that was judged lower than the cost of resolving it. Filing a settle
 call as an open question is the same defect as smoothing over an unsettled one,
 so an entry that has been decided is moved down rather than left above.
 
+**And an answered question can also simply go.** Moving down is right only when
+the pull *survives* the answer. Where the answer removes it — where the decision
+leaves nothing pulling in the other direction — the answer belongs in the
+requirement it changed, and the entry belongs nowhere. Keeping a resolved
+question in a section headed "accepted tensions" states a tension that does not
+exist, which is the same overclaim in the other direction. Three tests, applied
+per entry: is it still unanswered, does something still pull against the answer,
+or is it finished. Git is the record of the ones that finished.
+
 ## Product and release
 
-### What is in scope for app-store distribution?
+### Does a sandboxed build keep its data, and can it still find a peer?
 
-The last unscoped piece of v2.0. Sub-questions, none answered by any source:
+What remains of the store-distribution question after
+[ADR-0032](../00-overview/decisions/0032-all-four-stores-additive-to-direct-download.md)
+answered the rest of it:
 
-- **Which stores?** Four review processes with four sandboxing models.
-- **Does it force paid signing identities**, which
-  [the licence rationale](license-rationale.md#why-no-paid-signing-certificates)
-  currently declines? A store listing may make that trade different.
-- **Does a sandboxed build keep a user-data path that survives upgrades**, and
-  does local-network discovery survive the sandbox?
+- **Does a sandboxed build keep a user-data path that survives upgrades?**
+- **Does local-network discovery survive the sandbox?**
 
-*In: [00-overview/roadmap.md](../00-overview/roadmap.md#open-questions) ·
-[20-architecture/platform-matrix.md](../20-architecture/platform-matrix.md) ·
-[license-rationale.md](license-rationale.md#the-open-question)*
+Neither is a decision anybody can take. They are engineering unknowns,
+answerable only by building a sandboxed bundle and measuring it — and the scope
+decision is what makes them urgent rather than academic. `F8-R26` forbids a
+listing describing a capability that does not work on that platform, so an
+unmeasured answer is a listing whose copy cannot honestly be written. If the
+answer to either is no, a desktop store listing becomes a diminished product
+rather than a second channel.
+
+The Mac App Store carries a third constraint that is **not** an open question but
+a known cost: the sandbox ignores one of the two hardened-runtime relaxations the
+desktop bundle needs to map its static interpreter, so that listing is preceded
+by a runtime strategy rather than by a submission. It is stated in
+[F8](../10-functional/features/f-platform/f8-app-store-distribution.md#the-mac-app-store-is-a-runtime-problem-not-a-submission),
+not here.
+
+*Which stores, and whether a listing forces paid signing identities, were the
+other two sub-questions of this entry. Both are answered — the second is now an
+[accepted tension](#paid-signing-identities-were-declined-on-reasoning-that-still-holds).*
+
+*In: [00-overview/roadmap.md](../00-overview/roadmap.md#does-a-sandboxed-build-keep-its-data-and-can-it-still-find-a-peer) ·
+[F8-R26](../10-functional/features/f-platform/f8-app-store-distribution.md#acceptance-criteria) ·
+[20-architecture/platform-matrix.md](../20-architecture/platform-matrix.md#distribution)*
 
 ## Correctness and security
-
-### When do the connector's per-connection and per-user secret gaps become blockers?
-
-One live aggregator session exists system-wide, and the secrets file has no
-per-user keying. Under v2.0's single-user, single-bank shape both are documented
-limitations. **A second bank makes the first a defect; a second user makes the
-second one a security issue.**
-
-Neither has a scheduled fix.
-
-*In: [A6-R20, A6-R21](../10-functional/features/a-ingestion/a6-open-banking.md#acceptance-criteria) ·
-[40-quality/security.md](../40-quality/security.md#known-outstanding-items)*
 
 ### Does lock-on-window-close act on the focused window's session?
 
@@ -57,15 +71,6 @@ build.**
 
 *In: [F1-R18](../10-functional/features/f-platform/f1-desktop-shell.md#acceptance-criteria) ·
 [40-quality/security.md](../40-quality/security.md#known-outstanding-items)*
-
-### When is operating-system key custody wired?
-
-Adapters are registered and unwired; the unlocked key follows session custody on
-every platform. Combined with the absent mobile backup-exclusion bridge,
-key-at-rest protection is weaker than the design intends.
-
-*In: [F3-R33](../10-functional/features/f-platform/f3-auth-and-app-lock.md#acceptance-criteria) ·
-[E4-R23, E4-R24](../10-functional/features/e-sync/e4-at-rest-encryption.md#acceptance-criteria)*
 
 ### Is the search index's plaintext shadow an acceptable leak indefinitely?
 
@@ -84,16 +89,6 @@ is a clear win. None currently exists.
 *In: [ADR-0016](../00-overview/decisions/0016-noise-transport-zero-knowledge-relay.md#revisit-if)*
 
 ## Quality and process
-
-### What accessibility conformance target applies?
-
-The theme-companion test, the non-colour-carrier rule, the keyboard
-requirements, and locale formatting are all in force. **No conformance level is
-named, and no automated audit runs.** Choosing one, and deciding whether it gates
-a release, is undecided.
-
-*In: [G3-R12](../10-functional/features/g-ux/g3-accessibility.md#open-question) ·
-[60-brand/accessibility.md](../60-brand/accessibility.md#open-question)*
 
 ### Should ordering be machine-checked?
 
@@ -228,6 +223,71 @@ lookup, at which point the tagging becomes mechanical.
 
 *In: [G7-R12, G7-R13](../10-functional/features/g-ux/g7-localisation.md#acceptance-criteria) ·
 [G5-R14](../10-functional/features/g-ux/g5-plain-language.md#acceptance-criteria)*
+
+### Paid signing identities were declined on reasoning that still holds
+
+[The licence rationale](license-rationale.md#why-no-paid-signing-certificates)
+declined two signing subscriptions because both gate shipping on a recurring
+payment: a lapsed card or a missed identity-verification renewal stops a release
+until somebody restores it. `F8-R2` requires every store artefact to be signed by
+a recorded identity and a build to fail rather than emit an unsigned one, and
+there is no store listing without a paid identity behind it. The two pull in
+opposite directions and both stand.
+
+**Accepted, and the objection was not found to be wrong.** Paid identities are
+held on macOS, Windows and both mobile platforms, and the release build refuses
+to publish without them
+([ADR-0032](../00-overview/decisions/0032-all-four-stores-additive-to-direct-download.md)).
+What was traded is a release process that could not be stopped by a billing
+failure, in exchange for reaching users who cannot or will not sideload — a
+phone user, and anyone on a machine configured to refuse software the operating
+system cannot attribute. The first was a real property and it is gone. The
+mitigation is bookkeeping rather than architecture: `F8-R3` requires every
+identity the pipeline needs to be recorded with its expiry, because an expiry
+nobody is watching is the failure mode, not the subscription itself.
+
+The reasoning is kept in place rather than rewritten, so that a reader meeting
+the exception finds why the stance existed instead of a paragraph that reads as
+though it never did.
+
+*Would reverse it:* a lapse actually blocking a release, or a platform offering
+attributable distribution without a recurring identity.
+
+*In: [F8-R2, F8-R3](../10-functional/features/f-platform/f8-app-store-distribution.md#acceptance-criteria) ·
+[license-rationale.md](license-rationale.md#the-exception-store-distribution-and-what-it-costs)
+· [ADR-0032](../00-overview/decisions/0032-all-four-stores-additive-to-direct-download.md)*
+
+### A conformance level is named that nothing measures
+
+`G3-R12` requires a conformance target to be chosen and stated, and it is: **WCAG
+2.2 Level AA**. `DES-R8` forbids copy claiming a protection the implementation
+does not provide, and no automated accessibility audit runs in the pipeline, so
+nothing measures conformance on any build. Naming a standard nobody measures is
+the shape of claim `DES-R8` exists to prevent.
+
+**Accepted, and the wording is what carries it.** AA is stated as a target the
+product is **built to**, never as a level a build has been **certified against**,
+and `G3-R12` requires that distinction to be kept for as long as no audit runs.
+The half of AA most likely to be quietly false was measured rather than asserted:
+every foreground/background pair in the palette was sampled through a canvas
+rather than pattern-matched out of the stylesheet — a regex over colour utilities
+cannot read `oklch()`, and a light-only fix breaks dark mode — and 664 failures
+against the AA ratio were taken to zero in both themes. `G3-R1` through `G3-R11`
+are individually enforced, several by architecture test.
+
+The pull does not go away: a reader can still take "WCAG 2.2 AA" as a claim about
+a build rather than about an intention. Living with that was judged better than
+the alternatives, which are to name nothing — the position this replaced, and one
+that told a user with an accessibility need less than it could — or to gate a
+release on an audit that does not exist.
+
+*Would reverse it:* an accessibility audit in the pipeline, at which point AA
+becomes a gate rather than a target and the tension disappears rather than being
+managed.
+
+*In: [G3-R12](../10-functional/features/g-ux/g3-accessibility.md#conformance-target) ·
+[60-brand/accessibility.md](../60-brand/accessibility.md#conformance-target) ·
+[DES-R8](../60-brand/README.md#the-des-r-namespace)*
 
 ## Related
 
