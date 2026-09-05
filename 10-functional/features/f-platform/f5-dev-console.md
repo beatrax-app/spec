@@ -31,8 +31,11 @@ against the command's own declared rules at the controller.
 
 That is three independent guards, deliberately.
 
-**Schema-destructive commands are absent from the registry entirely.** Adding one
-would be a visible change in review, not a runtime decision.
+**Schema-destructive commands are absent from the registry entirely.** Absence
+is enforced by test: every registered name is resolved against the live console
+application, and the migration, wipe and seed families are refused. Review is
+not the control -- the registry carried a table-dropping command for the whole
+life of the tier, through every review it passed.
 
 Destructive commands additionally require a triple gate: an advanced toggle that
 resets on every sign-in, an explicit confirmation, and typing the application's
@@ -122,6 +125,7 @@ by architecture test, so no shipped code path can pull it in
 | A non-developer following a bookmark | Not-found. |
 | A command name not in the registry | Refused before a process is constructed. |
 | A required argument omitted | Refused with a clear message rather than an opaque failure. |
+| A command that can only run from a terminal | Absent from the registry -- the console is what removes that gate. |
 | A run finishing between two polls | The registry entry survives both; the closing audit record is durable. |
 | A worker dying mid-run | An opening record with no close; surfaced as an orphan. |
 | A credential rotated mid-output | The next line uses the new pattern; already-written lines keep the old redaction. |
@@ -161,6 +165,7 @@ by architecture test, so no shipped code path can pull it in
 | **F5-R24** | Queue-dashboard imports MUST be confined to a single file, enforced by architecture test. |
 | **F5-R25** | The queue dashboard MUST be registered only when both the development flag and the package are present. |
 | **F5-R26** | The system snapshot MUST mask every secret-bearing configuration and environment value, matching singular and plural key forms alike, and MUST resolve an uncertain key toward masking. |
+| **F5-R27** | Every registered command MUST be runnable as the runner invokes it: its declared argument schema MUST name only arguments and options the command declares, MUST supply every argument the command requires, and MUST NOT depend on input a detached run cannot provide. |
 
 ## Related
 
