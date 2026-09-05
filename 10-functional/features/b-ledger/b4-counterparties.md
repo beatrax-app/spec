@@ -45,12 +45,24 @@ Six types — merchant, personal, bank, government, self-account, unknown — wi
 their own visual language, their own profile layout, and their own filters. The
 type set is enforced at the database layer.
 
-### Personal identifiers never enter a URL
+### An account identifier never enters a URL
 
 The privacy default: a slug is derived from the display name alone. An account
 number is preserved on the record for the profile page to show behind an
 explicit action, but it never appears in a slug, a route, or the index view's
 data shape. The index row type does not even carry the field.
+
+That rule has one hard case, and stating it only for the personal type is what
+made the case invisible. Where a statement names nobody, the account number is
+the only name the record has — so it *becomes* the display name, and "derived
+from the display name alone" then derives the slug from the identifier. The
+identifier's place is the display name, which is encrypted: it is what the
+reader recognises the record by, and a triage queue of records all called
+"Unknown" is not a privacy improvement. Its place is not the slug, which is
+plaintext and is the URL. A record whose display name spells an account
+identifier therefore takes an **opaque slug** and is separated from its
+siblings by the same suffix walk every other collision uses, so the slug stays
+the matching key it exists to be.
 
 Slugs are unique per user, resolved by a suffix walk on collision, with a
 database-level guarantee underneath. Under at-rest encryption the walk decrypts
@@ -112,6 +124,7 @@ under uncertainty is the correct default.
 | Situation | Behaviour |
 |-----------|-----------|
 | No identifier, no description, no name | Unresolved; stays in triage. |
+| An identifier, no description, no name | Unresolved. The identifier is the display name, so the reader can tell one such record from another; the slug is opaque, so the URL cannot spell it. |
 | A merchant renamed in the alias table | The stored slug does not move; the rename surfaces at render. |
 | Two users each with the same merchant | Per-user slug uniqueness; each is invisible to the other. |
 | An unknown record that becomes resolvable later | A new record is created; the stale unknown is pruned by the next sweep. |
@@ -130,7 +143,7 @@ under uncertainty is the correct default.
 | **B4-R4** | Merchant matching MUST be attempted before the personal-identifier heuristic. |
 | **B4-R5** | The personal-identifier heuristic MUST require a checksum-valid account number and the absence of company markers. |
 | **B4-R6** | The type set MUST be closed and enforced at the database layer. Only the types resolution can store are reachable in a real install, and a reader-facing filter or profile for self_account MUST NOT be offered where it can only ever be empty. |
-| **B4-R7** | A slug MUST be derived from the display name alone; an account identifier MUST NOT appear in any slug or route. |
+| **B4-R7** | An account identifier MUST NOT appear in a slug, a route, or any plaintext column, and this MUST hold even where the identifier is the only display name the record has: an unresolved counterparty with no name MUST take an opaque slug rather than a slug spelling its identifier. |
 | **B4-R8** | The index view's data shape MUST NOT carry an account identifier at all. |
 | **B4-R9** | Slugs MUST be unique per user, resolved by suffix walk with a database-level guarantee underneath. |
 | **B4-R10** | Under at-rest encryption, the slug collision walk MUST decrypt stored names before comparing. |
@@ -149,6 +162,7 @@ under uncertainty is the correct default.
 | **B4-R23** | Garbage collection MUST clear the transaction reference before deleting, and MUST NOT delete transactions. |
 | **B4-R24** | Where garbage collection cannot decrypt a value it needs, it MUST skip that check with a warning rather than deleting. |
 | **B4-R25** | Cross-user reads MUST return not-found, revealing nothing about whether another user owns the slug. |
+| **B4-R26** | The slug is stored in plaintext as a routing key. It MUST therefore be derivable only from values that are themselves not sensitive, and any plaintext shadow it creates of an encrypted column MUST be disclosed as [B9-R14](b9-search.md) discloses the index body. |
 
 ## Related
 
