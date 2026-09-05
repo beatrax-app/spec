@@ -103,6 +103,13 @@
 #              behind the tip, over commits that changed the pairing path. A
 #              specification asserting its own verification is not evidence.
 #
+# E5 records all three as taken on an iPhone 12 mini, and this file does not
+# overrule that. What it records is narrower and checkable: neither repository
+# carries an artefact of either run, so nothing here can be audited against a
+# build. For E5-R23 the audit also found something no page yet carries — the
+# iOS half flags the wrong directory tree — which is a product defect rather
+# than a disagreement about a verification.
+#
 # OUTSTANDING — scoped work, not yet on the development line:
 #   A6-R20, A6-R21          — per-connection credential storage and per-user
 #                             credential keying. Carried as accepted deferrals
@@ -152,9 +159,11 @@
 #                             where the requirement says reject. Deliberate: a
 #                             saved report is a synced column and can arrive
 #                             from a peer on another build.
-# And three requirements marked *(Open)* are in no bucket either, so nothing
+# And four requirements marked *(Open)* are in no bucket either, so nothing
 # schedules them and nothing has declined them: A8-R27 (satisfied since
-# 2026-09-05, the marker is stale), F7-R10 and G7-R11.
+# 2026-09-05, the marker is stale), F6-R5, F7-R10 and G7-R11. F6-R5 was marked
+# open on 2026-09-05 and was in no bucket within the hour; the check below
+# caught it on its first run, which is the case for having the check.
 #
 # F1-R18 (lock on window close, unverified) remains the one carry-over
 # release-readiness item that is NOT a goal of v2.0. It cannot be verified
