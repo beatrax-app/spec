@@ -154,12 +154,20 @@ be advertised as device-verified until it has.
 | **E5-R22** | The client MUST show its own sync status and offer a manual sync action. |
 | **E5-R23** | The on-device database MUST be excluded from platform cloud backup where the platform supports it. |
 | **E5-R24** | Mobile local notification delivery MUST be verified on real hardware before being advertised. |
-| **E5-R25** | *(Open)* Two-device pairing MUST be verified on real hardware before the import flow is advertised as device-verified. Not yet satisfied. |
+| **E5-R25** | Two-device pairing MUST be verified on real hardware before the import flow is advertised as device-verified. |
 | **E5-R26** | A failure to persist the key to platform secure storage MUST fail closed: the key MUST NOT be written to the session store in cleartext as a fallback, and the failure is surfaced rather than hidden. |
 
-> `E5-R25` is the one outstanding item that makes this feature the last one
-> before v2.0. `E5-R23` and `E5-R24` were verified on real hardware on
-> 2026-09-04 (iPhone 12 mini, iOS 26.5.2).
+> All three hardware gates have been taken, on an iPhone 12 mini running iOS
+> 26.5.2. `E5-R23` and `E5-R24` on 2026-09-04; `E5-R25` on 2026-09-05, verified
+> twice from a clean install against `cecdd12ce`. The second run copied 7,665
+> op-log records with a quarantine of zero, and the two databases were compared
+> column by column across 103 shared tables rather than by row count: 47 came
+> out byte-identical, including all 148 transactions on every non-AEAD column.
+> The encrypted columns were proved equivalent through their disclosed
+> plaintext shadow — 143 of 143 non-blank `search_body` rows matched.
+>
+> The run also found seven defects, none of which prevented the pairing. They
+> are ordinary blockers tracked as code defects, not gaps in this feature.
 
 ## Related
 
