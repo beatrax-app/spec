@@ -140,7 +140,7 @@ in the application and by database trigger.
 | **C8-R7** | Whether an operating-system notification appears MUST be decided in two stages and nowhere else: a platform-independent stage evaluating, in order, a seeding flag, the per-trigger toggle, then quiet hours; and the delivery adapter's own stage. No third site may suppress delivery. |
 | **C8-R8** | The delivery adapter's stage MUST suppress delivery while the application window has focus, and MUST run only once the platform-independent stage has already answered yes. |
 | **C8-R9** | Preferences MUST be scoped per user and per device. |
-| **C8-R10** | An unpaired device MUST receive defaults on read and MUST no-op on write. |
+| **C8-R10** | An unpaired device MUST receive defaults on read and MUST persist a write under a reserved device id that cannot collide with a real one. Pairing MUST carry that row onto the device's own sync identity, so a setting chosen before pairing survives it. A write MUST NOT be discarded: an install that never pairs is the default one, and a no-op leaves its whole notification screen accepting input and silently dropping it. |
 | **C8-R11** | Notifications and their read state MUST be captured for sync and merged across devices. |
 | **C8-R12** | A payment reminder whose bill subsequently arrives MUST be resolved. |
 | **C8-R13** | The only permitted state transition MUST be open to resolved, enforced in the application and at the database layer. |

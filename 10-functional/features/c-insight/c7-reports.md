@@ -129,7 +129,7 @@ that would accept ambiguous input. An inverted range is rejected.
 | **C7-R10** | In base currency mode, rows with no available rate MUST be excluded and flagged, never treated as one-to-one. |
 | **C7-R11** | In original currency mode, nothing MUST be converted and each currency MUST occupy its own row. |
 | **C7-R12** | Period comparison MUST use an equal-length span shift, not the previous calendar period. |
-| **C7-R13** | Comparison MUST union the group keys of both periods and sort by absolute change. |
+| **C7-R13** | Comparison MUST union the group keys of both periods and sort by absolute change, wherever the group key names something that outlives a period. A series keyed by date — a time bucket, and net worth — MUST match on position instead, because two disjoint windows can share no date key and unioning them invents rows neither period held. A counterpart the other window has no row for MUST read as zero in a grouped comparison and as unknown in a positional one: a category nobody spent on did spend zero, while a bucket the previous window never reached is not a zero. |
 | **C7-R14** | A report definition MUST be saveable, renameable, deletable, and exportable. |
 | **C7-R15** | Export MUST escape every free-text column against formula injection and MUST format amounts with integer arithmetic. |
 | **C7-R16** | The number of pinned dashboard reports MUST be capped, and the cap MUST be checked inside the write transaction. |

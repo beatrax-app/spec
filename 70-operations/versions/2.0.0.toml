@@ -133,8 +133,8 @@
 #   E2-R10     closed by beatrax#447. `last_seen_at` was written on every
 #              exchange and read by nothing; the device list shows it.
 #
-# Eight remain. Four are the ones below that need a ruling rather than a fix,
-# and four are code: E2-R6, E3-R6, E3-R12 and E5-R10. Of those, E3-R12's second
+# Eight remained. Four needed a ruling rather than a fix and are ruled below;
+# four are code: E2-R6, E3-R6, E3-R12 and E5-R10. Of those, E3-R12's second
 # half is now satisfied and its first is not re-checked here — the relay address
 # IS a user setting, empty by default, on the devices screen; whether anything
 # still provisions one unasked was not established and the entry stays.
@@ -144,10 +144,60 @@
 # eleven, which is exactly what that requirement asks the table not to do. The
 # table is corrected in the same change as this note.
 #
-# Four of those — E1-R15, E5-R19, C7-R13 and C8-R10 — are not gaps in the
-# product. They are places the product moved on and the requirement did not,
-# each with the reasoning recorded in the product repository. Each needs a
-# ruling on the requirement, not a fix in the code.
+# Four of those — E1-R15, E5-R19, C7-R13 and C8-R10 — were not gaps in the
+# product. They were places the product moved on and the requirement did not,
+# each with the reasoning recorded in the product repository, and each needed a
+# ruling on the requirement rather than a fix in the code.
+#
+# RULED 2026-09-06. Two went to the code and two to the requirement. The two
+# that went to the code are worth reading together: a requirement a product has
+# drifted from is not evidence the requirement is stale, and restoring the first
+# of these found a live defect that four months of the drifted design had hidden.
+#
+#   E1-R15     RULED: restore the guard — and it was not a wording gap. The
+#              confirmed key map is read once, for one user, at construction;
+#              the scope to write into arrives per replay() call, and nothing
+#              held the two together. An entry admitted against another user's
+#              key set was then re-stamped onto the replay scope and persisted
+#              under it, so a device only one household member had confirmed
+#              could write the other's ledger. Proven by removing the restored
+#              guard: the other user's transaction changed category, and the
+#              ordering case reported unknown_table instead of cross_user. Two
+#              comments already described the gate as though it were there.
+#              The removal's own reasoning still holds and is kept: a wire
+#              user_id is the SENDING device's autoincrement, so what is
+#              compared is which user the key set was read for, never the
+#              entry's own claim. Closed by beatrax#448.
+#   E5-R19     RULED: change the code. The LAN leg now runs before the relay,
+#              which is also the cheaper order — the relay carries no operations
+#              at all, only epoch wraps, and the LAN leg already hands over the
+#              keys ahead of the entries they decrypt. The drain stays
+#              unconditional on purpose: the requirement fixes the ORDER of the
+#              legs, not whether the mailbox is read, and skipping it on a
+#              working LAN is what once left a wrap from a non-LAN peer unread.
+#              Both mobile pages already claimed "LAN-first, relay fallback".
+#              Closed by beatrax#448.
+#   C7-R13     RULED: scope the requirement, done in this change. Union-and-sort
+#              applies where a group key names something that outlives a period;
+#              a date-keyed series — a time bucket, and net worth — matches on
+#              position, because two disjoint windows share no date key and
+#              unioning them invents rows neither period held. The rule now also
+#              states what a missing counterpart means in each: zero in a
+#              grouped comparison, unknown in a positional one.
+#   C8-R10     RULED: amend the requirement, done in this change. An unpaired
+#              device persists a write under a reserved device id that cannot
+#              collide with a real one, and pairing carries that row onto the
+#              device's own sync identity so a setting chosen before pairing
+#              survives it. The no-op the requirement asked for left the whole
+#              notification screen accepting input and dropping it, on the
+#              install path that never pairs — which is the default one.
+#
+# One finding came out of the E5-R19 work rather than out of the audit:
+# SealedLedgerRecovery, which retries a recoverable quarantine, is reached only
+# from an after-response middleware the repo-root bootstrap registers. The
+# mobile shell has its own bootstrap and does not register it, so on the phone a
+# gdk_decrypt_failed row was retried during setup and never again — E1-R24 asks
+# that a recoverable reason be both retried and retired. Closed by beatrax#448.
 #
 # UNPROVEN — a verification this file asserted, and neither repository records:
 #   E5-R24     mobile local-notification delivery. The only on-device record in
@@ -247,12 +297,12 @@ status  = "staged"
 repos   = ["beatrax"]
 
 goals = [
-  # ── Sync: change capture and CRDT merge (landed, except R5, R6, R11, R15) ───
+  # ── Sync: change capture and CRDT merge (landed) ────────────────────────────
   "E1-R1", "E1-R2", "E1-R3", "E1-R4", "E1-R5", "E1-R6", "E1-R7", "E1-R8",
   "E1-R9", "E1-R10", "E1-R11", "E1-R12", "E1-R13", "E1-R14", "E1-R15",
   "E1-R16", "E1-R17", "E1-R18", "E1-R19", "E1-R20", "E1-R21", "E1-R22",
 
-  # ── Sync: device identity and pairing (landed, except R6, R10) ──────────────
+  # ── Sync: device identity and pairing (landed, except R6) ───────────────────
   "E2-R1", "E2-R2", "E2-R3", "E2-R4", "E2-R5", "E2-R6", "E2-R7", "E2-R8",
   "E2-R9", "E2-R10", "E2-R11", "E2-R12", "E2-R13", "E2-R14", "E2-R15",
   "E2-R16", "E2-R17",
@@ -260,7 +310,7 @@ goals = [
   # ── Sync: relayed device identity (landed 2026-09-05) ───────────────────────
   "E2-R18", "E2-R19", "E2-R20", "E2-R21",
 
-  # ── Sync: transport, LAN-direct and relay (landed, except R3, R6, R12) ──────
+  # ── Sync: transport, LAN-direct and relay (landed, except R6, R12) ──────────
   "E3-R1", "E3-R2", "E3-R3", "E3-R4", "E3-R5", "E3-R6", "E3-R7", "E3-R8",
   "E3-R9", "E3-R10", "E3-R11", "E3-R12", "E3-R13", "E3-R14", "E3-R15",
   "E3-R16", "E3-R17", "E3-R18", "E3-R19", "E3-R20", "E3-R21", "E3-R22",
@@ -272,7 +322,7 @@ goals = [
   "E4-R16", "E4-R17", "E4-R18", "E4-R19", "E4-R20", "E4-R21", "E4-R22",
   "E4-R23", "E4-R24",
 
-  # ── Sync: mobile peer (landed, except R10, R19, R23; R24, R25 unproven) ─────
+  # ── Sync: mobile peer (landed, except R10; R24, R25 unproven) ───────────────
   "E5-R1", "E5-R2", "E5-R3", "E5-R4", "E5-R5", "E5-R6", "E5-R7", "E5-R8",
   "E5-R9", "E5-R10", "E5-R11", "E5-R12", "E5-R13", "E5-R14", "E5-R15",
   "E5-R16", "E5-R17", "E5-R18", "E5-R19", "E5-R20", "E5-R21", "E5-R22",
@@ -297,7 +347,7 @@ goals = [
   "B7-R9", "B7-R10", "B7-R11", "B7-R12", "B7-R13", "B7-R14", "B7-R15",
   "B7-R16", "B7-R17",
 
-  # ── Reconciliation and cleared status (landed, except R9, R13) ──────────────
+  # ── Reconciliation and cleared status (landed) ──────────────────────────────
   "B8-R1", "B8-R2", "B8-R3", "B8-R4", "B8-R5", "B8-R6", "B8-R7", "B8-R8",
   "B8-R9", "B8-R10", "B8-R11", "B8-R12", "B8-R13", "B8-R14", "B8-R15",
   "B8-R16",
@@ -308,13 +358,13 @@ goals = [
   "B3-R16", "B3-R17", "B3-R18", "B3-R19", "B3-R20", "B3-R21", "B3-R22",
   "B3-R23", "B3-R24", "B3-R25",
 
-  # ── Migration importers (landed, except R24) ────────────────────────────────
+  # ── Migration importers (landed) ────────────────────────────────────────────
   "A8-R1", "A8-R2", "A8-R3", "A8-R4", "A8-R5", "A8-R6", "A8-R7", "A8-R8",
   "A8-R9", "A8-R10", "A8-R11", "A8-R12", "A8-R13", "A8-R14", "A8-R15",
   "A8-R16", "A8-R17", "A8-R18", "A8-R19", "A8-R20", "A8-R21", "A8-R22",
   "A8-R23", "A8-R24", "A8-R25", "A8-R26", "A8-R27",
 
-  # ── Notifications and reminders (landed, except R1, R10, R17) ───────────────
+  # ── Notifications and reminders (landed) ────────────────────────────────────
   "C8-R1", "C8-R2", "C8-R3", "C8-R4", "C8-R5", "C8-R6", "C8-R7", "C8-R8",
   "C8-R9", "C8-R10", "C8-R11", "C8-R12", "C8-R13", "C8-R14", "C8-R15",
   "C8-R16", "C8-R17", "C8-R18", "C8-R19", "C8-R20", "C8-R21", "C8-R22",
@@ -327,12 +377,12 @@ goals = [
   # ── App-lock: operating-system key custody (landed 2026-09-05) ──────────────
   "F3-R33",
 
-  # ── Report builder and saved reports (landed, except R13) ───────────────────
+  # ── Report builder and saved reports (landed) ───────────────────────────────
   "C7-R1", "C7-R2", "C7-R3", "C7-R4", "C7-R5", "C7-R6", "C7-R7", "C7-R8",
   "C7-R9", "C7-R10", "C7-R11", "C7-R12", "C7-R13", "C7-R14", "C7-R15",
   "C7-R16", "C7-R17", "C7-R18", "C7-R19", "C7-R20", "C7-R21",
 
-  # ── The single position definition (landed, except R8) ──────────────────────
+  # ── The single position definition (landed) ─────────────────────────────────
   "C1-R8", "C1-R9", "C1-R10", "C1-R11", "C1-R12", "C1-R13", "C1-R14",
   "C1-R15", "C1-R16", "C1-R17", "C1-R18",
 
