@@ -282,6 +282,9 @@ goals = [
   # ── Comment policy enforcement (landed) ─────────────────────────────────────
   "Q-R11", "Q-R12",
 
+  # ── The zone an installation reads its days in (landed 2026-09-06) ─────────
+  "G7-R16", "G7-R17", "G7-R18",
+
   # ── Org move and release-train mechanics ────────────────────────────────────
   "REPO-R37", "OPS-R12", "OPS-R18",
 ]

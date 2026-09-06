@@ -151,6 +151,12 @@ transition back short of clearing the preference.
 | A key missing in English as well | A genuine defect — English coverage is the source locale's contract, not a fallback that may itself have holes. |
 | Language changed mid-session | Applies immediately, without a reload that discards the user's place. |
 | A locale whose singular equals its plural | The two screens still read differently; the title carries a distinguishing word rather than repeating the shared one. |
+| No time zone chosen | The machine's own zone is read, per launch; nothing is written down. |
+| The machine's zone changes | Read again on the next launch. A stored choice is not moved by it. |
+| A shipped template pinning a zone | A release blocker: every install made from it reads the packager's day. |
+| A second reader changing the zone | Allowed, and it moves the installation's answer — there is one, not one each. |
+| A paired device in a different zone | Adopts the installation's stored choice when there is one; with none, each reads its own machine, and the two disagree until one is chosen. |
+| A stored zone the platform does not know | Ignored, and the machine is read instead; the control refuses to store one. |
 
 ## Acceptance criteria
 
@@ -171,12 +177,16 @@ transition back short of clearing the preference.
 | **G7-R13** | The active locale MUST be reflected in the document's language attribute for assistive technology. |
 | **G7-R14** | Language detection and selection MUST NOT add an outbound call or send the user's locale off the machine. |
 | **G7-R15** | Where English gives two screens distinct titles, a locale MUST NOT collapse them to one; where that language has a single word for both, the title MUST carry a distinguishing word. |
+| **G7-R16** | The zone an installation reads its days in MUST be resolved from the machine it runs on unless a stored choice or the environment names one, and no shipped template may pin it — a pinned zone ships the packager's day to every reader who installs that build. |
+| **G7-R17** | That zone MUST be one answer per installation rather than one per reader, and MUST travel to a paired device, because it is the frame stored timestamps are written in: two devices holding different answers record the same instant as two different days. |
+| **G7-R18** | The control offering the zone MUST name the machine's own zone on the option that defers to it, and MUST let a reader return to deferring after choosing. |
 
 ## Related
 
 - [G5 Plain language and in-product help](g5-plain-language.md) — the voice these translations carry, and the honesty rule the English fallback satisfies
 - [G3 Accessibility](g3-accessibility.md) — why the active locale must be announced
 - [G1 Privacy stance](g1-privacy.md) — why selection stays on the machine
+- [E1 Change capture and merge](../e-sync/e1-change-capture.md) — why the zone travels: it is the frame a stored timestamp is written in
 - [F1 Desktop shell](../f-platform/f1-desktop-shell.md) — the theme preference this mirrors
 - [20-architecture/data-model.md](../../../20-architecture/data-model.md) — where the per-user preference lives
 - [20-architecture/platform-matrix.md](../../../20-architecture/platform-matrix.md) — the language signal per platform
