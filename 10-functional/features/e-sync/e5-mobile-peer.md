@@ -119,9 +119,20 @@ that the database lives there — while the mobile bootstrap repoints the live
 connection to a path under the documents directory, and nothing sets the
 exclusion on that one. The 2026-09-04 check confirmed an on-device database
 excluded from iCloud backup; it did not record which of the two files it read,
-and they are not the same file. A re-check naming the path is what settles it.
-`E5-R23` stands on the check that was run, and this is recorded beside it rather
-than resolved in either direction.
+and they are not the same file.
+
+**Settled 2026-09-06 by a re-check that names the path.** The exclusion is set
+by `scripts/nativephp_exclude_data_from_backup.php`, which targets
+`Documents/persisted_data`, walks it with an enumerator and **reads the flag
+back** per node rather than trusting the write — logging
+`backup-excluded flagged=N unflagged=M store=<path>` once and
+`backup-NOT-excluded <path>` for every node it could not confirm. On an iPhone
+12 mini that line read `flagged=7 unflagged=0` against
+`…/Documents/persisted_data`, with 128 other application log lines beside it as
+the positive control that the log was being read at all. The developer console
+independently reported that store's `database.sqlite` at 2,637,824 bytes, which
+is what rules out the empty 4 KB stub under Application Support that the
+earlier check may have read.
 
 **Android device acceptance is not recorded.** All three gates were taken on one
 handset, an iPhone 12 mini. Nothing here records the same passes on Android, and
@@ -176,7 +187,9 @@ v2.0 ships without an Android pass is a release call, and nobody has made it.
 | **E5-R27** | Initial sync MUST NOT report a complete history while a peer has declared operations withheld. The expected count MUST include what was declared held, and the completion screen MUST say how many entries are held and under what condition they would arrive. |
 
 > All three hardware gates have been taken, on an iPhone 12 mini running iOS
-> 26.5.2. `E5-R23` and `E5-R24` on 2026-09-04; `E5-R25` on 2026-09-05, verified
+> 26.5.2. `E5-R24` on 2026-09-04, and `E5-R23` first on 2026-09-04 and again on
+> 2026-09-06 against a named path, because the first run recorded no path and
+> two candidate files existed; `E5-R25` on 2026-09-05, verified
 > twice from a clean install against `cecdd12ce`. The second run copied 7,665
 > op-log records with a quarantine of zero, and the two databases were compared
 > column by column across 103 shared tables rather than by row count: 47 came
