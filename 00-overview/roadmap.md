@@ -199,9 +199,13 @@ That gate is taken. Real two-device pairing UAT ran on hardware on 2026-09-05
 and passed twice from a clean install, so the "import from another device" flow
 may be advertised as device-verified.
 
-The other two hardware checks were taken on 2026-09-04, on an iPhone 12 mini
-running iOS 26.5.2: the local-notification plugin fires a real OS banner, and
-the on-device database is excluded from iCloud backup.
+The other two hardware checks were taken on the same iPhone 12 mini running iOS
+26.5.2: the local-notification plugin fires a real OS banner (2026-09-04), and
+the on-device database is excluded from iCloud backup — checked on 2026-09-04
+and **re-checked on 2026-09-06 against a named path**, because the first run
+recorded no path and the container holds two candidate files, only one of which
+is the ledger. The re-check reads the flag back per node and reported
+`flagged=7 unflagged=0` against `Documents/persisted_data`.
 
 Feature: [E5](../10-functional/features/e-sync/e5-mobile-peer.md).
 
