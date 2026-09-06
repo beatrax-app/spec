@@ -157,11 +157,13 @@
 #                             where the requirement says reject. Deliberate: a
 #                             saved report is a synced column and can arrive
 #                             from a peer on another build.
-# And four requirements marked *(Open)* are in no bucket either, so nothing
+# And three requirements marked *(Open)* are in no bucket either, so nothing
 # schedules them and nothing has declined them: A8-R27 (satisfied since
-# 2026-09-05, the marker is stale), F6-R5, F7-R10 and G7-R11. F6-R5 was marked
-# open on 2026-09-05 and was in no bucket within the hour; the check below
-# caught it on its first run, which is the case for having the check.
+# 2026-09-05, the marker is stale), F6-R5 and G7-R11. F6-R5 was marked open on
+# 2026-09-05 and was in no bucket within the hour; the check below caught it on
+# its first run, which is the case for having the check. F7-R10 was a fourth
+# until 2026-09-06: the single export action had shipped, so the marker was
+# cleared where it stood rather than scheduled.
 #
 # Two more joined that list on 2026-09-05 and are satisfied, so they need the
 # same ruling rather than a correction: E2-R22 (which authors a device may relay

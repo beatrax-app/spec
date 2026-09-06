@@ -72,8 +72,13 @@ rather than implying the backup is everything.
 journal files as a unit. The backup path is preferred: it produces a consistent
 snapshot without stopping anything.
 
-A single export action bundles the latest backup and the artefact directory for
-users who want one click.
+**One archive.** A single action writes both halves into one file: a snapshot
+the export takes itself rather than the newest file in the backups directory,
+encrypted under a passphrase the reader chooses, with every source-artefact
+directory beside it at the paths those files already have. What the archive
+carries and what it withholds are two lists named entry by entry
+([F7-R18](../10-functional/features/f-platform/f7-data-locations.md#acceptance-criteria)),
+and the connector credentials, the backups and the logs are in the second.
 
 ## How a user deletes
 
