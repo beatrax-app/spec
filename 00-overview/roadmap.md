@@ -221,8 +221,18 @@ One of the four is not a submission. The desktop bundle embeds a static
 interpreter and relies on two hardened-runtime relaxations to map it, and the
 sandbox a Mac App Store build must run under ignores one of them, so that
 listing needs a different runtime strategy before it needs a submission. It is
-the largest unknown in this release. What the other three cost is not yet
-measured, and the specification does not claim it is small
+the largest unknown in this release.
+
+The other three are further along than this page has been saying. Re-audited
+2026-09-07, one identifier at a time: twenty-two of the twenty-eight
+requirements are satisfied, four are console records and listing copy that
+neither repository can decide, and two are open — the Mac App Store shape above,
+and nothing else. Play takes a store bundle now built beside the direct
+download; iOS has no direct-download shape to be additive with; the Microsoft
+Store is an EXE/MSI listing by decision, so the existing installer already is
+the store shape. What is left on those three is account and listing work rather
+than build work, with one certification prerequisite named in the version
+manifest
 ([F8](../10-functional/features/f-platform/f8-app-store-distribution.md)).
 
 Feature: [F8](../10-functional/features/f-platform/f8-app-store-distribution.md),

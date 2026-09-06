@@ -227,20 +227,87 @@
 #   F8-R1 .. F8-R28         — app-store distribution, scoped in F8 and a goal of
 #                             this release. Scope is ALL FOUR stores, with
 #                             direct download retained wherever it remains
-#                             possible (ADR-0032, 2026-09-05). Audited: 12
-#                             satisfied, 12 not, and 4 that neither repository
-#                             can decide — F8-R4, F8-R15, F8-R16 and F8-R26 are
-#                             console records and listing copy, settled in App
-#                             Store Connect, the Play Console and Partner
-#                             Centre. No store-shaped artefact is built for any
-#                             platform yet, which is what F8-R5 and F8-R27 turn
-#                             on. F8-R28 remains the largest unknown in the
-#                             release: a Mac App Store build needs a runtime
-#                             strategy before it needs a submission, because the
-#                             sandbox ignores one of the two hardened-runtime
+#                             possible (ADR-0032, 2026-09-05).
+#
+#                             RE-AUDITED 2026-09-07, one identifier at a time
+#                             against beatrax@origin/main. The "12 satisfied, 12
+#                             not" above was written before four of them closed
+#                             and while the rest went unread: twenty-two are
+#                             satisfied, four are console records, and two are
+#                             open. What follows is what each is satisfied BY,
+#                             because a count nobody can re-derive is the thing
+#                             this file keeps having to correct.
+#
+#                             Satisfied by the release pipeline reading its own
+#                             artifacts: R1 (manifest + checksums, with a signed
+#                             record covering every asset on the page), R2 (the
+#                             verify-signature action on macOS and Windows,
+#                             apksigner on the APK, keytool on the AAB), R3 (one
+#                             signing-identity register, compared against the
+#                             workflows in both directions), R5 (the AAB is
+#                             built beside the APK — beatrax#450), R6 and R7
+#                             (`mobile:inspect-bundle` opens the artifact and
+#                             reads it, nested archives included — beatrax#450),
+#                             R17 (SDK levels are integer literals here, read
+#                             back off the shipped artifact), R18 and R19
+#                             (`mobile:check-permissions` over the MERGED
+#                             manifest, each permission naming the shipped class
+#                             that makes its use — beatrax#450).
+#
+#                             Satisfied in the product: R8 (the dev-console gate
+#                             allow-lists development environments by NAME, and
+#                             on mobile requires app.debug), R9, R10 and R11
+#                             (the iOS privacy manifest and export-compliance
+#                             patches, each with cases — including the
+#                             ITMS-91056 omit-rather-than-empty rule), R12 and
+#                             R13 (purpose strings restated in this product, in
+#                             all 26 languages, one tree feeding Info.plist and
+#                             every .lproj), R14 (LSApplicationCategoryType),
+#                             R20 (a store build reaches no feed it could
+#                             install from), R21 (the update surfaces render no
+#                             control on a phone, not merely a different
+#                             sentence), R22 (no shipped mobile dependency
+#                             carries analytics), R23 (the review notes name the
+#                             screen and the two presses — beatrax#450), R24
+#                             (the sample-data control, on a surface a store
+#                             build carries), R25 (deletion takes the identity
+#                             and the keyring with it, and says a paired device
+#                             keeps its own copy).
+#
+#                             Four neither repository can decide, unchanged:
+#                             R4, R15, R16 and R26 are console records and
+#                             listing copy, settled in App Store Connect, the
+#                             Play Console and Partner Centre.
+#
+#                             TWO OPEN.
+#
+#                             R27 is additive on three of the four now. Play
+#                             takes the AAB and the APK stays the direct
+#                             download; iOS has no direct-download shape to be
+#                             additive with; the Microsoft Store is an EXE/MSI
+#                             listing by decision, so the NSIS artifact IS the
+#                             store shape. The Mac App Store is the fourth, and
+#                             it waits on R28.
+#
+#                             R28 remains the largest unknown in the release: a
+#                             Mac App Store build needs a runtime strategy
+#                             before it needs a submission, because the sandbox
+#                             ignores one of the two hardened-runtime
 #                             relaxations the bundle uses to map its static
 #                             interpreter, and no sandboxed build exists to
 #                             measure.
+#
+#                             ONE FINDING, not a requirement of its own but a
+#                             Microsoft Store certification prerequisite the
+#                             runbook lists and nothing checks: the signature
+#                             verification reads the INSTALLER, and store
+#                             certification is per-file. Nothing signs the
+#                             bundled PHP interpreter or its DLLs — electron-
+#                             builder signs the app executable and the installer
+#                             via azureSignOptions, and extraResources are not
+#                             in that set. Configuring and proving it needs a
+#                             Windows runner and the Azure credentials, so it is
+#                             recorded rather than written blind.
 #
 # SATISFIED, and the pages that said otherwise are corrected as of 2026-09-05:
 #   E2-R18 .. E2-R21        — relayed device identity (ADR-0027), merged the day
