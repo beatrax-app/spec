@@ -125,8 +125,35 @@ Forty-one cases across five files pin the behaviour, including
 this gap and counts an exit recorded by a listener that has already been thrown
 away.
 
-What is still outstanding for `F1-R15` is a **confirmation on desktop
-hardware** — the mechanism is not in doubt, and no page should say it is.
+That confirmation was taken on 2026-09-06, and it is recorded below rather than
+here, because it did not find what it went looking for.
+
+### What the hardware confirmation found
+
+The mechanism was sound and the alert could not fire on any machine.
+
+The listener compared the arriving child-process alias against a constant of its
+own, spelling it with a hyphen. NativePHP starts a supervised worker as
+`queue_` followed by its configuration key, so the shell sends an underscore.
+The comparison was false on every exit the product will ever see.
+
+Nothing in the suite could have caught it. Every case constructed the event out
+of the same constant it was then checking, which is true of itself whatever that
+constant says. The suite was complete about the threshold, the window, the
+bounded bucket and the raise-once rule, and silent about the one value that
+arrives from outside the process — the classic shape of
+[a fixture that supplies what the field never provides](https://github.com/beatrax-app/beatrax/blob/main/.docs/conventions/invariants-from-shipped-failures.md).
+
+The alias is now derived from the configured workers rather than restated, and
+one case takes it from the vendor's own construction so it fails the moment
+either side moves. Measured on hardware after the fix, reading the database
+between kills: one crash records an exit and raises nothing, three raise one
+`critical` alert carrying the copy key, a fourth leaves it at one row, and the
+exit bucket stays bounded. `beatrax#442`.
+
+**This is what a confirmation is for.** The requirement had been carried as
+"built, pinned by test, awaiting hardware" — and the hardware is where the
+defect was.
 
 ## Edge cases
 
@@ -159,7 +186,7 @@ hardware** — the mechanism is not in doubt, and no page should say it is.
 | **F1-R12** | Either close outcome MUST lock the application immediately, with no grace period, where the user has the app-lock enabled; where they do not, no close outcome may lock or veil the session ([F3-R29](f3-auth-and-app-lock.md)). |
 | **F1-R13** | Notification delivery MUST consult suppression, then window focus, then the per-device detail preference. |
 | **F1-R14** | A focused window MUST suppress the operating-system notification. |
-| **F1-R15** | *(Open)* Repeated background-process exits within a rolling window MUST raise an alert; a single crash MUST NOT. Built and pinned by test; what is outstanding is a confirmation on desktop hardware, not the mechanism ([how the counter survives](#closed--what-a-shell-event-records-outlives-its-request)). |
+| **F1-R15** | Repeated background-process exits within a rolling window MUST raise an alert; a single crash MUST NOT. Confirmed on desktop hardware on 2026-09-06 — one crash records an exit and raises nothing, three raise one `critical` alert, a fourth leaves it at one ([what the confirmation found](#what-the-hardware-confirmation-found)). |
 | **F1-R16** | Outside the bundle, the absence of the theme signal MUST be the documented fallback trigger. |
 | **F1-R17** | Storage paths MUST resolve through the single path authority, enforced by architecture test. |
 | **F1-R18** | Lock-on-window-close MUST act on the focused window's session, and MUST be verified to. |
