@@ -29,14 +29,6 @@
 # not (OPS-R16). No goal was added or removed here — only the claims about them.
 #
 # NOT SATISFIED — or, for two of them, withdrawn. What the re-audit below left standing:
-#   E2-R6      the typed fallback carries the token alone, not the QR's payload.
-#              It re-fetches the identity over the LAN, drops the relay
-#              bootstrap, and a phone mints no typed code at all.
-#   E3-R6      rung two of the ladder — a manually entered host and port —
-#              exists nowhere: no field, no config key, no flag.
-#   E3-R12     the desktop provisions a relay for itself on boot, on enable and
-#              on unlock, then hands the endpoint to the phone over the pairing
-#              QR. Neither device chose it, and it is not off by default.
 #   E4-R23     WITHDRAWN 2026-09-05. The requirement documented an absence that
 #              has gone: custody is wired on both shells. The residual it leaves
 #              — a platform store that answers and does not protect, which is a
@@ -101,10 +93,20 @@
 #              exchange and read by nothing; the device list shows it.
 #
 # Eight remained. Four needed a ruling rather than a fix and are ruled below;
-# four are code: E2-R6, E3-R6, E3-R12 and E5-R10. Of those, E3-R12's second
-# half is now satisfied and its first is not re-checked here — the relay address
-# IS a user setting, empty by default, on the devices screen; whether anything
-# still provisions one unasked was not established and the entry stays.
+# four were code: E2-R6, E3-R6, E3-R12 and E5-R10. Three of those are closed
+# under CLOSED below, including E3-R12, whose open half — whether anything
+# provisions a relay unasked — this re-audit could not establish and the next
+# pass did.
+#
+# ONE REMAINS, and it is the one nothing in this session could honestly take:
+#   E5-R10     needs an Android device. The PHP half is complete and reachable
+#              — recover() answers pendingAsync, completePendingRecover() polls,
+#              pollRecovered() reads the blob back — and the Kotlin half says of
+#              itself that it is a skeleton needing an Activity and the event
+#              API. A BiometricPrompt cannot be verified without hardware that
+#              has a fingerprint enrolled, and writing the emitter blind would
+#              produce a change that looks like a fix and is not one. No Android
+#              device was attached; only an iPhone was.
 #
 # C8-R1 was the one entry that was a defect in THIS repository rather than in
 # the product: the C8 table listed eight trigger kinds while the enum has
@@ -158,6 +160,44 @@
 #              survives it. The no-op the requirement asked for left the whole
 #              notification screen accepting input and dropping it, on the
 #              install path that never pairs — which is the default one.
+#
+# CLOSED 2026-09-06, the code half of what the re-audit left standing.
+#
+#   E3-R6      closed by beatrax#448. The ladder's middle rung — a manually
+#              entered host and port — existed nowhere, so a network whose
+#              browse never answers left the dial falling through to an address
+#              guessed from the relay endpoint's host. `device_registry` now
+#              carries manual_lan_host/port, typed as one host:port field on
+#              the devices screen, in its OWN columns rather than seeded into
+#              last_lan_host: forget() clears where the peer was last REACHED,
+#              and a fallback a failed dial erases is not a fallback. Order is
+#              discovery, then typed, then the relay-derived guess.
+#   E2-R6      closed by beatrax#449, and two halves of the entry were wrong
+#              about the product rather than about the requirement.
+#              The real gap was that the typed arm's only road to the payload
+#              was an mDNS browse, so it could not work on a network that
+#              blocks multicast — which on iPhone is every network. It now asks
+#              the address the reader gives after the browse comes up empty,
+#              and the screen offers that field on the one refusal it answers.
+#              The two the entry named as gaps are consequences of other
+#              requirements, not gaps: the relay bootstrap is dropped from any
+#              FETCHED offer on purpose, because a reply is not the out-of-band
+#              channel a scanned QR is and a peer naming a relay is an older
+#              build or an attacker — a case has pinned that since before this
+#              change, and a second now pins it for the typed address. And a
+#              phone mints no code because minting one means serving the offer
+#              over LAN, which E5-R2 forbids it.
+#   E3-R12     satisfied as it stands; the entry read one fact and missed two.
+#              A fresh install configures no relay, and RelayListenerProcess
+#              returns before provisioning anything unless the device already
+#              has a sync identity — so nothing is on until sync is enabled.
+#              What is provisioned then is the device's OWN LAN address and
+#              never a remote host, LocalRelayProvisioner refuses to re-point
+#              an operator's non-LAN endpoint, and PairingPeerLink refuses to
+#              let a scanned QR redirect one either. The address is a file-backed
+#              user setting on the devices screen, empty by default, and is a
+#              constant nowhere. The entry's "neither device chose it" is true
+#              only of a household's own machine advertising itself.
 #
 # One finding came out of the E5-R19 work rather than out of the audit:
 # SealedLedgerRecovery, which retries a recoverable quarantine, is reached only
@@ -269,7 +309,7 @@ goals = [
   "E1-R9", "E1-R10", "E1-R11", "E1-R12", "E1-R13", "E1-R14", "E1-R15",
   "E1-R16", "E1-R17", "E1-R18", "E1-R19", "E1-R20", "E1-R21", "E1-R22",
 
-  # ── Sync: device identity and pairing (landed, except R6) ───────────────────
+  # ── Sync: device identity and pairing (landed) ──────────────────────────────
   "E2-R1", "E2-R2", "E2-R3", "E2-R4", "E2-R5", "E2-R6", "E2-R7", "E2-R8",
   "E2-R9", "E2-R10", "E2-R11", "E2-R12", "E2-R13", "E2-R14", "E2-R15",
   "E2-R16", "E2-R17",
@@ -277,7 +317,7 @@ goals = [
   # ── Sync: relayed device identity (landed 2026-09-05) ───────────────────────
   "E2-R18", "E2-R19", "E2-R20", "E2-R21",
 
-  # ── Sync: transport, LAN-direct and relay (landed, except R6, R12) ──────────
+  # ── Sync: transport, LAN-direct and relay (landed) ──────────────────────────
   "E3-R1", "E3-R2", "E3-R3", "E3-R4", "E3-R5", "E3-R6", "E3-R7", "E3-R8",
   "E3-R9", "E3-R10", "E3-R11", "E3-R12", "E3-R13", "E3-R14", "E3-R15",
   "E3-R16", "E3-R17", "E3-R18", "E3-R19", "E3-R20", "E3-R21", "E3-R22",
