@@ -206,7 +206,8 @@ goals = [
   # ── Sync: transport, LAN-direct and relay (landed, except R3, R6, R12) ──────
   "E3-R1", "E3-R2", "E3-R3", "E3-R4", "E3-R5", "E3-R6", "E3-R7", "E3-R8",
   "E3-R9", "E3-R10", "E3-R11", "E3-R12", "E3-R13", "E3-R14", "E3-R15",
-  "E3-R16", "E3-R17", "E3-R18", "E3-R19", "E3-R20",
+  "E3-R16", "E3-R17", "E3-R18", "E3-R19", "E3-R20", "E3-R21", "E3-R22",
+  "E3-R23",
 
   # ── Sync: at-rest encryption and rekey (landed, except R23, R24) ────────────
   "E4-R1", "E4-R2", "E4-R3", "E4-R4", "E4-R5", "E4-R6", "E4-R7", "E4-R8",
@@ -218,7 +219,7 @@ goals = [
   "E5-R1", "E5-R2", "E5-R3", "E5-R4", "E5-R5", "E5-R6", "E5-R7", "E5-R8",
   "E5-R9", "E5-R10", "E5-R11", "E5-R12", "E5-R13", "E5-R14", "E5-R15",
   "E5-R16", "E5-R17", "E5-R18", "E5-R19", "E5-R20", "E5-R21", "E5-R22",
-  "E5-R23", "E5-R24", "E5-R25",
+  "E5-R23", "E5-R24", "E5-R25", "E5-R26",
 
   # ── Sync: status and health (landed) ────────────────────────────────────────
   "E6-R1", "E6-R2", "E6-R3", "E6-R4", "E6-R5", "E6-R6", "E6-R7", "E6-R8",
@@ -228,7 +229,8 @@ goals = [
   "D1-R1", "D1-R2", "D1-R3", "D1-R4", "D1-R5", "D1-R6", "D1-R7", "D1-R8",
   "D1-R9", "D1-R10", "D1-R11", "D1-R12", "D1-R13", "D1-R14", "D1-R15",
   "D1-R16", "D1-R17", "D1-R18", "D1-R19", "D1-R20", "D1-R21", "D1-R22",
-  "D1-R23", "D1-R24", "D1-R25", "D1-R26", "D1-R27", "D1-R28",
+  "D1-R23", "D1-R24", "D1-R25", "D1-R26", "D1-R27", "D1-R28", "D1-R29",
+  "D1-R30",
 
   # ── Pots: category-link retirement (landed) ─────────────────────────────────
   "D3-R12", "D3-R16",
@@ -241,6 +243,7 @@ goals = [
   # ── Reconciliation and cleared status (landed, except R9, R13) ──────────────
   "B8-R1", "B8-R2", "B8-R3", "B8-R4", "B8-R5", "B8-R6", "B8-R7", "B8-R8",
   "B8-R9", "B8-R10", "B8-R11", "B8-R12", "B8-R13", "B8-R14", "B8-R15",
+  "B8-R16",
 
   # ── The general-purpose rules engine (landed) ───────────────────────────────
   "B3-R1", "B3-R2", "B3-R3", "B3-R4", "B3-R5", "B3-R6", "B3-R7", "B3-R8",
@@ -252,12 +255,12 @@ goals = [
   "A8-R1", "A8-R2", "A8-R3", "A8-R4", "A8-R5", "A8-R6", "A8-R7", "A8-R8",
   "A8-R9", "A8-R10", "A8-R11", "A8-R12", "A8-R13", "A8-R14", "A8-R15",
   "A8-R16", "A8-R17", "A8-R18", "A8-R19", "A8-R20", "A8-R21", "A8-R22",
-  "A8-R23", "A8-R24", "A8-R25",
+  "A8-R23", "A8-R24", "A8-R25", "A8-R26", "A8-R27",
 
   # ── Notifications and reminders (landed, except R1, R10, R17) ───────────────
   "C8-R1", "C8-R2", "C8-R3", "C8-R4", "C8-R5", "C8-R6", "C8-R7", "C8-R8",
   "C8-R9", "C8-R10", "C8-R11", "C8-R12", "C8-R13", "C8-R14", "C8-R15",
-  "C8-R16", "C8-R17", "C8-R18", "C8-R19", "C8-R20", "C8-R21",
+  "C8-R16", "C8-R17", "C8-R18", "C8-R19", "C8-R20", "C8-R21", "C8-R22",
 
   # ── Open-banking connector (landed) ─────────────────────────────────────────
   "A6-R1", "A6-R2", "A6-R3", "A6-R4", "A6-R5", "A6-R6", "A6-R7", "A6-R8",
@@ -270,16 +273,21 @@ goals = [
   # ── Report builder and saved reports (landed, except R13) ───────────────────
   "C7-R1", "C7-R2", "C7-R3", "C7-R4", "C7-R5", "C7-R6", "C7-R7", "C7-R8",
   "C7-R9", "C7-R10", "C7-R11", "C7-R12", "C7-R13", "C7-R14", "C7-R15",
-  "C7-R16", "C7-R17", "C7-R18", "C7-R19", "C7-R20",
+  "C7-R16", "C7-R17", "C7-R18", "C7-R19", "C7-R20", "C7-R21",
 
   # ── The single position definition (landed, except R8) ──────────────────────
   "C1-R8", "C1-R9", "C1-R10", "C1-R11", "C1-R12", "C1-R13", "C1-R14",
+  "C1-R15", "C1-R16", "C1-R17", "C1-R18",
 
   # ── App-store distribution (all four stores; the outstanding block) ─────────
   "F8-R1", "F8-R2", "F8-R3", "F8-R4", "F8-R5", "F8-R6", "F8-R7", "F8-R8",
   "F8-R9", "F8-R10", "F8-R11", "F8-R12", "F8-R13", "F8-R14", "F8-R15",
   "F8-R16", "F8-R17", "F8-R18", "F8-R19", "F8-R20", "F8-R21", "F8-R22",
   "F8-R23", "F8-R24", "F8-R25", "F8-R26", "F8-R27", "F8-R28",
+
+  # ── Desktop shell: the carry-over item ──────────────────────────────────────
+  # F3-R33 rode with this pair until custody landed; it has its own block above.
+  "F1-R18",
 
   # ── Comment policy enforcement (landed) ─────────────────────────────────────
   "Q-R11", "Q-R12",
