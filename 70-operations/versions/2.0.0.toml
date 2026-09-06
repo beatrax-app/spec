@@ -93,6 +93,57 @@
 #   C8-R17     no site logs and refuses. The runtime path that meets an
 #              unrecognised kind logs it and renders it with a neutral chip.
 #
+# RE-AUDITED 2026-09-06 — the list above, one identifier at a time, against
+# beatrax@origin/main rather than against itself. Eleven of the twenty-two have
+# closed since it was written, seven of them before this session touched
+# anything: an audit is a photograph, and a list of unmet goals goes stale in
+# the direction of being wrong about the product.
+#
+#   E3-R3      closed. No test name calls the Noise vectors official; the
+#              wording the entry describes is not in the tree.
+#   A8-R24     closed. `migration:sweep-abandoned` is scheduled in
+#              routes/console.php, so production invokes it.
+#   B8-R9      closed. `ReconciledRowExemptions` exists with a guard reading
+#              the tree back against it, which is what the entry asked for.
+#   B8-R13     closed. `ReconciliationWriter` and `PromoteStagingToDomain` both
+#              inject `TransactionStatusWriter`; the column has one owner.
+#   C1-R8      closed. `PositionSummaryDto` carries a `NetWorth`, and
+#              `ShortfallRisk` is a three-case enum whose own comment records
+#              that collapsing it to a boolean reported an unforecast month as
+#              a safe one.
+#   C8-R17     closed, and the entry read the wrong path. The WRITE path
+#              refuses by type — `NotificationDraft::$triggerType` is the enum,
+#              so an unrecognised kind cannot be persisted at all, which is a
+#              stronger refusal than a runtime check. The READ path logs the
+#              kind and renders a neutral chip, which is what a row written by
+#              a peer on a newer build should get: refusing there would hide a
+#              real notification rather than refuse a bad one.
+#   E5-R23     closed 2026-09-06 by a re-check naming the path, recorded on E5.
+#
+#   E1-R11     closed by beatrax#446. `_delete_wins` decides the exact HLC tie
+#              and the merge never asked: `tombstoneWins()` returned `>= 0` for
+#              every table, so `accounts` — which sets it false — lost a row to
+#              a peer's delete made at the same instant. A guard now holds every
+#              registry directive to a reader in the shipping tree.
+#   E1-R5      closed by beatrax#447. The distinction was right and had no case;
+#              three now hold it, including one asserting the two entries differ
+#              in nothing but their operation kind.
+#   E1-R6      closed by beatrax#447. `sync:rebuild` makes the rebuild an
+#              operation rather than a property the code happened to have.
+#   E2-R10     closed by beatrax#447. `last_seen_at` was written on every
+#              exchange and read by nothing; the device list shows it.
+#
+# Eight remain. Four are the ones below that need a ruling rather than a fix,
+# and four are code: E2-R6, E3-R6, E3-R12 and E5-R10. Of those, E3-R12's second
+# half is now satisfied and its first is not re-checked here — the relay address
+# IS a user setting, empty by default, on the devices screen; whether anything
+# still provisions one unasked was not established and the entry stays.
+#
+# C8-R1 was the one entry that was a defect in THIS repository rather than in
+# the product: the C8 table listed eight trigger kinds while the enum has
+# eleven, which is exactly what that requirement asks the table not to do. The
+# table is corrected in the same change as this note.
+#
 # Four of those — E1-R15, E5-R19, C7-R13 and C8-R10 — are not gaps in the
 # product. They are places the product moved on and the requirement did not,
 # each with the reasoning recorded in the product repository. Each needs a
