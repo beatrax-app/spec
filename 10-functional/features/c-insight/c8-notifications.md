@@ -16,7 +16,7 @@ seen on the phone is not still shouting on the desktop.
 
 ## Behaviour
 
-### Eight kinds, one inbox
+### Eleven kinds, one inbox
 
 | Kind | Fires when |
 |------|-----------|
@@ -27,10 +27,20 @@ seen on the phone is not still shouting on the desktop.
 | Drift alert | A subscription's price moved |
 | Forecast shortfall | A projected balance crosses a buffer |
 | Coalesced import | An import completed |
+| Receipts found | That import was wholly receipts |
+| Manual entry recorded | That import was wholly hand-entered |
+| Migration finished | That import was wholly a migration from another tool |
 | Statement ready | A card statement notification arrived |
 
-All eight land in one inbox with a navigation badge, read and dismissed
+All eleven land in one inbox with a navigation badge, read and dismissed
 individually.
+
+The last four are one family. A completed import is announced by the first arm
+that matches what it wholly contained, so a batch of receipts, a batch typed by
+hand and a batch carried in from another tool each get their own sentence and
+their own destination rather than the generic one — and a mixed batch falls
+through to it. This table listed eight for as long as the set was eleven, which
+is the whole reason `C8-R1` asks it to list the set in full.
 
 ### Deduplication is structural
 
