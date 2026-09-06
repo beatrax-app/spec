@@ -185,6 +185,7 @@ transition back short of clearing the preference.
 | **G7-R16** | The zone an installation reads its days in MUST be resolved from the machine it runs on unless a stored choice or the environment names one, and no shipped template may pin it — a pinned zone ships the packager's day to every reader who installs that build. |
 | **G7-R17** | That zone MUST be one answer per installation rather than one per reader, and MUST travel to a paired device, because it is the frame stored timestamps are written in: two devices holding different answers record the same instant as two different days. |
 | **G7-R18** | The control offering the zone MUST name the machine's own zone on the option that defers to it, and MUST let a reader return to deferring after choosing. |
+| **G7-R19** | An installation that already holds an account when the stored zone is introduced MUST be given the zone its rows were written in, rather than falling through to the machine — removing a pinned zone changes what an existing stored timestamp means, not how it is shown, and a reader who upgrades abroad would otherwise have every stored day move under them. |
 
 ## Related
 
