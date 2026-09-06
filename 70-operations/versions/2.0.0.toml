@@ -55,7 +55,11 @@
 #   E4-R23     WITHDRAWN 2026-09-05. The requirement documented an absence that
 #              has gone: custody is wired on both shells. The residual it leaves
 #              — a platform store that answers and does not protect, which is a
-#              keyring-less Linux desktop — is now F3-R37, and E4 says it.
+#              keyring-less Linux desktop — moved to F3, which now reports
+#              unprotected for any store it cannot positively identify, and E4
+#              says so. That successor is satisfied and is a goal below; naming
+#              it inside this list is what made the manifest gate read it as
+#              unmet, so it is named outside the list instead.
 #   E4-R24     the same shape. The backup-exclusion bridge exists and Android is
 #              closed; see E5-R23 for what is actually still open.
 #   E5-R10     the async cold-start recovery signal has no emitter. The Android
