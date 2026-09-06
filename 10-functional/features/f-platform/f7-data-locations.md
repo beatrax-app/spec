@@ -122,17 +122,40 @@ rows the ledger references is deleting user data, whatever it is called.
 
 ### Export
 
-Two supported paths:
+Three supported paths:
 
 - **A backup file** — self-contained and openable by any compatible tool. Source
-  artefacts live outside it, so a full archive means copying that directory too,
-  and the documentation says so rather than implying the backup is everything.
+  artefacts live outside it, so a copy of one is not a copy of everything, and
+  the documentation says so rather than implying the backup is everything.
 - **A direct file copy**, with the application stopped, taking the database and
   its journal files as a unit. The backup path is preferred because it produces
   a consistent snapshot without stopping anything.
+- **One archive**, for the reader who would rather take a single action than
+  remember two.
 
-A single export action bundles the latest backup and the artefact directory into
-one archive for users who want one click.
+The single action does not reach into the backups directory for the newest file
+there. It takes its own snapshot, encrypted under a passphrase the reader
+chooses and carrying the key material that opens the sealed columns, and writes
+it first. A backup on disk can be a week old, and an archive pairing last week's
+ledger with today's documents would disagree with itself.
+
+The source artefacts go in beside it, each directory under its own name, at the
+paths the files already have — and unencrypted, which is the deliberate half.
+They are the reader's own files, readable today; handing them back in a format
+only this application opens would take that away in the name of portability.
+
+What the archive carries and what it withholds are **two lists that together
+are the whole inventory**, named entry by entry rather than swept up with
+exceptions. That is the reasoning the packager's copy already runs on, arrived
+at the same way: `secrets/` sits one directory from the imported statements, so
+a sweep of the storage root would put the open-banking credentials inside a file
+the reader then mails to themselves. Backups and logs are withheld for the
+plainer reason — the archive carries its own snapshot, and a log file is not the
+reader's history.
+
+A missing artefact directory is not an error. A reader who has only ever
+connected a bank has no imports directory to copy, and their archive is the
+snapshot alone.
 
 ### Deletion
 
@@ -177,7 +200,8 @@ this document cannot keep.
 | An uninstall | User data survives, by design and stated. |
 | A backup copied to another machine | Opens, given a compatible store version. |
 | A direct copy taken while running | May be stale relative to the journal; the backup path is the supported one. |
-| Source artefacts | Not inside the backup; copying them is a separate documented step. |
+| Source artefacts | Not inside the backup; the single export action bundles them beside it, and the documentation names the directories either way. |
+| A reader who has imported no files at all | The single export action produces the snapshot alone, rather than refusing over a directory that was never created. |
 | A signing key or a capture directory present in the tree at build time | Excluded by name from the packager's copy; `.gitignore` does not bound a build. |
 
 ## Acceptance criteria
@@ -194,7 +218,8 @@ this document cannot keep.
 | **F7-R7** | Open-banking connector credentials MUST live in a filesystem-permission-protected directory, never in the database. |
 | **F7-R8** | A backup export MUST be self-contained for the database and openable by any compatible tool. |
 | **F7-R9** | The documentation MUST state that source artefacts are outside the backup and MUST name the directory. |
-| **F7-R10** | *(Open)* A single export action MUST bundle the latest backup and the artefact directory. Not yet satisfied — the interface's own help string says it will arrive, and the two paths are exported separately today. |
+| **F7-R10** | A single export action MUST produce one archive holding the database and every source-artefact directory. The database MUST go in as a snapshot the export takes itself, encrypted and carrying its own key material, rather than whichever file the backups directory happens to hold; and an artefact directory that does not exist MUST NOT fail the export. |
+| **F7-R18** | What that archive carries and what it withholds MUST each be stated by name, and the two lists together MUST be exactly the inventory F7-R1 resolves — a location belonging to neither is a defect, not a default. Connector credentials MUST be withheld: an export bounded by a sweep of the storage root would carry out the file F7-R7 keeps out of the database. |
 | **F7-R11** | Deletion MUST be by removing files, and the procedure MUST name every path. |
 | **F7-R12** | Uninstalling MUST NOT delete user data, and this MUST be stated plainly to the user. |
 | **F7-R13** | The third parties any data reaches MUST be exactly the release host of the update check, plus the endpoints of the optional outbound calls the user enabled — no others, and each MUST appear in the catalogue ([G1-R1](../g-ux/g1-privacy.md)). |
