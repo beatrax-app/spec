@@ -169,21 +169,18 @@ Abandoned runs are swept after an age threshold.
 | A run abandoned mid-preview | Swept after the age threshold, scoped to its owner. |
 | A conflict in a field with no reconciliation support | Not surfaced — the field is simply not reconciled on re-run. |
 
-### Known gap — the refusal names the cell to nobody
+### How a refusal reaches both readers
 
-The parser composes its refusal around the file, the column and the offending
-value. Neither the reader nor the log is told any of it. The screen shows one
-fixed line for every unreadable export — deliberately, so that a raw exception
-message is never handed to a user — and the log records the exception's class
-and nothing else, because the context helper that writes it strips the message
-wholesale. That default is sound elsewhere in the product, where an exception
-message can carry row data.
+The parser composes its refusal around three things: the file it was reading,
+the column the cell sat under, and the value it could not read. The screen shows
+one fixed line for every unreadable export — deliberately, so a raw exception
+message is never handed to a user — and the local log records all three, so the
+diagnostic the parser took the trouble to compose is not discarded between them.
 
-The effect here is that the reader is told the file could not be read and given
-nothing to act on, while the diagnostic the parser took the trouble to compose is
-discarded between the two. The sibling pipeline already states the rule this one
-is missing: plain language on screen, full diagnostics in the local log
-([A2-R6](a2-import-wizard.md)).
+The division is the one the sibling pipeline already states: plain language on
+screen, full diagnostics in the local log ([A2-R6](a2-import-wizard.md)). It is
+kept by marking the refusal as an exception whose message may be logged whole,
+which a throw that interpolates a cell can never be given.
 
 ## Acceptance criteria
 
@@ -215,7 +212,7 @@ is missing: plain language on screen, full diagnostics in the local log
 | **A8-R24** | Abandoned runs MUST be swept after an age threshold, scoped to their owner. |
 | **A8-R25** | Fields without reconciliation support MUST be documented as unreconciled rather than silently appearing to reconcile. |
 | **A8-R26** | A value that cannot be parsed MUST refuse the whole file before any row is staged, and MUST NOT be substituted with a default or recorded as an unmapped item. |
-| **A8-R27** | *(Open)* A refusal MUST record the file, the column and the value it could not read in the local log. Not yet satisfied — see [Known gap](#known-gap--the-refusal-names-the-cell-to-nobody). |
+| **A8-R27** | A refusal MUST record the file, the column and the value it could not read in the local log. |
 
 ## Related
 
