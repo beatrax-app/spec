@@ -55,7 +55,11 @@
 #   E4-R23     WITHDRAWN 2026-09-05. The requirement documented an absence that
 #              has gone: custody is wired on both shells. The residual it leaves
 #              — a platform store that answers and does not protect, which is a
-#              keyring-less Linux desktop — is now F3-R37, and E4 says it.
+#              keyring-less Linux desktop — moved to F3, which now reports
+#              unprotected for any store it cannot positively identify, and E4
+#              says so. That successor is satisfied and is a goal below; naming
+#              it inside this list is what made the manifest gate read it as
+#              unmet, so it is named outside the list instead.
 #   E4-R24     the same shape. The backup-exclusion bridge exists and Android is
 #              closed; see E5-R23 for what is actually still open.
 #   E5-R10     the async cold-start recovery signal has no emitter. The Android
@@ -144,38 +148,40 @@
 #                             are two axes of one file. A6's markers and both
 #                             "Known limitation" sections are gone.
 #
-# DEFINED, LANDED, IN NO BUCKET — a ruling is needed on each, not a correction.
-# Requirements the specification defines and the product satisfies, added to
-# their feature pages after this file's blocks were written, and listed in
-# neither these goals nor either roadmap bucket. This is the defect the roadmap
-# already records for E2-R18..E2-R21, still live for eleven more:
+# DEFINED, LANDED, IN NO BUCKET — RESOLVED 2026-09-06. The thirteen below are
+# now goals of this release, in the block named for them. They were defined by
+# this release's own work and the product satisfies them; leaving them unlisted
+# meant nothing could report on them, which is the defect the roadmap already
+# records for E2-R18..E2-R21. Listing a requirement this release defined and
+# satisfied is a correction, not a scope decision — the scope decision would be
+# adding one it does not satisfy.
 #   A8-R26, C1-R18, C8-R22, D1-R29, D1-R30, E1-R23, E1-R24, E3-R21, E3-R22,
-#   E3-R23, E5-R26
+#   E3-R23, E5-R26 — the eleven; E2-R22 and F3-R37 joined them on 2026-09-05
 # Two more sit in the same gap unsatisfied, so they need the ruling first:
 #   B8-R16                  — no exemption list exists in the product at all.
 #   C7-R21                  — the read path defaults an unreadable granularity
 #                             where the requirement says reject. Deliberate: a
 #                             saved report is a synced column and can arrive
 #                             from a peer on another build.
-# And three requirements marked *(Open)* are in no bucket either, so nothing
-# schedules them and nothing has declined them: A8-R27 (satisfied since
-# 2026-09-05, the marker is stale), F6-R5 and G7-R11. F6-R5 was marked open on
-# 2026-09-05 and was in no bucket within the hour; the check below caught it on
-# its first run, which is the case for having the check. F7-R10 was a fourth
-# until 2026-09-06: the single export action had shipped, so the marker was
-# cleared where it stood rather than scheduled.
+# One requirement marked *(Open)* is in no bucket, so nothing schedules it and
+# nothing has declined it: F6-R5, which was marked open on 2026-09-05 and was in
+# no bucket within the hour — the check below caught it on its first run, which
+# is the case for having the check. Three others were on this list and are not
+# any more: A8-R27's refusal records the file, the column and the value;
+# F7-R10's single export action had shipped, so the marker was cleared where it
+# stood rather than scheduled; and G7-R11's two reference tables now resolve
+# their seeded `name` through a key, read by every render site rather than
+# merely present.
 #
-# Two more joined that list on 2026-09-05 and are satisfied, so they need the
-# same ruling rather than a correction: E2-R22 (which authors a device may relay
-# for) and F3-R37 (what custody does where the platform store is absent or does
-# not protect). Both were defined by work in this release and neither is a goal.
+# E2-R22 (which authors a device may relay for) and F3-R37 (what custody does
+# where the platform store is absent or does not protect) are in that block too.
 #
-# DEFINED, OPEN, AND SCHEDULED — but not goals of this file, for the same reason:
-# adding a goal is a scope decision, not a correction. E6-R13 .. E6-R16 and
-# E5-R27 — the withheld status, where it ranks, one classification behind every
-# surface that reports a hold, copy that stays true for a hold nobody can act on,
-# and a first sync that does not report a history it is short of. They are in the
-# roadmap's outstanding bucket, which is what the last check below reads.
+# DEFINED, SCHEDULED, AND SATISFIED SINCE — RESOLVED 2026-09-06. E6-R13 .. E6-R16
+# and E5-R27 — the withheld status, where it ranks, one classification behind
+# every surface that reports a hold, copy that stays true for a hold nobody can
+# act on, and a first sync that does not report a history it is short of — were
+# built on 2026-09-05 in beatrax#406 and #407, hours after this note and both
+# feature pages were last read. They are goals now, and the markers are cleared.
 #
 # F1-R18 (lock on window close) was the one carry-over release-readiness item
 # that is NOT a goal of v2.0. It is satisfied as of 2026-09-05, and the claim
@@ -294,6 +300,16 @@ goals = [
 
   # ── The zone an installation reads its days in (landed 2026-09-06) ─────────
   "G7-R16", "G7-R17", "G7-R18",
+
+  # ── The withheld status a reader can read (landed 2026-09-05) ──────────────
+  "E5-R27", "E6-R13", "E6-R14", "E6-R15", "E6-R16",
+
+  # ── Defined by this release, landed, and in no bucket until now ────────────
+  # Added to their feature pages after the blocks above were written, so nothing
+  # listed them and nothing could report on them. E1-R23 and E1-R24 were once
+  # read as non-existent — E1 did stop at R22 when that was written, and does
+  # not now.
+  "E1-R23", "E1-R24", "E2-R22", "F3-R37",
 
   # ── Org move and release-train mechanics ────────────────────────────────────
   "REPO-R37", "OPS-R12", "OPS-R18",

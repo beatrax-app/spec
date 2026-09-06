@@ -284,23 +284,24 @@ whose feature page and whose roadmap bucket disagree.
 
 ### 5 — What a peer will not send, and the surfaces that report it
 
-The relay in section 4 is built; what a reader is told about what a peer
-**cannot** send is not. Five requirements are open, and four of them are being
-built as one change.
+**done** 2026-09-05, in beatrax#406 and #407: E6-R13, E6-R14, E6-R15 and
+E6-R16 — a withheld status of its own, where it ranks, one classification
+behind every surface that reports a hold, and copy that stays true for a hold
+no reader can act on — together with E5-R27, a first sync that does not report
+a whole history it is short of. This section said they were open for a day
+after they merged, which is the same defect section 4 records one layer up: a
+bucket is only worth having if something reads the branch before writing in it.
 
-- [E6-R13, E6-R14, E6-R15 and E6-R16](../10-functional/features/e-sync/e6-sync-status.md#acceptance-criteria)
-  — a withheld status of its own, where it ranks, one classification behind every
-  surface that reports a hold, and copy that stays true for a hold no reader can
-  act on.
-- [E5-R27](../10-functional/features/e-sync/e5-mobile-peer.md#acceptance-criteria)
-  — a first sync that does not report a whole history it is short of.
-
-And one that belongs to no change at all, recorded here because it is in no
-other bucket:
+One requirement remains here, and it belongs to no change at all — it is
+recorded in this bucket because it is in no other:
 [F1-R15](../10-functional/features/f-platform/f1-desktop-shell.md#acceptance-criteria),
-the background-process crash alert. Its rolling counter does not survive the
-request that writes it, so the threshold is never crossed and the alert has
-never fired on any build.
+the background-process crash alert. The cause recorded here — that its rolling
+counter does not survive the request that writes it — has been wrong since
+beatrax#414: `ShellState` keeps that counter in the database cache store
+precisely because a `php -S` shell gives every shell-event POST its own
+process, and sixteen cases pin the behaviour, one of them counting an exit
+recorded by a listener already thrown away. What is outstanding is a
+confirmation on desktop hardware, not the mechanism.
 
 ### 6 — Release-readiness carry-over
 
