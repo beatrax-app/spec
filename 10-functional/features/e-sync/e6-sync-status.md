@@ -119,19 +119,22 @@ sit in one place, so "how is sync configured" is one screen rather than four.
 | **E6-R10** | A cryptographic verification failure MUST read as error. |
 | **E6-R11** | Relay configuration, network preferences, and the device list MUST be presented in one place. |
 | **E6-R12** | Every status query MUST be scoped to the requesting user. |
-| **E6-R13** | *(Open)* A peer holding operations back because this device cannot verify their author MUST prevent the aggregate reading as all-synced, and MUST read as a state of its own rather than as an error or a failure. Not yet satisfied — the status vocabulary has no word for it, so a device short an entire replaced phone's history reads as all devices up to date. |
-| **E6-R14** | *(Open)* The withheld state MUST outrank behind, and MUST rank below offline. Not yet satisfied — the state it ranks does not exist yet. |
-| **E6-R15** | *(Open)* The aggregate status and the per-peer withheld detail MUST be derived from one classification of what is still held, so a reader who confirms an author is never told a hold has ended on one surface and not on another. Not yet satisfied — the stored report is read per surface, and a row records a past exchange rather than what is still held now. |
-| **E6-R16** | *(Open)* Copy describing a hold MUST NOT assert an action the reader can always take. A hold whose author no peer is able to vouch for offers no confirmation at all, and the wording MUST stay true in that case. Not yet satisfied — the surfaces this governs are being built, and the first drafts of them named an act rather than a condition. |
+| **E6-R13** | A peer holding operations back because this device cannot verify their author MUST prevent the aggregate reading as all-synced, and MUST read as a state of its own rather than as an error or a failure. |
+| **E6-R14** | The withheld state MUST outrank behind, and MUST rank below offline. |
+| **E6-R15** | The aggregate status and the per-peer withheld detail MUST be derived from one classification of what is still held, so a reader who confirms an author is never told a hold has ended on one surface and not on another. A hold MUST NOT outlive the device that reported it. |
+| **E6-R16** | Copy describing a hold MUST NOT assert an action the reader can always take. A hold whose author no peer is able to vouch for offers no confirmation at all, and the wording MUST stay true in that case. |
 
-> **`E6-R13` through `E6-R16` are not satisfied.** They are being built against
-> the widened relay of [E2-R22](e2-device-pairing.md#acceptance-criteria), which
-> is what makes the last of the four load-bearing: once a device relays for an
-> author it cannot vouch for, a held entry exists that **no** reader anywhere can
-> confirm their way out of. Any sentence promising otherwise is false for that
-> reader, and the promise has already had to be taken back out of three places
-> that were justifying the ranking by the act it offers rather than by what
-> clears it.
+> **`E6-R13` through `E6-R16` are satisfied** as of 2026-09-05, and the last of
+> the four is why the ranking is worded as it is: they were built against the
+> widened relay of [E2-R22](e2-device-pairing.md#acceptance-criteria), and once a
+> device relays for an author it cannot vouch for, a held entry exists that
+> **no** reader anywhere can confirm their way out of. Any sentence promising
+> otherwise is false for that reader, and the promise had to be taken back out
+> of three places that were justifying the ranking by the act it offers rather
+> than by what clears it. `E6-R15` gained its second sentence on 2026-09-06: a
+> removed device's last declared count had no writer left to revise it, so a
+> hold could outlive the peer that reported it and pin the aggregate to a
+> report nothing could move.
 
 ## Related
 

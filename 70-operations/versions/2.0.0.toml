@@ -172,12 +172,12 @@
 # E2-R22 (which authors a device may relay for) and F3-R37 (what custody does
 # where the platform store is absent or does not protect) are in that block too.
 #
-# DEFINED, OPEN, AND SCHEDULED — but not goals of this file, for the same reason:
-# adding a goal is a scope decision, not a correction. E6-R13 .. E6-R16 and
-# E5-R27 — the withheld status, where it ranks, one classification behind every
-# surface that reports a hold, copy that stays true for a hold nobody can act on,
-# and a first sync that does not report a history it is short of. They are in the
-# roadmap's outstanding bucket, which is what the last check below reads.
+# DEFINED, SCHEDULED, AND SATISFIED SINCE — RESOLVED 2026-09-06. E6-R13 .. E6-R16
+# and E5-R27 — the withheld status, where it ranks, one classification behind
+# every surface that reports a hold, copy that stays true for a hold nobody can
+# act on, and a first sync that does not report a history it is short of — were
+# built on 2026-09-05 in beatrax#406 and #407, hours after this note and both
+# feature pages were last read. They are goals now, and the markers are cleared.
 #
 # F1-R18 (lock on window close) was the one carry-over release-readiness item
 # that is NOT a goal of v2.0. It is satisfied as of 2026-09-05, and the claim
@@ -296,6 +296,9 @@ goals = [
 
   # ── The zone an installation reads its days in (landed 2026-09-06) ─────────
   "G7-R16", "G7-R17", "G7-R18",
+
+  # ── The withheld status a reader can read (landed 2026-09-05) ──────────────
+  "E5-R27", "E6-R13", "E6-R14", "E6-R15", "E6-R16",
 
   # ── Defined by this release, landed, and in no bucket until now ────────────
   # Added to their feature pages after the blocks above were written, so nothing
