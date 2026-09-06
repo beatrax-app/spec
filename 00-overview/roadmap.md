@@ -296,16 +296,24 @@ a whole history it is short of. This section said they were open for a day
 after they merged, which is the same defect section 4 records one layer up: a
 bucket is only worth having if something reads the branch before writing in it.
 
-One requirement remains here, and it belongs to no change at all — it is
-recorded in this bucket because it is in no other:
 [F1-R15](../10-functional/features/f-platform/f1-desktop-shell.md#acceptance-criteria),
-the background-process crash alert. The cause recorded here — that its rolling
-counter does not survive the request that writes it — has been wrong since
-beatrax#414: `ShellState` keeps that counter in the database cache store
-precisely because a `php -S` shell gives every shell-event POST its own
-process, and sixteen cases pin the behaviour, one of them counting an exit
-recorded by a listener already thrown away. What is outstanding is a
-confirmation on desktop hardware, not the mechanism.
+the background-process crash alert, was the last requirement in this bucket and
+is **done** 2026-09-06. It belonged to no change at all and was recorded here
+because it was in no other.
+
+The cause this page carried — that its rolling counter does not survive the
+request that writes it — had been wrong since beatrax#414, and the feature page
+went on repeating it for another two weeks. What was outstanding was a
+confirmation on desktop hardware, and **the hardware is where the defect was**:
+the watchdog compared the arriving alias against a constant spelling it with a
+hyphen, while the shell sends an underscore, so no crash storm could raise an
+alert on any machine. Every one of the forty-one cases pinning the behaviour
+built the event out of that same constant, which is true of itself whatever the
+constant says. Fixed and re-measured on hardware in beatrax#442.
+
+**This bucket now has no outstanding items**, and the entry is worth keeping for
+what it cost to learn: a requirement carried as "built, pinned by test, awaiting
+hardware" was three of those four things.
 
 ### 6 — Release-readiness carry-over
 
