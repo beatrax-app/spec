@@ -61,21 +61,40 @@ did not apply.
 Two by design: stable and preview. Stable resolves the `latest` manifest for the
 running platform, preview resolves a `beta` one, and the bundle defaults to
 stable. See
-[ADR-0019](../../../00-overview/decisions/0019-asymmetric-release-publish.md),
-and the known gap below for what is actually published.
+[ADR-0019](../../../00-overview/decisions/0019-asymmetric-release-publish.md).
 
-### Known gap — the preview channel resolves a manifest nobody publishes
+### Closed — the channel a reader can choose, and a feed it can reach
 
-The release pipeline writes only the `latest` set, for every tag shape, release
-candidates included. A bundle set to preview therefore asks for a file that is
-never published, and gets nothing back for as long as it asks.
+`F6-R5` was open on two counts and both are closed, on 2026-09-06.
 
-There is no in-app switch either. The channel is read from the bundle's
-environment at build time, so opting into preview is a rebuild rather than a
-setting.
+**The channel is the reader's.** It was read from the bundle's environment at
+build time, so opting into preview was a rebuild — and nobody who installs a
+bundle can reach its `.env`. It is now `users.update_channel`, read off the
+owner's row, set from a settings section, and device-local: a desktop on
+preview and a phone its store updates are both correct at once.
 
-`F6-R5` is marked *(Open)* on both counts. Neither affects the stable channel,
-and the verification chain is the same chain either way.
+**A preview manifest is published.** The pipeline wrote the `latest` set for
+every tag shape and the `beta` set for none, so a bundle on preview asked for a
+file no release had ever carried. A stable tag now writes both — a stable
+release is also the newest build on the preview channel — and a prerelease tag
+writes only the preview set, because a release candidate must never appear under
+the name the stable channel resolves.
+
+**And it is reachable, which was very nearly missed.** Publishing the file is
+not the same as being able to fetch it: `releases/latest/download`, the origin
+each bundle carries, resolves the newest **non-prerelease** release. A
+`beta*.yml` on a release-candidate page is unreachable through it however it is
+named, so a reader on preview would have been handed the newest stable build's
+manifest and offered a stable build. A direct tag URL does serve a prerelease,
+so the preview channel has an origin of its own and the pipeline keeps one
+rolling `preview` release carrying the current set. Which origin a channel asks
+sits beside the manifest prefix it already owned, so a third channel cannot be
+added without being given a feed.
+
+Nothing about the verification chain is different for preview. One Ed25519 key
+signs both sets, and every page a reader fetches from is re-downloaded and
+re-verified against the key the bundle itself carries — the rolling release
+included, after it is moved and against what it actually serves.
 
 ### The banner
 
@@ -143,7 +162,7 @@ never caches a transaction list to disk.
 | **F6-R2** | A manifest failing verification MUST be logged and MUST NOT produce a user-facing banner. |
 | **F6-R3** | Every downloaded binary MUST be verified against the manifest's declared hash before any install step. |
 | **F6-R4** | No update path may skip signature or hash verification. |
-| **F6-R5** | *(Open)* Stable and preview channels MUST both exist, with stable as the default. Not yet satisfied — nothing publishes a preview manifest, and the channel is fixed at build time rather than chosen; see [Known gap](#known-gap--the-preview-channel-resolves-a-manifest-nobody-publishes). |
+| **F6-R5** | Stable and preview channels MUST both exist, with stable as the default. Satisfied 2026-09-06: the channel is the reader's, the pipeline publishes a preview manifest, and the preview channel has an origin that can address a prerelease ([how](#closed--the-channel-a-reader-can-choose-and-a-feed-it-can-reach)). |
 | **F6-R6** | Where update checking is enabled, a manifest older than the staleness threshold MUST raise a banner that does not offer an install; where it is disabled, no staleness banner may be raised. |
 | **F6-R7** | Skipped versions MUST persist per user and MUST NOT resurface. |
 | **F6-R8** | Update checking MUST be disableable, and with it disabled no outbound call may occur from this feature. |
