@@ -101,25 +101,32 @@ from a shell event.
 Residual: a process killed without notice — force quit, power cut, OOM — records
 no demand, and that session is covered by the idle lock alone.
 
-### Known gap — what a shell event records does not outlive its request
+### Closed — what a shell event records outlives its request
 
-Every event the shell posts is its own request, so state held in memory for the
-life of one is constructed fresh for the next. Two behaviours above are built
-that way, and neither accumulates.
+Every event the shell posts is its own request, because the bundle serves them
+from a single-process `php -S`. State held in memory for the life of one is
+therefore constructed fresh for the next, and two behaviours here were built
+that way: the watchdog's rolling counter started empty at every exit and never
+reached the threshold, and the window's focus state read back as the
+constructed default — *focused* — from every request that was not the one which
+wrote it, so an unfocused window was never observed as unfocused and no
+operating-system notification was delivered at all.
 
-The **watchdog's** rolling counter is held that way, so it starts empty at every
-exit and never reaches the threshold: a crash storm raises no alert today. The
-**window's focus state** is written by the focus listeners and read from other
-requests entirely — by the watchdog before it escalates, and by notification
-delivery before it decides whether to show a toast — so every reader sees the
-constructed default, *focused*. An unfocused window is therefore never observed
-as unfocused, and no operating-system notification is delivered at all.
+**Both were closed in beatrax#414**, and this section described them as current
+for two weeks afterwards. `ShellState` puts the fact where the next request can
+read it, in the **database** cache store rather than the configured default —
+`CACHE_STORE` is `file`, and a file store keyed under a bundle's own path is no
+better at surviving than the memory was. `WindowFocusState` reads and writes
+through it, and the watchdog's exit stamps are held there under a TTL equal to
+the rolling window, so a device that stops crashing leaves nothing behind.
 
-Both are still what the product intends, which is why the rows below stay and
-say so rather than being deleted. The fix is the shape the lock uses above —
-leave the fact where the next request can read it — and it is not taken yet
-because it changes a user-visible operating-system notification that only a real
-bundle can judge.
+Forty-one cases across five files pin the behaviour, including
+`TheWatchdogCountedToOneAndTheWindowWasAlwaysFocusedTest`, which is named for
+this gap and counts an exit recorded by a listener that has already been thrown
+away.
+
+What is still outstanding for `F1-R15` is a **confirmation on desktop
+hardware** — the mechanism is not in doubt, and no page should say it is.
 
 ## Edge cases
 
@@ -127,9 +134,9 @@ bundle can judge.
 |-----------|-----------|
 | A path pointing at a non-existent file | Canonicalisation fails; logged and dropped. |
 | A file deleted between drop and sign-in | The intent is cleared; the user lands on the dashboard. |
-| The window unfocused when a notification fires | Delivered to the operating system — intended, and [not what happens](#known-gap--what-a-shell-event-records-does-not-outlive-its-request). |
+| The window unfocused when a notification fires | Delivered to the operating system. The focus state is [read back from the store](#closed--what-a-shell-event-records-outlives-its-request) rather than from the request that wrote it. |
 | The window focused | Not delivered; the in-app surface shows it. This is the answer every window gets, focused or not. |
-| A background-process crash storm | One alert on threshold crossing — intended, and [not what happens](#known-gap--what-a-shell-event-records-does-not-outlive-its-request). |
+| A background-process crash storm | One alert on threshold crossing. The counter [outlives the request](#closed--what-a-shell-event-records-outlives-its-request) that writes each exit. |
 | Running outside the bundle | Listeners that call into the shell do not register; the ones that only record a fact do, so the round-trip is provable off-bundle. |
 | First launch before the database file exists | The migrator creates it. |
 | An oversized file | Rejected by the size bound. |
@@ -152,7 +159,7 @@ bundle can judge.
 | **F1-R12** | Either close outcome MUST lock the application immediately, with no grace period, where the user has the app-lock enabled; where they do not, no close outcome may lock or veil the session ([F3-R29](f3-auth-and-app-lock.md)). |
 | **F1-R13** | Notification delivery MUST consult suppression, then window focus, then the per-device detail preference. |
 | **F1-R14** | A focused window MUST suppress the operating-system notification. |
-| **F1-R15** | *(Open)* Repeated background-process exits within a rolling window MUST raise an alert; a single crash MUST NOT. Not yet satisfied — the rolling counter does not survive the request that writes it, so the threshold is never crossed ([Known gap](#known-gap--what-a-shell-event-records-does-not-outlive-its-request)). |
+| **F1-R15** | *(Open)* Repeated background-process exits within a rolling window MUST raise an alert; a single crash MUST NOT. Built and pinned by test; what is outstanding is a confirmation on desktop hardware, not the mechanism ([how the counter survives](#closed--what-a-shell-event-records-outlives-its-request)). |
 | **F1-R16** | Outside the bundle, the absence of the theme signal MUST be the documented fallback trigger. |
 | **F1-R17** | Storage paths MUST resolve through the single path authority, enforced by architecture test. |
 | **F1-R18** | Lock-on-window-close MUST act on the focused window's session, and MUST be verified to. |
