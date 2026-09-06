@@ -5,6 +5,9 @@ extend-ignore-re = ["\\[[a-z]\\][a-zA-Z]+"]
 [default.extend-words]
 beatrax = "beatrax"
 Beatrax = "Beatrax"
+# Apple's own App Store Connect rejection codes, quoted verbatim
+# (ITMS-91053, ITMS-91056). Carried in beatrax/typos.toml for the same reason.
+ITMS = "ITMS"
 # Dutch statement vocabulary that appears verbatim in parser examples.
 Betaalautomaat = "Betaalautomaat"
 Geldautomaat = "Geldautomaat"
