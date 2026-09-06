@@ -9,8 +9,13 @@
 > product, which misleads a reader deciding what is built exactly as badly as
 > the opposite would. Each was then checked against the implementation and
 > cleared only where there is evidence, named in the pull request that cleared
-> it. **One marker stands: G7-R11**, and it stands because the requirement is
-> genuinely unmet, with the two places named in the row itself.
+> it. **No marker stands.** G7-R11 was the last, and the two places it named —
+> the tax deduction corpus and the currency reference table — were closed on
+> the same day this notice was written and a few hours after it: the corpus
+> through `TaxCorpusWording` and a `name_is_default` column, the currencies
+> through `CurrencyDisplayName` and the `ledger::currencies` group. Both are
+> read by every render site rather than merely present, which is the
+> distinction this notice exists to keep.
 
 ---
 
@@ -172,7 +177,7 @@ transition back short of clearing the preference.
 | **G7-R8** | The language preference MUST persist across sessions without re-detection. |
 | **G7-R9** | A language switcher MUST live in Settings, in the same family as the Appearance/theme setting. |
 | **G7-R10** | Changing the language MUST take effect across the interface immediately, without discarding the user's place or data. |
-| **G7-R11** | *(Open)* Every user-facing string MUST be translatable; no user-facing copy may be pinned to a single language beyond a locale's reach. Not yet satisfied — two reference tables render a seeded `name` column directly: tax deduction categories, seeded in the jurisdiction's language, and the currency reference table, seeded in English. Both need the treatment `categories` already has, where an untouched default re-resolves through a key and a reader's own rename stays verbatim. |
+| **G7-R11** | Every user-facing string MUST be translatable; no user-facing copy may be pinned to a single language beyond a locale's reach. The two reference tables that rendered a seeded `name` column directly now resolve it: a tax deduction category through `TaxCorpusWording` against `name_is_default`, and a currency through `CurrencyDisplayName` against its own code. An untouched default re-resolves for the reader; a rename stays verbatim in every language. |
 | **G7-R12** | A key absent in the active locale MUST fall back to its English value, never to a raw key, a blank, or a placeholder. |
 | **G7-R13** | The active locale MUST be reflected in the document's language attribute for assistive technology. |
 | **G7-R14** | Language detection and selection MUST NOT add an outbound call or send the user's locale off the machine. |
