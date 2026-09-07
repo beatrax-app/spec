@@ -279,35 +279,58 @@
 #                             listing copy, settled in App Store Connect, the
 #                             Play Console and Partner Centre.
 #
-#                             TWO OPEN.
+#                             TWO WERE OPEN. Both are engineering-complete as
+#                             of 2026-09-07; what each waits on is an account or
+#                             a credential rather than a change.
 #
-#                             R27 is additive on three of the four now. Play
-#                             takes the AAB and the APK stays the direct
-#                             download; iOS has no direct-download shape to be
-#                             additive with; the Microsoft Store is an EXE/MSI
-#                             listing by decision, so the NSIS artifact IS the
-#                             store shape. The Mac App Store is the fourth, and
-#                             it waits on R28.
+#                             R27 is additive on all four. Play takes the AAB
+#                             and the APK stays the direct download; iOS has no
+#                             direct-download shape to be additive with; the
+#                             Microsoft Store is an EXE/MSI listing by decision,
+#                             so the NSIS artifact IS the store shape. The Mac
+#                             App Store shape is built: a `mas` electron-builder
+#                             target with its own entitlements pair, the
+#                             interpreter relocated into Contents/MacOS where a
+#                             nested executable is allowed to live, and a
+#                             dispatch-only workflow that builds it and then
+#                             READS what it built. It is dispatch-only on
+#                             purpose: a release blocked by portal paperwork is
+#                             a direct-download channel that stops shipping for
+#                             a listing it does not depend on.
 #
-#                             R28 remains the largest unknown in the release: a
-#                             Mac App Store build needs a runtime strategy
-#                             before it needs a submission, because the sandbox
-#                             ignores one of the two hardened-runtime
-#                             relaxations the bundle uses to map its static
-#                             interpreter, and no sandboxed build exists to
-#                             measure.
+#                             R28's prerequisite is met, and the requirement is
+#                             satisfied in the direction it was written: a build
+#                             that cannot map its interpreter under the sandbox
+#                             must not be submitted, and this one can. Measured
+#                             rather than argued, each probe run twice against
+#                             an unsandboxed control — loopback listener,
+#                             multicast join and send on 224.0.0.251:5353, child
+#                             process spawn and SQLite write all survive, and
+#                             PCRE's JIT works with no JIT entitlement at all
+#                             because a sandboxed build is not hardened unless
+#                             told to be. Neither refused relaxation is needed:
+#                             the interpreter is statically linked, which is
+#                             what library validation checks.
 #
-#                             ONE FINDING, not a requirement of its own but a
-#                             Microsoft Store certification prerequisite the
-#                             runbook lists and nothing checks: the signature
-#                             verification reads the INSTALLER, and store
-#                             certification is per-file. Nothing signs the
-#                             bundled PHP interpreter or its DLLs — electron-
-#                             builder signs the app executable and the installer
-#                             via azureSignOptions, and extraResources are not
-#                             in that set. Configuring and proving it needs a
-#                             Windows runner and the Azure credentials, so it is
-#                             recorded rather than written blind.
+#                             What remains for the Mac App Store is not code: a
+#                             provisioning profile and a Mac Installer
+#                             Distribution certificate, both artefacts of the
+#                             Apple Developer portal. The lane refuses to build
+#                             without them, which is the correct failure.
+#
+#                             THE FINDING IS CLOSED. It was a Microsoft Store
+#                             certification prerequisite the runbook listed and
+#                             nothing checked: signature verification reads the
+#                             INSTALLER, and certification is per-file.
+#                             electron-builder's shouldSignFile falls back to
+#                             .exe alone when win.signExts is unset, so php.exe
+#                             was signed and every bundled DLL was not.
+#                             win.signExts now covers .exe, .dll and .node, and
+#                             both release workflows walk the unpacked package
+#                             with Get-AuthenticodeSignature and refuse a build
+#                             carrying an unsigned binary — including one that
+#                             walked the tree and found nothing, which reads
+#                             identically to a package that is fully signed.
 #
 # SATISFIED, and the pages that said otherwise are corrected as of 2026-09-05:
 #   E2-R18 .. E2-R21        — relayed device identity (ADR-0027), merged the day

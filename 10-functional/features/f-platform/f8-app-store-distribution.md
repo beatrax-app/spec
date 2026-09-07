@@ -45,7 +45,19 @@ The *shape* still holds: the listing is preceded by a runtime change, and a
 build that cannot map its interpreter under the sandbox is not one to submit
 and fix later. The *size* does not. It was called the largest unknown in the
 release; it was measured on 2026-09-07 and the interpreter runs sandboxed with
-every capability this product needs, which is recorded below. Nothing here claims the other three are cheap; what it claims is
+every capability this product needs, which is recorded below.
+
+**The runtime change has since been made**, so `F8-R28` is satisfied in the
+direction it was written — a build that cannot map its interpreter must not be
+submitted, and this one can. The store lane is a `mas` electron-builder target
+with its own entitlements pair, the interpreter relocated into `Contents/MacOS`
+where a nested executable is allowed to live, and a dispatch-only workflow that
+builds it and then reads what it built rather than trusting the config that
+produced it.
+
+What is left is not code. A Mac App Store provisioning profile and a Mac
+Installer Distribution certificate are artefacts of the Apple Developer portal,
+and the lane refuses to build without them. Nothing here claims the other three are cheap; what it claims is
 that they are submissions against the work below, and this one is not.
 
 Two further unknowns applied to any sandboxed build, desktop or mobile, and
