@@ -41,21 +41,56 @@ and it is the most important thing on this page for anyone planning the work:
 > run under ignores one of them, so that listing needs a **different runtime
 > strategy** rather than a submission.
 
-That still holds. What changed is what follows from it. It was previously the
-reason the listing was declined; it is now the listing's cost, stated rather
-than hidden. The Mac App Store listing is preceded by a runtime change nobody
-has scoped, and it is the largest unknown in the release — a build that cannot
-map its interpreter under the sandbox is not a build that can be submitted and
-fixed later. Nothing here claims the other three are cheap; what it claims is
+The *shape* still holds: the listing is preceded by a runtime change, and a
+build that cannot map its interpreter under the sandbox is not one to submit
+and fix later. The *size* does not. It was called the largest unknown in the
+release; it was measured on 2026-09-07 and the interpreter runs sandboxed with
+every capability this product needs, which is recorded below. Nothing here claims the other three are cheap; what it claims is
 that they are submissions against the work below, and this one is not.
 
-Two further unknowns apply to any sandboxed build, desktop or mobile, and are
-not answered by the scope decision: whether it keeps a user-data path that
+Two further unknowns applied to any sandboxed build, desktop or mobile, and
+were not answered by the scope decision: whether it keeps a user-data path that
 survives upgrades, and whether local-network discovery survives the sandbox.
-They are engineering unknowns, answerable only by building a sandboxed bundle
-and measuring one, and `F8-R26` makes them blocking for that platform's listing
-copy — a capability that is dead under a sandbox may not be described as though
-it were not. They are recorded in
+`F8-R26` makes them blocking for that platform's listing copy — a capability
+that is dead under a sandbox may not be described as though it were not.
+
+**Both were measured on 2026-09-07, and local-network discovery survives.**
+The interpreter was signed into a minimal bundle with the store lane's sandbox
+entitlements and asked about itself, each probe run twice so that a failure
+reproducing outside the sandbox could not be mistaken for one caused by it
+(`scripts/measure_sandboxed_interpreter.php` in the product repository):
+
+| probe | sandboxed | unsandboxed control |
+|---|---|---|
+| PCRE JIT | works | works |
+| loopback listener, bound and connected | yes | yes |
+| multicast join and send, `224.0.0.251:5353` | yes | yes |
+| child process spawn | yes | yes |
+| SQLite write | yes | yes |
+| `HOME` | container | real home |
+| write outside the container | refused | allowed |
+
+Three consequences follow, and they narrow this section rather than close it.
+
+The **relaxations** are narrower than recorded. The interpreter's own JIT is
+off (`opcache.jit` is `disable`, `opcache.enable_cli` is `0`); PCRE's is the
+only live consumer of writable-executable memory, and it worked with no JIT
+entitlement at all, because a sandboxed build is not hardened unless it is told
+to be. The interpreter is statically linked and loads no third-party library,
+which is what library validation checks.
+
+The **data path** relocates with the container rather than needing to be moved:
+the desktop shell already derives its storage root and bootstrap cache from
+`app.getPath('userData')`, which the sandbox redirects. That is expected rather
+than measured — what was measured is the interpreter's `HOME`, not Electron's
+`userData`.
+
+What is **not** removed is the residual the measurement confirms: a sandboxed
+build cannot read the real home, so a ledger written by a direct-download
+install does not follow a reader into a store build. That is a migration and
+disclosure question under `F8-R26`, not a runtime one.
+
+The remaining unknowns are recorded in
 [90-appendix/open-questions.md](../../../90-appendix/open-questions.md).
 
 ### The paid-identity trade is already made

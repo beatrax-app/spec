@@ -28,7 +28,7 @@ or is it finished. Git is the record of the ones that finished.
 
 ## Product and release
 
-### Does a sandboxed build keep its data, and can it still find a peer?
+### What carries a reader's ledger into a sandboxed build?
 
 What remains of the store-distribution question after
 [ADR-0032](../00-overview/decisions/0032-all-four-stores-additive-to-direct-download.md)
@@ -37,18 +37,31 @@ answered the rest of it:
 - **Does a sandboxed build keep a user-data path that survives upgrades?**
 - **Does local-network discovery survive the sandbox?**
 
-Neither is a decision anybody can take. They are engineering unknowns,
-answerable only by building a sandboxed bundle and measuring it — and the scope
-decision is what makes them urgent rather than academic. `F8-R26` forbids a
-listing describing a capability that does not work on that platform, so an
-unmeasured answer is a listing whose copy cannot honestly be written. If the
-answer to either is no, a desktop store listing becomes a diminished product
-rather than a second channel.
+Neither was a decision anybody could take. They were engineering unknowns,
+answerable only by building a sandboxed bundle and measuring it — and both were
+measured on **2026-09-07**.
 
-The Mac App Store carries a third constraint that is **not** an open question but
-a known cost: the sandbox ignores one of the two hardened-runtime relaxations the
-desktop bundle needs to map its static interpreter, so that listing is preceded
-by a runtime strategy rather than by a submission. It is stated in
+**Local-network discovery survives.** A multicast join and send to
+`224.0.0.251:5353` both succeed under the sandbox, as do a loopback listener,
+an outbound connection, a child process and a SQLite write. Every probe ran
+twice so that a failure reproducing outside the sandbox could not be read as one
+caused by it. `F8-R26` is therefore satisfiable for that listing: the capability
+works and may be described.
+
+**The data path does not survive, and that is the answer rather than a
+blocker.** `HOME` is redirected into the container and the real one is
+unreadable, so a ledger written by a direct-download install does not follow a
+reader into a store build. The store build keeps its own data across upgrades —
+a container is stable — but it does not inherit. That makes this a migration and
+disclosure question rather than a runtime one, and it is the part of this entry
+that stays open: what a reader is told, and what if anything carries their
+ledger across.
+
+The Mac App Store's third constraint is narrower than it was recorded. The
+sandbox does ignore `disable-library-validation`, but the interpreter is
+statically linked and loads no third-party library, so nothing needs it; and the
+other relaxation covers writable-executable memory that only PCRE's JIT uses,
+which worked under the sandbox with no JIT entitlement at all. Stated in
 [F8](../10-functional/features/f-platform/f8-app-store-distribution.md#the-mac-app-store-is-a-runtime-problem-not-a-submission),
 not here.
 
@@ -56,7 +69,7 @@ not here.
 other two sub-questions of this entry. Both are answered — the second is now an
 [accepted tension](#paid-signing-identities-were-declined-on-reasoning-that-still-holds).*
 
-*In: [00-overview/roadmap.md](../00-overview/roadmap.md#does-a-sandboxed-build-keep-its-data-and-can-it-still-find-a-peer) ·
+*In: [00-overview/roadmap.md](../00-overview/roadmap.md#what-carries-a-readers-ledger-into-a-sandboxed-build) ·
 [F8-R26](../10-functional/features/f-platform/f8-app-store-distribution.md#acceptance-criteria) ·
 [20-architecture/platform-matrix.md](../20-architecture/platform-matrix.md#distribution)*
 
