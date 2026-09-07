@@ -377,21 +377,26 @@ as an outstanding item, which is where a closed gap belongs.
 
 Genuinely unresolved. Recorded here rather than guessed at.
 
-### Does a sandboxed build keep its data, and can it still find a peer?
+### What carries a reader's ledger into a sandboxed build?
 
-The two sub-questions the store-scope ruling did **not** settle, kept here
-because they are the ones that could still change what a store build is allowed
-to claim:
+The two sub-questions the store-scope ruling did **not** settle were whether a
+sandboxed build keeps a user-data path that survives upgrades, and whether
+local-network discovery survives the sandbox. Both were measured on
+**2026-09-07**, by signing the bundled interpreter into a sandboxed bundle and
+asking it — each probe run twice, so a failure that reproduces outside the
+sandbox is not read as one caused by it.
 
-- Does a sandboxed build keep a user-data path that survives upgrades?
-- Does local-network discovery survive the sandbox?
+**Discovery survives**: a multicast join and send to `224.0.0.251:5353`, a
+loopback listener and connection, a child process and a SQLite write all work
+under the sandbox. That capability may be described in the listing
+([F8-R26](../10-functional/features/f-platform/f8-app-store-distribution.md#acceptance-criteria)).
 
-Neither is a call anybody can make. They are engineering unknowns, answerable
-only by building a sandboxed bundle and measuring it, and the decision to ship
-all four store listings is what makes them urgent rather than academic. A
-capability that is dead under a sandbox may not be described in that platform's
-listing ([F8-R26](../10-functional/features/f-platform/f8-app-store-distribution.md#acceptance-criteria)),
-so an unmeasured answer is a listing that cannot honestly be written.
+**The data path is answered, and what it answers is the open part.** A store
+build keeps its own data across upgrades, because a container is stable. It does
+not inherit: `HOME` is redirected into the container and the real one is
+unreadable, so a ledger written by a direct-download install does not follow a
+reader across. What stays unresolved is not a runtime question but a product
+one — what a reader is told, and whether anything carries their ledger over.
 
 *Which stores, and whether store distribution forces paid signing identities,
 were the other two sub-questions here. Both are answered — see
