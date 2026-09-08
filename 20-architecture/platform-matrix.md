@@ -34,7 +34,7 @@ documentation says so plainly rather than shipping something that will not run.
 | File-open intake | Native or process arguments | Not applicable | Not applicable |
 | Notifications | Operating-system delivery | In-application only | Platform local notifications |
 | Theme signal | Reported by the shell | Browser preference | Reported by the shell |
-| Language signal | `Accept-Language` from the webview | `Accept-Language` from the browser | `Accept-Language` from the webview |
+| Language signal | Reported by the shell | `Accept-Language` from the browser | Reported by the shell |
 
 Storage paths resolve through a **single path authority**
 ([ARCH-R8](README.md#the-arch-r-namespace)), which is what makes the
@@ -44,6 +44,16 @@ architecture test.
 The mobile runtime is detected **structurally** — by the shape of the paths the
 platform provisions — rather than by an environment flag, because the flag is
 not reliable at every stage of request handling.
+
+**Neither mobile webview sends `Accept-Language`.** This row read
+"`Accept-Language` from the webview" for both mobile columns, and it was wrong:
+measured on a Galaxy A51 set to Dutch, the Android webview forwards `Cookie`,
+`Accept`, `Upgrade-Insecure-Requests`, `User-Agent` and the `sec-ch-ua` hints
+into the runtime and no language header at all. A phone whose owner had set it
+to Dutch therefore rendered every screen in English, and the option named
+"System" was a promise the platform never kept. The language signal is a
+shell-reported fact on mobile, exactly like the theme signal in the row above
+it, and the shell already answers it through its device-information call.
 
 ## The runtime version floor
 
