@@ -33,7 +33,7 @@ documentation says so plainly rather than shipping something that will not run.
 | Biometrics | Platform API | Web authentication | Secure enclave |
 | File-open intake | Native or process arguments | Not applicable | Not applicable |
 | Notifications | Operating-system delivery | In-application only | Platform local notifications |
-| Theme signal | Reported by the shell | Browser preference | Reported by the shell |
+| Theme signal | Reported by the shell | Browser preference | `prefers-color-scheme` in the webview |
 | Language signal | Reported by the shell | `Accept-Language` from the browser | Reported by the shell |
 
 Storage paths resolve through a **single path authority**
@@ -44,6 +44,16 @@ architecture test.
 The mobile runtime is detected **structurally** — by the shape of the paths the
 platform provisions — rather than by an environment flag, because the flag is
 not reliable at every stage of request handling.
+
+**The mobile theme signal is deliberately not the shell.** This row read
+"Reported by the shell" for mobile as well, and the implementation had already
+decided otherwise on purpose: the bridge is read per request and can answer
+differently while the application is idle or paused — which is exactly when the
+idle lock renders its unlock screen — so a shell-reported theme could change
+under the reader mid-session. The pre-paint script reads `prefers-color-scheme`
+instead, which is the same operating-system night-mode flag the native window
+background uses, so every layer agrees at all times. Nothing binds the
+desktop's theme port on mobile, and nothing should.
 
 **Neither mobile webview sends `Accept-Language`.** This row read
 "`Accept-Language` from the webview" for both mobile columns, and it was wrong:
