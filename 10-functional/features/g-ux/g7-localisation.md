@@ -61,6 +61,17 @@ Where nothing in the request matches a supported locale, the interface uses
 **English**. English is the floor, not an error state — an unmatched preference
 is an ordinary outcome, not a failure to report.
 
+A shell may send no such preference at all, and both mobile shells do exactly
+that: their webviews forward no `Accept-Language` into the runtime. There the
+environment's preference is the **operating system's own language**, which the
+shell reports the same way it reports the theme. A phone set to Dutch opens in
+Dutch; the header is simply not the channel it arrives on.
+
+The two are not interchangeable, so they do not rank equally. A request that
+names a language has been *told* one. An operating-system setting is only ever
+an inference about whoever is holding the device, so it is consulted when the
+request named nothing, never instead of a request that did.
+
 This mirrors the theme signal exactly: the environment offers a preference, its
 absence is itself a defined outcome, and neither is ever the last word.
 
@@ -138,17 +149,21 @@ The active locale for a request resolves in a fixed order, first match wins:
 | Order | Source | When it applies |
 |-------|--------|-----------------|
 | 1 | The user's stored language preference | Whenever the user has set one. |
-| 2 | The environment's `Accept-Language`, best supported match | First visit, before a preference exists, when the request names a supported locale. |
-| 3 | English (`en`) | Whenever neither above yields a supported locale. |
+| 2 | A guest's session-scoped choice | On the sign-in and setup surfaces, where there is no user record to hold one. |
+| 3 | The environment's `Accept-Language`, best supported match | First visit, before a preference exists, when the request names a supported locale. |
+| 4 | The operating system's language, as the shell reports it | When the request named no language at all — every mobile request, whose webview sends no such header. |
+| 5 | English (`en`) | Whenever none of the above yields a supported locale. |
 
-Setting a preference moves a user permanently from rows 2–3 to row 1. There is no
+Setting a preference moves a user permanently from rows 2–5 to row 1. There is no
 transition back short of clearing the preference.
 
 ## Edge cases
 
 | Situation | Behaviour |
 |-----------|-----------|
-| `Accept-Language` prefers an unsupported language | Falls through to English; no error. |
+| `Accept-Language` prefers an unsupported language | Falls through to English; no error. The operating system is not consulted — the request named a language, and it was heard. |
+| The request carries no `Accept-Language` at all | The operating system's language decides, then English. A header-parsing helper that answers with the first supported locale rather than "nothing" hides this case, because its answer is English and it is indistinguishable from a real preference. |
+| The operating system names a language the product does not carry | Falls through to English, exactly as an unsupported header does. |
 | `Accept-Language` lists several languages | The best supported match is taken in the header's own priority order. |
 | A supported locale with a region subtag (`nl-BE`) | Resolved to its base supported locale (`nl`). |
 | A preference set, then the environment language changes | The preference still wins; detection does not re-run. |
@@ -186,6 +201,8 @@ transition back short of clearing the preference.
 | **G7-R17** | That zone MUST be one answer per installation rather than one per reader, and MUST travel to a paired device, because it is the frame stored timestamps are written in: two devices holding different answers record the same instant as two different days. |
 | **G7-R18** | The control offering the zone MUST name the machine's own zone on the option that defers to it, and MUST let a reader return to deferring after choosing. |
 | **G7-R19** | An installation that already holds an account when the stored zone is introduced MUST be given the zone its rows were written in, rather than falling through to the machine — removing a pinned zone changes what an existing stored timestamp means, not how it is shown, and a reader who upgrades abroad would otherwise have every stored day move under them. |
+| **G7-R20** | Where a request carries no `Accept-Language`, the active locale MUST be the best supported match against the operating system's own language as the shell reports it, before falling back to English. Both mobile webviews send no such header, so on those platforms this is the only environment signal there is, and without it the option named "System" resolves to English on every device whatever the device says. |
+| **G7-R21** | A request that does name a language MUST NOT be overridden by the operating system's setting: an absent header and an unmatched one are different outcomes, and only the absent one reaches the platform. |
 
 ## Related
 
