@@ -44,11 +44,12 @@
 #              reason above: a name in this list is read as a claim that the id
 #              is unmet. The iOS residual this entry used to point at closed in
 #              the re-audit below.
-#   E5-R10     the async cold-start recovery signal has no emitter. The Android
-#              half is a documented skeleton, and Android is the only platform
-#              that needs it.
 #
-# The sixteen this list used to carry are closed, each with its own entry under
+# The list is EMPTY as of 2026-09-09. E5-R10 was the last name in it and closed
+# that day; it is named under CLOSED ON HARDWARE below and not here, because a
+# name in this list is read as a claim that the id is unmet.
+#
+# The seventeen this list used to carry are closed, each with its own entry under
 # RE-AUDITED and RULED below. They are named there and not here, because a name
 # in this list is a claim, and the group headings in `goals` are checked against it.
 #
@@ -98,15 +99,37 @@
 # provisions a relay unasked — this re-audit could not establish and the next
 # pass did.
 #
-# ONE REMAINS, and it is the one nothing in this session could honestly take:
-#   E5-R10     needs an Android device. The PHP half is complete and reachable
-#              — recover() answers pendingAsync, completePendingRecover() polls,
-#              pollRecovered() reads the blob back — and the Kotlin half says of
-#              itself that it is a skeleton needing an Activity and the event
-#              API. A BiometricPrompt cannot be verified without hardware that
-#              has a fingerprint enrolled, and writing the emitter blind would
-#              produce a change that looks like a fix and is not one. No Android
-#              device was attached; only an iPhone was.
+# ONE REMAINED, and it is taken. It was left because no Android device was
+# attached and writing the emitter blind would have produced a change that looks
+# like a fix and is not one.
+#
+# CLOSED ON HARDWARE 2026-09-09 by beatrax#483, on a Galaxy A51 (Android 13) with
+# a fingerprint enrolled:
+#   E5-R10     the async cold-start recovery signal has an emitter. `Get` returns
+#              `async` and the BiometricPrompt callback raises
+#              `native:BiometricVault.Recovered`; `BiometricVault.PollRecovered`
+#              is declared and hands the blob over the PHP bridge, consuming its
+#              slot on read. The event payload is `{}` — the key does not cross
+#              as a value, which is the second half of what the requirement asks.
+#
+#              Three things the work found that no page carried. The Keystore key
+#              had to become a PAIR: a secret key gates encryption too, and the
+#              caller zeroes the data key on the statement after the store, so an
+#              asynchronous `Set` would hold that plaintext across a UI round
+#              trip. Only the private half of an asymmetric key needs
+#              authentication, so `Set` stays synchronous. Second, PHP listened
+#              on a channel the device cannot raise: the coordinator builds every
+#              call as `window.Livewire.dispatch("native:" + event)`, and the
+#              handler waited on a bare name — both halves passed their own tests
+#              and the join could not fail while nothing raised the event at all.
+#              Third, OAEP: Keymaster reads the MGF1 digest as SHA-1 whatever the
+#              transform string says, and reports the mismatch as a generic
+#              KM_ERROR_UNKNOWN_ERROR after a correct fingerprint.
+#
+#              The replay case is what makes the rest of it evidence: the same
+#              `PollRecovered` call that unlocks after a real fingerprint does
+#              nothing when the signal is dispatched from JS with no prompt
+#              behind it, because the slot is consumed on read.
 #
 # C8-R1 was the one entry that was a defect in THIS repository rather than in
 # the product: the C8 table listed eight trigger kinds while the enum has
@@ -221,7 +244,11 @@
 # carries an artefact of either run, so nothing here can be audited against a
 # build. For E5-R23 the audit also found something no page yet carries — the
 # iOS half flags the wrong directory tree — which is a product defect rather
-# than a disagreement about a verification.
+# than a disagreement about a verification. THAT DEFECT IS CLOSED: the Swift
+# derives the tree from `PersistedStore::DIRECTORY`, the same constant
+# `UserDataPathService` reads, creates it ahead of PHP's mkdir, walks it and
+# reads every node back, and re-asserts on backgrounding for the one case an
+# excluded ancestor does not cover.
 #
 # OUTSTANDING — scoped work, not yet on the development line:
 #   F8-R1 .. F8-R28         — app-store distribution, scoped in F8 and a goal of
@@ -355,16 +382,33 @@
 # adding one it does not satisfy.
 #   A8-R26, C1-R18, C8-R22, D1-R29, D1-R30, E1-R23, E1-R24, E3-R21, E3-R22,
 #   E3-R23, E5-R26 — the eleven; E2-R22 and F3-R37 joined them on 2026-09-05
-# Two more sit in the same gap unsatisfied, so they need the ruling first:
-#   B8-R16                  — no exemption list exists in the product at all.
-#   C7-R21                  — the read path defaults an unreadable granularity
-#                             where the requirement says reject. Deliberate: a
-#                             saved report is a synced column and can arrive
-#                             from a peer on another build.
-# One requirement marked *(Open)* is in no bucket, so nothing schedules it and
-# nothing has declined it: F6-R5, which was marked open on 2026-09-05 and was in
+# Two more sat in the same gap unsatisfied and needed a ruling first. Both are
+# closed as of 2026-09-09, and one of them was never open:
+#   B8-R16                  — the entry said no exemption list existed in the
+#                             product at all. It was written before B8-R9 closed
+#                             and stale from that day: ReconciledRowExemptions is
+#                             keyed BY the requirement that mandates each
+#                             exemption, each writer carrying the pattern that
+#                             earned its place, and a guard reads the tree back
+#                             against it. That is what R16 asks for.
+#   C7-R21                  — RULED: split the boundaries, done in beatrax#484.
+#                             The read path defaulted an unreadable granularity
+#                             where the requirement says reject, and the class
+#                             doing it was right for what it was written for —
+#                             every `#[Url]` rail is reader-supplied and an
+#                             unknown one used to 500 the page. The requirement
+#                             says `stored`, which is a different boundary and
+#                             one caller of three. The stored read rejects now
+#                             and the rails still coerce; the sites that need a
+#                             concrete grouping resolve it in the open rather
+#                             than inheriting one from a factory.
+# One requirement marked *(Open)* was in no bucket, so nothing scheduled it and
+# nothing had declined it: F6-R5, which was marked open on 2026-09-05 and was in
 # no bucket within the hour — the check below caught it on its first run, which
-# is the case for having the check. Three others were on this list and are not
+# is the case for having the check. It is SATISFIED as of 2026-09-06 and says so
+# on its own page: the channel is the reader's, the pipeline publishes a preview
+# manifest, and the preview channel has an origin that can address a prerelease.
+# Three others were on this list and are not
 # any more: A8-R27's refusal records the file, the column and the value;
 # F7-R10's single export action had shipped, so the marker was cleared where it
 # stood rather than scheduled; and G7-R11's two reference tables now resolve
@@ -419,7 +463,7 @@ goals = [
   "E4-R16", "E4-R17", "E4-R18", "E4-R19", "E4-R20", "E4-R21", "E4-R22",
   "E4-R23", "E4-R24",
 
-  # ── Sync: mobile peer (landed, except R10; R24, R25 unproven) ───────────────
+  # ── Sync: mobile peer (landed; R24, R25 unproven) ───────────────────────────
   "E5-R1", "E5-R2", "E5-R3", "E5-R4", "E5-R5", "E5-R6", "E5-R7", "E5-R8",
   "E5-R9", "E5-R10", "E5-R11", "E5-R12", "E5-R13", "E5-R14", "E5-R15",
   "E5-R16", "E5-R17", "E5-R18", "E5-R19", "E5-R20", "E5-R21", "E5-R22",
