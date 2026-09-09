@@ -229,15 +229,37 @@
 # gdk_decrypt_failed row was retried during setup and never again — E1-R24 asks
 # that a recoverable reason be both retried and retired. Closed by beatrax#448.
 #
-# UNPROVEN — a verification this file asserted, and neither repository records:
-#   E5-R24     mobile local-notification delivery. The only on-device record in
-#              the product is the opposite: a Galaxy producing the inbox row and
-#              no OS banner, in a commit whose own body says it does not fix
-#              delivery. Nothing has touched the listener since.
-#   E5-R25     two-device pairing acceptance. No commit body, no runbook note,
-#              no artefact carries the run, and the baseline it names is well
-#              behind the tip, over commits that changed the pairing path. A
-#              specification asserting its own verification is not evidence.
+# UNPROVEN — the list is EMPTY as of 2026-09-10. Both names it carried are
+# closed below, and neither is repeated here, because a name in this list is
+# read as a claim that the verification is unrecorded.
+#
+#   E5-R24     CLOSED 2026-09-10. The artefact is
+#              `.docs/features/notifications/architecture.md`, section
+#              "Delivery, confirmed on hardware". Taken on the Galaxy A51, not
+#              the iPhone this file had been told about: a cash-book entry is
+#              the only on-demand trigger the product offers, and it produced
+#              the OS banner as well as the inbox row. The earlier record this
+#              entry cited — banner absent — was true of the build it was
+#              written against and is not true of this one.
+#   E5-R25     CLOSED 2026-09-10. The artefact is
+#              `.docs/features/sync/pairing-handshake.md`, section "What a run
+#              on two real devices measures". iPhone 12 mini paired to the
+#              desktop shell, both built from 71a8a8d8b, with the numbers the
+#              run produced rather than an assertion that it passed: 8,481
+#              op-log records copied, 47 tables reconciled, quarantine 0 on
+#              both sides. It also carries the one number that came out wrong,
+#              which is why it is evidence and not a claim — see below.
+#
+#              THE RUN FOUND A DEFECT AND THE ARTEFACT RECORDS IT.
+#              `tax_transaction_tags` produced zero op-log entries while both
+#              its neighbours in `CoveredTableOrder::insertionOrder()` captured
+#              normally, and seventeen rows did not cross. Quarantine stayed 0
+#              and the row counts matched, so nothing reported it; the loss is
+#              visible only against a plaintext shadow. A pairing that copies
+#              8,481 records and silently drops 17 has still satisfied R25,
+#              which is about acceptance, and has opened a defect against E1
+#              that is being fixed separately. Recording the acceptance without
+#              the hole would be the shape this file exists to stop.
 #
 # E5 records all three as taken on an iPhone 12 mini, and this file does not
 # overrule that. What it records is narrower and checkable: neither repository
@@ -463,7 +485,7 @@ goals = [
   "E4-R16", "E4-R17", "E4-R18", "E4-R19", "E4-R20", "E4-R21", "E4-R22",
   "E4-R23", "E4-R24",
 
-  # ── Sync: mobile peer (landed; R24, R25 unproven) ───────────────────────────
+  # ── Sync: mobile peer (landed) ──────────────────────────────────────────────
   "E5-R1", "E5-R2", "E5-R3", "E5-R4", "E5-R5", "E5-R6", "E5-R7", "E5-R8",
   "E5-R9", "E5-R10", "E5-R11", "E5-R12", "E5-R13", "E5-R14", "E5-R15",
   "E5-R16", "E5-R17", "E5-R18", "E5-R19", "E5-R20", "E5-R21", "E5-R22",
