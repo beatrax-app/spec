@@ -153,6 +153,30 @@ in the application and by database trigger.
 | **C8-R20** | Notification content MUST be treated as sensitive and encrypted at rest alongside other identifying text. |
 | **C8-R21** | Cross-user reads and writes MUST return not-found. |
 | **C8-R22** | The digest cadence vocabulary MUST be closed to daily, weekly, and off; it MUST be expressed as one named type rather than as free strings, and the stored column MUST be constrained to that set. It is distinct from the series cadence in [C2](c2-recurring.md) and MUST NOT share a type with it. |
+| **C8-R23** | The platform's answer to the notification permission prompt MUST be recorded when the reader gives it, and a refusal MUST be recorded as a refusal rather than as an answer still outstanding. A shell that raises the prompt MUST carry its result back on the path the platform's own plugin documents. |
+| **C8-R24** | *(Open)* A permission the reader later revokes MUST stop being reported as granted. Not yet satisfied — the mobile plugin exposes a way to request the permission and no way to read its current state, and requesting it again raises the dialog, which a background reconcile may not do ([Known gap](#known-gap--a-grant-the-reader-later-revokes)). |
+
+## Known gap — a grant the reader later revokes
+
+Once a grant is recorded, nothing checks it again. Measured on a Galaxy A51
+(2026-09-09) after revoking notifications in system settings: the operating
+system reported the permission denied while the stored row still reported it
+granted, and the application went on scheduling notifications the platform
+would silently drop.
+
+It cannot presently find out. The plugin offers a request and no read, and
+asking again is not a substitute — where the permission is genuinely revoked
+that call raises the dialog, and a reconcile the reader did not initiate must
+not put a dialog on screen.
+
+Closing it needs a permission read on both platforms. Android can answer
+synchronously, and the right question there is whether notifications are
+enabled rather than whether the permission is held: a reader who keeps the
+permission and turns the app's notifications off in settings is equally
+unreachable, and only one of those is a permission. iOS has no synchronous
+equivalent, so its half needs a value cached on activation or the plugin's
+asynchronous event pattern. A read that answers on one platform and not the
+other would leave the reconcile inert exactly where it was needed.
 
 ## Related
 
