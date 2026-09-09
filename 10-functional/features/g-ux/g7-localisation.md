@@ -108,6 +108,25 @@ something broken — which is exactly the honesty [G5-R14](g5-plain-language.md)
 requires: an untranslated string reads as English, not as a translated interface
 that silently isn't.
 
+### A sentence a reader sees whole is one line
+
+A translatable string is not the smallest piece of text a screen can name; it is
+the smallest piece a translator can move words within. A sentence assembled at
+the call site from a prefix line, a value, and a suffix line is translatable key
+by key and untranslatable as a sentence: concatenation happens in the order the
+code writes it, and that order is the grammar of whoever wrote the code.
+
+Every language then has to end the sentence where English ends it. A language
+that puts the verb after its object cannot, and neither can one whose only
+natural phrasing already carries the object as a pronoun — it names the thing
+twice. Neither is a translation error, and no per-key review finds them: every
+key exists and every key is translated.
+
+So a sentence is one line, with the parts that vary written as placeholders the
+translator can position. What the placeholder carries — a command name, a peer,
+a count — belongs where that language puts it, which is a decision only the line
+itself can express.
+
 ### English is what a locale is measured against
 
 A translation is judged against the **source locale**, and not only key by key.
@@ -171,6 +190,7 @@ transition back short of clearing the preference.
 | A key missing in English as well | A genuine defect — English coverage is the source locale's contract, not a fallback that may itself have holes. |
 | Language changed mid-session | Applies immediately, without a reload that discards the user's place. |
 | A locale whose singular equals its plural | The two screens still read differently; the title carries a distinguishing word rather than repeating the shared one. |
+| A sentence built from a prefix line, a value and a suffix line | A defect in every locale at once, including the ones that read correctly: they are correct only because their grammar happens to match English's. |
 | No time zone chosen | The machine's own zone is read, per launch; nothing is written down. |
 | The machine's zone changes | Read again on the next launch. A stored choice is not moved by it. |
 | A shipped template pinning a zone | A release blocker: every install made from it reads the packager's day. |
@@ -203,6 +223,7 @@ transition back short of clearing the preference.
 | **G7-R19** | An installation that already holds an account when the stored zone is introduced MUST be given the zone its rows were written in, rather than falling through to the machine — removing a pinned zone changes what an existing stored timestamp means, not how it is shown, and a reader who upgrades abroad would otherwise have every stored day move under them. |
 | **G7-R20** | Where a request carries no `Accept-Language`, the active locale MUST be the best supported match against the operating system's own language as the shell reports it, before falling back to English. Both mobile webviews send no such header, so on those platforms this is the only environment signal there is, and without it the option named "System" resolves to English on every device whatever the device says. |
 | **G7-R21** | A request that does name a language MUST NOT be overridden by the operating system's setting: an absent header and an unmatched one are different outcomes, and only the absent one reaches the platform. |
+| **G7-R22** | A sentence a reader sees as one sentence MUST be one translatable line with placeholders for the parts that vary, never assembled at the call site from separate lines and values. A line that a locale can only render in the source language's word order is copy pinned to a single language under G7-R11, whether or not every key it is built from has been translated. |
 
 ## Related
 
