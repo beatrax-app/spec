@@ -61,6 +61,14 @@ A failed or cancelled biometric never releases the key. An entry missing from th
 enclave — after a device restore, or an eviction — falls back cleanly to
 passphrase unlock rather than failing.
 
+Whether a device can hold the key at all is a question for the device. Having a
+biometric sensor, having one the reader has enrolled against, and having one the
+operating system will release a key to right now are three different things, and
+the operating system's name answers none of them. Where the platform says no, it
+also says why, and the refusal is recorded with its cause: the difference
+between nothing enrolled, no sensor, and a sensor locked out is the difference
+between something the reader can act on and something nobody can.
+
 A periodic passphrase re-authentication floor applies, so biometrics alone
 cannot hold a device open indefinitely.
 
@@ -185,6 +193,7 @@ v2.0 ships without an Android pass is a release call, and nobody has made it.
 | **E5-R25** | Two-device pairing MUST be verified on real hardware before the import flow is advertised as device-verified. |
 | **E5-R26** | A failure to persist the key to platform secure storage MUST fail closed: the key MUST NOT be written to the session store in cleartext as a fallback, and the failure is surfaced rather than hidden. |
 | **E5-R27** | Initial sync MUST NOT report a complete history while a peer has declared operations withheld. The expected count MUST include what was declared held, and the completion screen MUST say how many entries are held and under what condition they would arrive. |
+| **E5-R28** | Whether biometric unlock can be offered MUST be answered by the platform's own capability check and MUST NOT be inferred from the operating system. The check MUST demand the authentication the stored entry is written under, MUST refuse where the client cannot complete the write, and its refusal MUST be recorded with the cause the platform gave. |
 
 > All three hardware gates have been taken, on an iPhone 12 mini running iOS
 > 26.5.2. `E5-R24` on 2026-09-04, and `E5-R23` first on 2026-09-04 and again on
