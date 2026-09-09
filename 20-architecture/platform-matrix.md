@@ -35,6 +35,7 @@ documentation says so plainly rather than shipping something that will not run.
 | Notifications | Operating-system delivery | In-application only | Platform local notifications |
 | Theme signal | Reported by the shell | Browser preference | `prefers-color-scheme` in the webview |
 | Language signal | Reported by the shell | `Accept-Language` from the browser | Reported by the shell |
+| Request body | Read from the request | Read from the request | Captured in the page, handed over by request id |
 
 Storage paths resolve through a **single path authority**
 ([ARCH-R8](README.md#the-arch-r-namespace)), which is what makes the
@@ -64,6 +65,23 @@ to Dutch therefore rendered every screen in English, and the option named
 "System" was a promise the platform never kept. The language signal is a
 shell-reported fact on mobile, exactly like the theme signal in the row above
 it, and the shell already answers it through its device-information call.
+
+**A mobile request body is captured in the page, and the capture has to be in
+place before the page can post.** The engine hands a custom scheme handler no
+request body of its own, so the shell wraps the page's `fetch` and
+`XMLHttpRequest.send`, stores each body against a generated id, and puts that
+id on the request as a header for the interception to trade back. Installing
+that wrapper when the page finishes loading is too late for anything the page
+issues while it is still loading. Measured on a Galaxy A51: a component
+committing from its initialisation hook posted at 679 ms and the wrapper was
+installed at 688 ms, so the body was dropped and the runtime read a zero-byte
+input stream. The request was then indistinguishable from one that genuinely
+carried nothing — it was answered with not-found, the client read that as a
+failed write and reloaded the page, and the reload mounted the component again.
+The loop never converged, and nothing in it was visible in any log the
+application writes. [ARCH-R26](README.md#the-arch-r-namespace) is what closes
+it: the capture belongs ahead of the first script on the page, and a body that
+could not be recovered is reported rather than replaced with an empty one.
 
 ## The runtime version floor
 

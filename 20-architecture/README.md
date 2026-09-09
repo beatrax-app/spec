@@ -50,6 +50,7 @@ things the *shape* of the system must satisfy, which no single feature owns.
 | **ARCH-R23** | The widening MUST be opt-in and MUST default to loopback only, so a desktop or mobile bundle stays unreachable off its machine unless its operator has said otherwise. |
 | **ARCH-R24** | The widening MUST be configured by naming the interfaces served. It MUST refuse a wildcard address, a range, and a hostname, and MUST report each refused entry rather than expanding or resolving it. Where the runtime publishes no bind address, the recorded host MUST authorise the request in its place, and MUST NOT do so when that host is itself a loopback name. |
 | **ARCH-R25** | Whether the boundary is widened MUST be visible on the health surface, as state alone. The interfaces served MUST NOT appear there: once widened, that body crosses the network, where an inventory of what else is served is a disclosure rather than a diagnosis. |
+| **ARCH-R26** | A write the page issues MUST reach the application carrying its body, whenever in the page lifecycle it is issued. Where a shell cannot read a body from the request itself and recovers it from the page, that recovery MUST be in place before the first script on the page runs. A shell that cannot recover one MUST report it, and MUST NOT deliver an empty request in its place. |
 
 ## Self-hosting and the address gate
 
