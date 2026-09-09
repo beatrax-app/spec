@@ -138,6 +138,14 @@ arriving whole, and is decoded server-side into the temporary file the import
 pipeline already expects. Being ASCII, it carries binary formats as safely as
 text ones.
 
+That a JSON body arrives whole is conditional, not free. On Android the body
+is recovered from the page rather than read from the request, so it arrives
+only where that recovery was already in place when the request went out
+([ARCH-R26](../../../20-architecture/README.md#the-arch-r-namespace)). The
+measurement above was taken on a user-initiated upload, which is issued long
+after the page has loaded; a write issued while the page was still loading was
+separately measured arriving as zero bytes.
+
 This is a **transport**, not a second import path. The file that reaches the
 parser, the preview it produces, the verdicts, the confirm boundary and every
 rule above are identical on every platform — which is the property that makes
