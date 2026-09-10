@@ -27,6 +27,7 @@ that follow.
 | **Script injected via rendered financial text** | A nonce-based Content-Security-Policy on authenticated responses, so bank- and email-derived text renders as data and cannot execute even if an output sink is missed |
 | **Injection through the developer console** | Registry allow-list, argument escaping, and controller validation — three independent guards |
 | **Spreadsheet formula injection in exports** | Escaping on every free-text cell |
+| **Online guessing of the account password** | A per-username rate limit on sign-in, enforced in the action rather than on the route because the credential arrives on the Livewire update endpoint ([F3-R38](../10-functional/features/f-platform/f3-auth-and-app-lock.md#acceptance-criteria)). The offline case is separate and is bounded by the memory-hard derivation ([F3-R36](../10-functional/features/f-platform/f3-auth-and-app-lock.md#acceptance-criteria)). |
 | **Enumeration of accounts** | Constant messages, not-found rather than forbidden, audit rows that record no user on an unknown-username failure, and equal work on the account-not-found path so timing does not distinguish it ([F3-R34](../10-functional/features/f-platform/f3-auth-and-app-lock.md#acceptance-criteria)) |
 
 ### Explicitly out of scope

@@ -35,6 +35,16 @@ non-owner, never forbidden, so the surface stays hidden from probing.
 
 Passwords have a minimum length enforced on every write path.
 
+**Sign-in is metered.** It is the one credential gate that leads straight to
+the ledger, and it was for a long time the only one with no cap on how often it
+could be tried: recovery is capped, and a wrong code escalates a backoff and
+signs the user out at a hard cap. The account password now has a cap of its
+own, counted per username so that an unknown one is metered exactly like a
+known one and the counter answers nothing about which it was. It is a ceiling
+on a machine's rate, not a lockout — the window is short enough that a reader
+who has mistyped their own password waits seconds, and the whole of it is
+released by a successful sign-in.
+
 The forced-change guard exempts the change-password page and sign-out, so a
 flagged user can always either comply or leave.
 
@@ -134,6 +144,7 @@ needs the key that a locked session does not have.
 | A reused recovery code | Invisible; the constant mismatch message fires. |
 | Probing for a partner that does not exist | Not-found, identical to the not-owner response. |
 | A corrupted key wrap | Non-counting failure, plus an alert. |
+| A wrong password repeatedly | Metered per username; further attempts are refused for the rest of the window. |
 | A wrong code repeatedly | Escalating backoff, then sign-out and an alert. |
 | A biometric failing repeatedly | That credential disarms until the next code unlock. |
 | A locked session receiving a biometric enrolment request | Refused — enrolment is not exempt. |
@@ -181,6 +192,7 @@ needs the key that a locked session does not have.
 | **F3-R35** | A password change or recovery reset MUST invalidate the account's other sessions. |
 | **F3-R36** | The app-lock wraps of the data key MUST use a memory-hard KDF at MODERATE limits, and the PIN MUST be six to ten digits, so a stolen database file resists offline brute-force of the wrap key. Operating-system key custody (F3-R33) now stands beside it on macOS, Windows, iOS, Android and keyring-backed Linux; where the platform offers no store that protects, this is the whole defence. |
 | **F3-R37** | Custody MUST NOT fail closed where the platform key store is absent, unreachable, or does not protect what it holds. An absent or unreachable store MUST degrade to session custody; a store that answers but does not protect MAY keep the key, and MUST be reported as providing no protection at rest. In every such case the custodian MUST report the custody it is actually providing, and nothing may claim a protection it is not being given. A store that is present and refuses a write is none of these: it MUST fail closed rather than let the raw key land in a persisted session. |
+| **F3-R38** | Sign-in with the account password MUST be rate-limited. The limit MUST be counted on the username as typed and normalised, so an unknown username is metered identically to a known one and the limiter reveals nothing about which it was; it MUST be enforced in the action rather than on the route, because the credential arrives on the Livewire update endpoint that route middleware does not cover; and a successful sign-in MUST clear it. The refusal MUST NOT distinguish a throttled known username from a throttled unknown one ([F3-R13](#acceptance-criteria), [F3-R34](#acceptance-criteria)). |
 
 > **`F3-R33` landed on 2026-09-05**, the same day the deferral it was carried
 > under was reversed. "Registered but not yet wired" had been stale for months:
