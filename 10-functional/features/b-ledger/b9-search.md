@@ -15,7 +15,8 @@ transaction with this word in the note" across years of data, fast.
 
 ### An index kept in lockstep with writes
 
-A full-text index covers counterparty name, description, and tax note. It is
+A full-text index covers counterparty name, description, the transaction's own
+note, each split leg's note, and the tax note. It is
 updated **synchronously, in the same transaction as the write that caused it** —
 not on a queue, not on a schedule.
 
@@ -77,12 +78,14 @@ with token autocompletion and recent searches.
 | A reindex that ends with a count mismatch | Non-zero exit; treated as a failure. |
 | An amount query | Matches against the stored minor-unit amounts directly, never a second money representation. |
 | A tax note edited | The index updates in the same write. |
+| A note the reader wrote before this was indexed | A forward migration composes it into the body; on a sealed ledger the write is deferred rather than the body emptied. |
+| Several legs of one split carrying notes | Each is its own field, so a match cannot span two legs. |
 
 ## Acceptance criteria
 
 | ID | Requirement |
 |----|-------------|
-| **B9-R1** | The index MUST cover the counterparty name as stored, the description, and the tax note. It MUST NOT carry the alias-resolved display name (B4-R15), which has no write on the transaction to key a refresh to. |
+| **B9-R1** | The index MUST cover the counterparty name as stored, the description, the transaction's own note, each split leg's note, and the tax note. It MUST NOT carry the alias-resolved display name (B4-R15), which has no write on the transaction to key a refresh to. |
 | **B9-R18** | Where a stored name and its resolved display name differ, the search surface MUST say that matching is against the statement's own text, so a reader who renamed a merchant is not told the transactions do not exist. |
 | **B9-R2** | The index MUST be updated synchronously in the same transaction as the write that caused it. |
 | **B9-R3** | An index write failure MUST roll back the causing write; it MUST NOT be swallowed. |

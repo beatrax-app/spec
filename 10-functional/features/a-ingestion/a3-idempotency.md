@@ -117,8 +117,9 @@ original migration — and the re-derivation is itself idempotent.
 
 | ID | Requirement |
 |----|-------------|
-| **A3-R1** | Every transaction MUST carry a fingerprint derived from user, account, booking and posting dates, amount, currency, and normalised counterparty name. |
+| **A3-R1** | Every transaction MUST carry a fingerprint derived from user, account, booking and posting dates, amount, currency, normalised counterparty name, and which occurrence of that tuple the row is within the file it arrived in. |
 | **A3-R2** | The source reference MUST NOT contribute to the fingerprint. |
+| **A3-R20** | The occurrence number MUST be derived from the file's own contents and row order alone, so two devices importing one statement compute the same number for the same row, and MUST take part in the stored uniqueness constraint as well as the fingerprint. |
 | **A3-R3** | Counterparty normalisation MUST lower-case, strip diacritics, collapse punctuation, trim, and truncate to a bounded length. |
 | **A3-R4** | A missing, empty, or punctuation-only counterparty name MUST be replaced by a literal sentinel so the uniqueness constraint remains effective. |
 | **A3-R5** | A uniqueness constraint on user, account, and fingerprint MUST exist; idempotency MUST NOT rely on application-level checks alone. |
