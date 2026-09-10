@@ -257,6 +257,7 @@ it were not.
 | **F8-R6** | No signing key, credential, or other secret may appear inside a shipped mobile bundle, verified by inspecting the built artefact rather than the exclusion rules. |
 | **F8-R7** | No database carrying data may ship inside a mobile bundle, verified by inspecting the built artefact. |
 | **F8-R8** | Every shipped mobile bundle MUST resolve to production environment settings, and the developer console MUST NOT be reachable on one. |
+| **F8-R29** | No shipped mobile bundle may enable remote inspection of its web view. Where the platform offers the setting, it MUST be read from the platform's own debuggable flag rather than from a constant, so a development build keeps the inspection the device work depends on and a release build does not carry it. |
 | **F8-R9** | Every iOS submission MUST carry a privacy manifest declaring exactly the required-reason API categories the shipped binary's symbols trip, and no others. |
 | **F8-R10** | The privacy manifest MUST declare tracking as false, and MUST omit rather than empty the collected-data-types and tracking-domains keys. |
 | **F8-R11** | Every iOS submission MUST declare non-exempt encryption, and a country requiring its own encryption declaration MUST NOT be a release territory until that declaration is filed and its code ships in the bundle. |
