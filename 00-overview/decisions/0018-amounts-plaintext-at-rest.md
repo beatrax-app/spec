@@ -39,8 +39,11 @@ notes; split-leg notes; notification title, body, parameters, and trigger type.
   because SQL aggregation over them is load-bearing across the whole product.
 - **Dates, account references, and type enums**, for the same reason.
 - **The full-text search index body**, which is a disclosed plaintext shadow of
-  the encrypted description and counterparty columns. It is written by decrypting
-  first, precisely so search works at all.
+  several of the encrypted columns above. It is written by decrypting first,
+  precisely so search works at all. Which columns it covers is stated by
+  [B9-R1](../../10-functional/features/b-ledger/b9-search.md) and not restated
+  here — the list has grown since this decision was taken, and a second copy of
+  it is how a disclosure comes to understate itself.
 
 Three further plaintext exceptions are knowingly accepted and named rather than
 hidden: the recurring detector's cluster key, the migration importer's baseline
