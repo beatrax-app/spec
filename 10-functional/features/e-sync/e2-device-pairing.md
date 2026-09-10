@@ -36,6 +36,26 @@ mandatory — not a dismissible advisory.
 
 Pairing tokens are stored hashed, are single-use, and expire.
 
+### A code is only worth showing if it can be answered
+
+Showing a code is not the whole ceremony: the device that scans it has to send
+its acceptance back. It can do that only where the showing device accepts a
+pairing frame directly, or where the code carries a relay to leave the frame
+with. A device that does neither is offering a code nobody can answer.
+
+That failure is quiet and looks like success. The scan reads the payload, and
+the safety number derives from the two public identities alone — so the
+scanning device can display six words and ask its user to confirm them, while
+the device that showed the code has heard nothing at all and never leaves the
+step it is on. The token then expires with both users believing they were
+mid-ceremony.
+
+Only one side of a pairing listens ([E3](e3-transport.md)), so this is not a
+corner case: two devices that can only scan can never pair with each other,
+however correct each half looks on its own screen. A device in that position
+says so and names the direction that does work, rather than drawing a code and
+a countdown.
+
 ### The device list
 
 Every paired device appears with a name, a last-seen time, and its own
@@ -172,6 +192,7 @@ A pairing moves `pending` → `awaiting_confirm` → `confirmed`, falling to
 | **E2-R20** | Catch-up MUST NOT send an operation whose author the receiving device has declared it cannot verify, and MUST report to that device how many operations were withheld and for which author. The count MUST be taken over the authors the answering device could have served (E2-R22), so that an author it can verify and the asker cannot is reported rather than absent. The report MUST reach a reader on the receiving device whether or not an identity for that author accompanies it. |
 | **E2-R21** | A catch-up cursor MUST NOT advance over an operation whose author the receiving device could not verify, so that confirming an introduction later still delivers it. |
 | **E2-R22** | Catch-up MUST serve operations for every author the answering device holds a signing key for — a device it paired with, in any state of that pairing, and a device it holds only through a confirmed introduction — narrowed by what the receiving device has declared it can verify (E2-R20). The answering device MUST NOT relay that author's identity onward: only a device it has itself paired with may be introduced. |
+| **E2-R23** | A device offering to show a pairing code MUST be answerable by the device that scans it: it MUST either accept a pairing frame directly or carry a relay in the payload. A device that can do neither MUST NOT offer to show a code, and MUST name the direction that can complete instead. |
 
 > **`E2-R18` through `E2-R21` are satisfied**, and `E2-R22` with them. The four
 > shipped on 2026-09-05 and were hardened the same day: the withheld count now
