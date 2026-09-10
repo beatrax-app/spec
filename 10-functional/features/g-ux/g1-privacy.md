@@ -109,6 +109,7 @@ Data locations, export, and deletion are first-class and documented in
 | **G1-R9** | The community corpus MUST ship inside the application; no corpus fetch may occur. |
 | **G1-R10** | Every non-loopback request MUST be refused with not-found. A gate the operator has explicitly widened ([ARCH-R22](../../../20-architecture/README.md)) is the one exception; a bundle nobody has widened MUST refuse. This governs the application's own HTTP surface; the sync listener is a separate process on its own port, deliberately not loopback-bound, whose gate is the mutually-authenticated handshake ([E3](../e-sync/e3-transport.md)). |
 | **G1-R11** | Every authenticated response MUST carry a no-store cache directive. |
+| **G1-R21** | Every authenticated response MUST carry the application's Content-Security-Policy, and a layer nearer the route MUST NOT be able to replace it. Where such a layer needs a different value it MUST be able to narrow a named directive and nothing else, from a closed set the base policy declares; a directive outside that set, or one carrying no sources, MUST be discarded rather than honoured. |
 | **G1-R12** | The offline application shell MUST NOT cache financial pages. |
 | **G1-R13** | External links MUST pass an HTTPS check and a host allow-list before being opened. |
 | **G1-R14** | The product's own copy MUST state that at-rest encryption leaves amounts, dates, and the search index in plaintext. |
