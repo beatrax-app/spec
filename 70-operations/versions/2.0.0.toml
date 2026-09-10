@@ -571,6 +571,9 @@ goals = [
   # ── The capability the device is asked about (landed 2026-09-09) ───────────
   "E5-R28",
 
+  # ── A code nobody can answer is not offered (opened 2026-09-10) ────────────
+  "E2-R23",
+
   # ── Defined by this release, landed, and in no bucket until now ────────────
   # Added to their feature pages after the blocks above were written, so nothing
   # listed them and nothing could report on them. E1-R23 and E1-R24 were once
