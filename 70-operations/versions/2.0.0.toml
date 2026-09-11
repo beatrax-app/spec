@@ -574,6 +574,9 @@ goals = [
   # ── A code nobody can answer is not offered (opened 2026-09-10) ────────────
   "E2-R23",
 
+  # ── A restated amount is a disagreement, not a second row (opened 2026-09-11) ─
+  "A3-R21",
+
   # ── Defined by this release, landed, and in no bucket until now ────────────
   # Added to their feature pages after the blocks above were written, so nothing
   # listed them and nothing could report on them. E1-R23 and E1-R24 were once
