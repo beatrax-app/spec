@@ -48,8 +48,8 @@ Open the reconcile surface, pick an account, enter the closing balance the
 statement shows and the date it applies to. Beatrax shows its own cleared
 balance and **the difference**.
 
-- **Zero.** Complete the reconciliation. Every cleared row up to that date
-  becomes reconciled and locks against further change.
+- **Zero.** Complete the reconciliation. Every cleared row up to that date in the
+  statement's own currency becomes reconciled and locks against further change.
 - **Not zero.** The difference is shown plainly with the cleared set visible.
   Nothing is auto-corrected — that is the user's investigation, and Beatrax's job
   is to make it findable rather than to guess.
