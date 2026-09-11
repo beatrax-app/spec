@@ -25,15 +25,18 @@ worst thing wins:
 | **Error** | Something failed and needs attention. |
 | **Syncing** | An exchange is in progress. |
 | **Offline** | No peer is reachable. |
+| **Refused** | An operation a peer sent arrived here, was refused, and nothing will take it again. |
 | **Withheld** | A peer is holding changes back because this device cannot verify who signed them. |
+| **Held** | An operation a peer sent arrived here and could not be applied yet; nothing is lost. |
 | **Behind** | This device holds changes no peer has yet. |
 | **All synced** | Every known device is up to date. |
 | **Unknown** | Not enough information yet. |
 
-Error outranks syncing, which outranks offline, which outranks withheld, which
-outranks behind and all-synced, which outrank unknown. A device that is behind
-must never let the overall status read as all-synced, and neither must one whose
-peer is holding changes back.
+Error outranks syncing, which outranks offline, which outranks refused, which
+outranks withheld, which outranks held, which outranks behind and all-synced,
+which outrank unknown. A device that is behind must never let the overall status
+read as all-synced; neither must one whose peer is holding changes back, nor one
+holding a refusal of its own.
 
 **Behind** exists because the table did not previously have a word for it. A
 device holding an undelivered change with no exchange under way is not syncing
@@ -62,6 +65,44 @@ act at all: a device may carry an author's history and still be unable to vouch
 for that author's identity, so for that author no device in the household has a
 confirmation to offer ([E2-R22](e2-device-pairing.md#acceptance-criteria)). The
 state has to be reported in a way that is true of both.
+
+### What arrived here and was turned away
+
+*Behind* and *Withheld* are both questions about the outbound queue: what this
+device has not sent, and what a peer will not send. Neither asks the question a
+reader actually means by "is my data here" — whether something a peer *did* send
+arrived and was refused. Computed from the outbound queue alone, the aggregate
+read *all synced* on a device holding 65 refused operations across 20 distinct
+records.
+
+So a refusal recorded here is a state of its own, and there are two of them,
+split by what clears them rather than by how many there are. **Refused** is a
+refusal nothing will take again: the two devices hold different things and no
+exchange closes the gap. **Held** is one a later pass can still answer, so
+nothing is lost yet. A loss and a wait are different facts about a reader's
+data, and one count standing for both is the sum of the two.
+
+They rank where what-clears-them puts them, the rule the withheld line is
+already ranked on. *Refused* outranks *Withheld*, because a hold can end when an
+author is confirmed and a refusal nothing retries ends at nothing. *Held* ranks
+below *Withheld* and above *Behind*. Both sit below *Offline*, because an
+unreachable peer is why nothing is moving at all, and neither is an *Error* — a
+refusal recorded is the merge layer working, not a fault.
+
+Both are asked only once every exchange has closed cleanly. Error, syncing and
+offline claim no agreement, so a refusal has nothing there to contradict.
+
+Counted as **records**, not as entries. A create is captured per field
+([E1](e1-change-capture.md)), so the eight entries one refused transaction
+produces are one record missing from this device; counting entries overstates
+the damage by the width of the table.
+
+And the copy for a held refusal names a condition, never an act. A recoverable
+reason is meant to be retried and retired
+([E1-R24](e1-change-capture.md#acceptance-criteria)); where nothing yet does,
+copy saying a change is waiting to be retried promises the reader a future the
+device will not deliver. It says the change has not been applied here yet, and
+stops.
 
 ### Last-synced, per device
 
@@ -102,6 +143,9 @@ sit in one place, so "how is sync configured" is one screen rather than four.
 | A device both behind and being held from | Status is withheld: the one of the two that the next exchange will not clear. |
 | An author confirmed since the last exchange | The hold clears at once, without waiting for another exchange. |
 | A hold whose author no device can vouch for | Reported with its count; no action is offered, and none is implied. |
+| An operation that arrived and was refused for good | Status is refused, not all-synced: the two devices hold different things. |
+| An operation that arrived and cannot be applied yet | Status is held, not all-synced; nothing is lost, and no retry is promised. |
+| A device both holding a refusal and behind | Status is the refusal: an unsent change leaves on the next exchange, and a refusal is not what an exchange clears. |
 
 ## Acceptance criteria
 
@@ -123,6 +167,9 @@ sit in one place, so "how is sync configured" is one screen rather than four.
 | **E6-R14** | The withheld state MUST outrank behind, and MUST rank below offline. |
 | **E6-R15** | The aggregate status and the per-peer withheld detail MUST be derived from one classification of what is still held, so a reader who confirms an author is never told a hold has ended on one surface and not on another. A hold MUST NOT outlive the device that reported it. |
 | **E6-R16** | Copy describing a hold MUST NOT assert an action the reader can always take. A hold whose author no peer is able to vouch for offers no confirmation at all, and the wording MUST stay true in that case. |
+| **E6-R17** | The aggregate status MUST account for operations that arrived at this device and were refused, not only for work this device has yet to send and work a peer is withholding; an empty outbound queue MUST NOT on its own read as all-synced. A refusal nothing will take again and one a later pass can still answer MUST be separate states carrying separate counts, and those counts MUST be of records rather than of captured entries. |
+| **E6-R18** | A refusal nothing will take again MUST outrank withheld; one a later pass can still answer MUST rank below withheld and above behind. Both MUST rank below offline, and each MUST read as a state of its own rather than as an error. |
+| **E6-R19** | Copy describing a refusal a later pass could still answer MUST NOT state that it will be retried while nothing retries it. Until a recoverable reason is both retried and retired ([E1-R24](e1-change-capture.md#acceptance-criteria)), the copy MUST name the condition — that the change has not been applied here yet — and stop. |
 
 > **`E6-R13` through `E6-R16` are satisfied** as of 2026-09-05, and the last of
 > the four is why the ranking is worded as it is: they were built against the
@@ -135,6 +182,19 @@ sit in one place, so "how is sync configured" is one screen rather than four.
 > removed device's last declared count had no writer left to revise it, so a
 > hold could outlive the peer that reported it and pin the aggregate to a
 > report nothing could move.
+>
+> **`E6-R17` and `E6-R18` are satisfied** as of 2026-09-12. The settled arm asks
+> the quarantine before it asks the outbound queue, and the two states rank
+> between offline and behind exactly where `E6-R2` and `E6-R14` already put the
+> boundary, so neither of those needed an edit to admit them. The counting
+> clause has been checked on hardware and not only in code: on a handset rebuilt
+> against the merged build, one pass took the held total from 65 entries to 8
+> and the status line reported **8**, equal to the distinct
+> `table_name`-and-key count read from the same database. What separates the two
+> ways of counting is the earlier measurement on that same handset — 65 entries
+> standing for 20 distinct records — where reporting entries would have told the
+> reader more than three times what was actually missing. `E6-R19` holds today
+> and is scoped to a condition now being closed.
 
 ## Related
 

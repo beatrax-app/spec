@@ -36,7 +36,10 @@ date. Beatrax shows the cleared balance it computes up to that date and the
 difference between the two.
 
 - **Zero difference** — the user completes the reconciliation, and every cleared
-  row up to that date becomes reconciled in one operation.
+  row up to that date **in the currency the statement was matched against**
+  becomes reconciled in one operation. An account can settle in more than one
+  money and a statement is printed in one of them; a row in another was never in
+  the figure that matched, so locking it would lock what nothing checked.
 - **Non-zero difference** — the difference is shown plainly, with the cleared
   set visible so the user can find what is missing or wrongly cleared. Nothing
   is auto-corrected.
@@ -90,7 +93,7 @@ uncleared ──▶ cleared ──▶ reconciled
 | Re-importing a reconciled period | Status untouched. |
 | A reconciled row targeted by a rule re-apply | Skipped. |
 | Clearing a row on one device and un-clearing on another | Resolved by last-writer-wins on the status field. |
-| An account with mixed currencies | The cleared balance sums minor units directly and assumes a single currency per account; a mixed-currency account is outside what the figure can express. |
+| An account with mixed currencies | The balance reports one figure per settled currency and never sums across them (B8-R15). The reconcile screen matches the statement's line, and completing it locks that line's rows only. |
 
 ## Acceptance criteria
 
@@ -100,7 +103,7 @@ uncleared ──▶ cleared ──▶ reconciled
 | **B8-R2** | The import default MUST depend on the source's strength as evidence. |
 | **B8-R3** | The user MUST be able to toggle a row between uncleared and cleared from both the list and the detail view. |
 | **B8-R4** | The reconcile flow MUST accept a statement balance and a date and MUST show the computed cleared balance and the difference. |
-| **B8-R5** | Completing a reconciliation MUST transition every cleared row up to the date to reconciled in one operation. |
+| **B8-R5** | Completing a reconciliation MUST transition every cleared row up to the date **in the currency the statement was matched against** to reconciled in one operation, and MUST leave the account's other currency lines untouched (B8-R15). That currency MUST be a required input to the write rather than a defaulted one, and the count deciding whether completion is offered MUST be narrowed the same way. |
 | **B8-R6** | The bulk transition MUST re-derive the affected set inside the operation. |
 | **B8-R7** | A non-zero difference MUST be surfaced plainly and MUST NOT be auto-corrected. |
 | **B8-R8** | Un-reconciling MUST return rows to cleared. |
