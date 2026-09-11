@@ -83,6 +83,26 @@ encrypted-search design is ever worth its cost is unasked.
 
 *In: [ADR-0018](../00-overview/decisions/0018-amounts-plaintext-at-rest.md#revisit-if)*
 
+### Should pairing refuse to complete over unreconcilable key material?
+
+Two devices that each enabled at-rest encryption before pairing hold different
+blind-index keys, and nothing rotates that key, so the pair is in a standoff the
+ceremony never mentions
+([E4](../10-functional/features/e-sync/e4-at-rest-encryption.md#the-one-key-that-never-rotates)).
+The reader learns on a later sync pass instead — which is now reported once and
+honestly (`E4-R26`, `E4-R27`), and which is still after the fact.
+
+The ceremony could ask the question before it completes, and tell the reader at
+the moment they can still choose which device to set up again. Nothing outside
+the sync module's key handling asks it at all today, and nothing has been
+decided: reporting after the fact is a defensible design, and refusing a pairing
+the reader deliberately asked for is not obviously the better one. Writing it as
+a requirement would settle a call nobody has made, so it is recorded here
+instead.
+
+*In: [E4](../10-functional/features/e-sync/e4-at-rest-encryption.md#the-one-key-that-never-rotates) ·
+[E2](../10-functional/features/e-sync/e2-device-pairing.md)*
+
 ### Should the hand-built transport handshake be replaced?
 
 It is vector-validated, and it is the highest-risk component in the product. If

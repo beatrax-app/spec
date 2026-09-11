@@ -94,6 +94,38 @@ Removing a device:
 Epoch delivery is idempotent on the epoch identity: a device that already has it
 drops the duplicate with a warning and never logs key material.
 
+### The one key that never rotates
+
+Recognising the same shop across two rows without reading either needs a keyed
+digest, so counterparty matching carries a **blind-index key**. That key is not
+an epoch. It is minted once beside the first epoch, it is single-valued, and
+nothing rotates it — rotation is what an epoch has, and an index that moved with
+a rotation would stop matching every row written before it.
+
+The consequence falls on two devices that each enabled encryption *before* they
+were paired. Each holds its own key and each already has rows keyed under it, so
+neither may adopt the other's: whichever gave way would orphan the digests only
+it can read. Removing a device and pairing it again brings the same key back to
+the same standoff, because nothing rotates it. Re-pairing is not a recovery.
+
+The wrap carrying the peer's key therefore arrives, is declined, and arrives
+again on the next pass, for as long as the two devices stay paired. A refusal
+reported per delivery attempt is a log line nobody reads; reported once it is a
+fact about the household. So it is raised **once per divergence**, to the
+reader's alerts rather than to the log alone, and withdrawn when the two keys
+are next found to agree — which is the only evidence either device ever gets
+that the split has ended. An alert that outlives the fault it reported teaches
+the reader to dismiss the next one unread.
+
+What the copy may say is bounded by what a reader can reach. A bulk
+re-derivation of the keyed columns exists in code, but it runs once in an
+install's life behind a marker both devices stamped at enable time, and no
+screen reaches it. Naming it sends the reader looking for a control that is not
+there. The only recovery that exists is to set one device up again and let it
+take its copy from the other, and that is what the copy says. It is the rule
+[E6-R16](e6-sync-status.md#acceptance-criteria) states for a withheld hold,
+applied to key material instead of to withheld operations.
+
 ### Passphrase changes re-wrap
 
 Changing the passphrase re-wraps the keyring rather than re-encrypting the data.
@@ -163,6 +195,8 @@ an answer in either direction.
 | A crash mid-keyring-write | The staged file is not renamed; the previous keyring stands. |
 | A failed passphrase re-wrap | Raises a critical alert rather than failing silently. |
 | A payload that cannot be decrypted under any epoch | Quarantined ([E1](e1-change-capture.md)). |
+| Two devices holding different blind-index keys, each with rows keyed under its own | Neither adopts the other's; the divergence is reported once and withdrawn when the keys agree. |
+| A device removed and paired again after such a divergence | The same key returns; nothing rotates it, so re-pairing is not a recovery. |
 | Re-running the migration | Row-level idempotent by real verification. |
 
 ## Acceptance criteria
@@ -194,11 +228,14 @@ an answer in either direction.
 | **E4-R23** | *(Withdrawn)* Unwired operating-system key custody MUST be documented as outstanding rather than implied to work. Withdrawn 2026-09-05: custody is wired on both shells, so there is no unwired custody left to document. What stands in its place — a platform store that answers and does not protect — is [F3-R37](../f-platform/f3-auth-and-app-lock.md#acceptance-criteria). |
 | **E4-R24** | *(Withdrawn)* The absence of a mobile backup-exclusion bridge MUST be documented. Withdrawn 2026-09-05: the bridge exists and the mobile build applies it, so there is no absence left to document. What the requirement was for moves to `E4-R25`. |
 | **E4-R25** | The mobile backup-exclusion bridge's reach MUST be documented per platform: what it excludes, whether the build applies it or a person must, and any path holding user data that it does not cover. |
+| **E4-R26** | Key material the design never rotates MUST either converge across the group or have its divergence reported to the reader. Where two devices hold different values for a single-valued key and neither may adopt the other's without orphaning rows only it can read, the refusal MUST be reported once per divergence rather than once per delivery attempt, and MUST be withdrawn when the two are next found to agree. |
+| **E4-R27** | Copy describing a key divergence MUST NOT name a remedy no surface reaches. Where a re-derivation exists in code that nothing a reader can operate will run, the copy MUST NOT name it; where rebuilding one device from its peer is the only recovery left, the copy MUST say so. |
 
 ## Related
 
 - [ADR-0018](../../../00-overview/decisions/0018-amounts-plaintext-at-rest.md) — read this alongside
 - [E1 Change capture](e1-change-capture.md) · [E2 Device pairing](e2-device-pairing.md) · [E3 Transport](e3-transport.md)
+- [E6-R16](e6-sync-status.md#acceptance-criteria) — the same rule about copy, for a withheld hold
 - [F3 Authentication and app-lock](../f-platform/f3-auth-and-app-lock.md) — the release gate
 - [F4 Backup and restore](../f-platform/f4-backup-restore.md)
 - [40-quality/security.md](../../../40-quality/security.md)
