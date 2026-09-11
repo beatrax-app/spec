@@ -59,9 +59,17 @@ Deletes win over concurrent edits by default, per table.
 
 ### Imported rows deduplicate by fingerprint
 
-Two devices importing the same statement converge because the fingerprint
-already made that idempotent ([A3](../a-ingestion/a3-idempotency.md)). The sync
-layer inherits the property rather than reinventing it.
+The fingerprint describes a **local** row: it is derived from the account, and
+two devices mint their own account ids ([A3-R1](../a-ingestion/a3-idempotency.md)).
+So two devices holding one transaction hold two different digests, and the same
+statement imported separately on each produces no shared key.
+
+Convergence is inherited all the same, but one step later than it reads. The row
+travels as a create, the arriving account id is translated to the local one, and
+the digest is re-derived against the row it now describes. A later import of that
+statement then meets a fingerprint it matches. The sync layer inherits import's
+idempotency rather than reinventing it; what it adds is the translation that
+makes the inherited key apply here.
 
 ### The replayer never throws
 
