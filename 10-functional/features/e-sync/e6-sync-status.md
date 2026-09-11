@@ -169,7 +169,7 @@ sit in one place, so "how is sync configured" is one screen rather than four.
 | **E6-R16** | Copy describing a hold MUST NOT assert an action the reader can always take. A hold whose author no peer is able to vouch for offers no confirmation at all, and the wording MUST stay true in that case. |
 | **E6-R17** | The aggregate status MUST account for operations that arrived at this device and were refused, not only for work this device has yet to send and work a peer is withholding; an empty outbound queue MUST NOT on its own read as all-synced. A refusal nothing will take again and one a later pass can still answer MUST be separate states carrying separate counts, and those counts MUST be of records rather than of captured entries. |
 | **E6-R18** | A refusal nothing will take again MUST outrank withheld; one a later pass can still answer MUST rank below withheld and above behind. Both MUST rank below offline, and each MUST read as a state of its own rather than as an error. |
-| **E6-R19** | Copy describing a refusal a later pass could still answer MUST NOT state that it will be retried while nothing retries it. Until a recoverable reason is both retried and retired ([E1-R24](e1-change-capture.md#acceptance-criteria)), the copy MUST name the condition — that the change has not been applied here yet — and stop. |
+| **E6-R19** | Copy describing a refusal a later pass could still answer MUST NOT promise the reader an outcome the device cannot guarantee. A reason being retried is not a hold clearing: an operation that fails again is recorded afresh by the pass that replayed it. The copy MUST therefore name the condition — that the change has not been applied here yet — rather than the retry. |
 
 > **`E6-R13` through `E6-R16` are satisfied** as of 2026-09-05, and the last of
 > the four is why the ranking is worded as it is: they were built against the
@@ -193,8 +193,10 @@ sit in one place, so "how is sync configured" is one screen rather than four.
 > `table_name`-and-key count read from the same database. What separates the two
 > ways of counting is the earlier measurement on that same handset — 65 entries
 > standing for 20 distinct records — where reporting entries would have told the
-> reader more than three times what was actually missing. `E6-R19` holds today
-> and is scoped to a condition now being closed.
+> reader more than three times what was actually missing. `E6-R19` is satisfied
+> and no longer conditional: every recoverable reason is reopened by an event the
+> device can observe, and what the requirement bars is a promise the copy does
+> not make.
 
 ## Related
 
