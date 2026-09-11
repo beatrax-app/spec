@@ -182,6 +182,18 @@ sit in one place, so "how is sync configured" is one screen rather than four.
 > removed device's last declared count had no writer left to revise it, so a
 > hold could outlive the peer that reported it and pin the aggregate to a
 > report nothing could move.
+>
+> **`E6-R17` and `E6-R18` are satisfied** as of 2026-09-12. The settled arm asks
+> the quarantine before it asks the outbound queue, and the two states rank
+> between offline and behind exactly where `E6-R2` and `E6-R14` already put the
+> boundary, so neither of those needed an edit to admit them. The counting
+> clause has been checked on hardware and not only in code: on a handset rebuilt
+> against the merged build, one pass took the held total from 65 entries to 8
+> and the status line reported **8**, equal to the distinct
+> `table_name`-and-key count read from the same database. What separates the two
+> ways of counting is the earlier measurement on that same handset — 65 entries
+> standing for 20 distinct records — where reporting entries would have told the
+> reader more than three times what was actually missing.
 
 ## Related
 

@@ -231,6 +231,20 @@ an answer in either direction.
 | **E4-R26** | Key material the design never rotates MUST either converge across the group or have its divergence reported to the reader. Where two devices hold different values for a single-valued key and neither may adopt the other's without orphaning rows only it can read, the refusal MUST be reported once per divergence rather than once per delivery attempt, and MUST be withdrawn when the two are next found to agree. |
 | **E4-R27** | Copy describing a key divergence MUST NOT name a remedy no surface reaches. Where a re-derivation exists in code that nothing a reader can operate will run, the copy MUST NOT name it; where rebuilding one device from its peer is the only recovery left, the copy MUST say so. |
 
+> **`E4-R26` and `E4-R27` are satisfied** as of 2026-09-12. The divergence is
+> raised through an alert row that is itself the idempotence key, so the report
+> and the log line beside it have one cardinality between them and neither can
+> be made to repeat per pass. It is withdrawn from the single branch that proves
+> the split ended — a wrap arriving with a key equal to the one already held —
+> because an alert only a reader can close, for a fault that fixed itself,
+> teaches them to dismiss the next one unread. Both halves are pinned by test,
+> the withdrawal included, and so are the two paths where the alert row itself
+> cannot be written or taken down: a divergence nobody can resolve is worth
+> reporting twice rather than losing to a failed write. The copy names setting
+> one device up again from its peer and does not name the bulk re-derivation,
+> which still has exactly one production caller behind a marker both devices
+> stamp at enable time.
+
 ## Related
 
 - [ADR-0018](../../../00-overview/decisions/0018-amounts-plaintext-at-rest.md) — read this alongside
