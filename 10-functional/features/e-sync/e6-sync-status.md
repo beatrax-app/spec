@@ -193,7 +193,8 @@ sit in one place, so "how is sync configured" is one screen rather than four.
 > `table_name`-and-key count read from the same database. What separates the two
 > ways of counting is the earlier measurement on that same handset — 65 entries
 > standing for 20 distinct records — where reporting entries would have told the
-> reader more than three times what was actually missing.
+> reader more than three times what was actually missing. `E6-R19` holds today
+> and is scoped to a condition now being closed.
 
 ## Related
 
