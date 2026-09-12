@@ -116,6 +116,15 @@ pre-restore snapshot. A refused restore leaves no snapshot, because it leaves
 nothing at all. A restore that migrates and then swaps is not a refusal, and
 takes its snapshot like any other.
 
+The second thing it may not take with it is the reader's own file. A restore
+already lifts a carried keyring out of the backup, which drops the table that
+carried it; a forward run writes a whole schema into it. Both would consume the
+file — leaving a backup that restores the ledger once and the keys never again,
+or one that no earlier build can read — and a reader whose restore was refused
+is a reader who has to be able to hand the same file to the next attempt. So a
+restore never writes to the file it was given, whichever of the two applies to
+it, and whether or not either does.
+
 ### A refusal the reader never sees
 
 A restore that refuses has to refuse *to somebody*. A reason written to a
@@ -212,6 +221,7 @@ maintenance command should refuse rather than confirm.
 | **F4-R24** | A refusal MUST name what it is refusing — a backup from a build ahead of this one, or a backup that could not be brought up to date — because those ask different things of the reader and only one of them is answered by installing something. |
 | **F4-R26** | A backup missing schema changes the running build has run MUST be brought forward to that build's schema as part of the restore, on every shell rather than as a consequence of one shell's startup gate. The reader MUST be told before it runs that restoring will update the backup. |
 | **F4-R27** | The forward run MUST NOT touch the live database. It MUST run against the copy the restore has already staged, and the swap MUST read that copy only once every migration has run. A migration that fails MUST refuse the restore with the live database unopened and no pre-restore snapshot written — this store has no schema transaction, so a partly-applied run is permanent wherever it lands. |
+| **F4-R28** | A restore MUST NOT write to the backup file it was given. Both of the things a restore does to a backup — lifting the carried keyring out of it, and bringing an older schema forward — rewrite it, so both MUST happen on a copy. A reader whose restore was refused still holds the file they started with, and it is often the only copy they have. |
 | **F4-R25** | Every refusal a restore raises, and every path a successful restore reports, MUST reach a surface that renders it. A reason flashed to a screen the flow does not arrive at is not a refusal the reader received. |
 
 ## Related
