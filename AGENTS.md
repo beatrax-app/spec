@@ -84,7 +84,8 @@ be challenged.
 
 ## Conventions and preferences
 
-- Commits carry **no** AI or co-author attribution trailers.
+- Commits may carry AI or co-author attribution trailers; `Co-authored-by` is
+  accepted. The DCO `Signed-off-by` line is still required on every commit.
 - Propose before writing; wait for approval before committing.
 - Maintained by NightWorks.io · community on
   [Discord](https://discord.nightworks.io).
