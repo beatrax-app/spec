@@ -43,6 +43,16 @@ paired with before have to be paired with it again: the identity is new, so the
 trust is new. The entry the restore carried stops standing for this device and
 goes on standing for the one that wrote the history, which still has to verify.
 
+Those are two readings of one entry, and every reader has to take one of them
+deliberately. It verifies signatures, and it is not a device: no transport
+session is admitted on its key, no key epoch is wrapped to it, nothing offers or
+selects it as a peer, and it is on no list of this household's devices. The
+machine it names is gone — a session it could authenticate has nobody at the
+other end, and an epoch wrapped to its key waits in a mailbox nothing will ever
+collect. The two readings also point opposite ways on removal, and the history
+wins: removing the entry clears the confirmation the restored log verifies
+against, so it is not removable at all.
+
 ### Pairing is a deliberate ceremony
 
 An existing device shows a QR code carrying its public identity and a
@@ -181,6 +191,7 @@ A pairing moves `pending` → `awaiting_confirm` → `confirmed`, falling to
 | Two devices that cannot see each other | The handshake propagates over the relay. |
 | App-lock engaged during key generation | Generation is gated; it does not proceed without the unlock. |
 | A database restored onto a device holding no key file | The registry entry it carries does not make this device a peer. The state is named to the reader, local changes are held rather than discarded, and an explicit repair gives this device its own identity. |
+| A registry entry the repair retired | It verifies the history it signed and does nothing else. No transport session, no key epoch, no peer offer, no place on the device list — and no removal, because removal would clear the confirmation that verification rests on. |
 | A device removed and then re-paired | It is a new pairing, mutually confirmed afresh, and it receives the whole keyring — every epoch, the current one last. A device holding only the current epoch could neither read history nor rebuild from the log (E4-R2, E1-R6), and re-pairing is a new grant of trust rather than a partial restoration of the old one. |
 | Operations signed by a device the receiver cannot verify | Not sent, and the count withheld is reported to the receiver. |
 | An introduction the reader never confirms | Nothing verifies against it, and the operations it would have unlocked stay with the peer that holds them. |
@@ -216,13 +227,21 @@ A pairing moves `pending` → `awaiting_confirm` → `confirmed`, falling to
 | **E2-R22** | Catch-up MUST serve operations for every author the answering device holds a signing key for — a device it paired with, in any state of that pairing, and a device it holds only through a confirmed introduction — narrowed by what the receiving device has declared it can verify (E2-R20). The answering device MUST NOT relay that author's identity onward: only a device it has itself paired with may be introduced. |
 | **E2-R23** | A device offering to show a pairing code MUST be answerable by the device that scans it: it MUST either accept a pairing frame directly or carry a relay in the payload. A device that can do neither MUST NOT offer to show a code, and MUST name the direction that can complete instead. |
 | **E2-R24** | A device registry entry naming this device, with no key file to answer for it, MUST NOT be presented as sync being enabled, MUST NOT cause local changes to be discarded, and MUST be repairable by an explicit reader action that mints a new identity for this device. The retired entry MUST go on verifying the history it signed. |
+| **E2-R25** | A registry entry retired by the E2-R24 repair MUST NOT be treated as a device: it MUST NOT admit a transport session, MUST NOT be sent a key epoch, MUST NOT be offered or selected as a peer, and MUST NOT appear on the device list. It MUST go on verifying the history it signed, and MUST NOT be removable — removal clears the confirmation that verification rests on. |
 
 > **`E2-R24` records a defect, not a behaviour the product already had.** A
 > database restored onto a device that could not carry its key file presented
 > itself as a synced device on its own settings screen while discarding every
-> local write at debug level, with both routes out of that state shut. The
-> requirement states what the state must mean; the implementation is in review in
-> `beatrax` alongside this page.
+> local write at debug level, with both routes out of that state shut. It
+> shipped on 2026-09-12, and it drew the line at the three readers the repair
+> put the entry in front of: the device list, the peer-name map, and the epochs
+> a confirmed peer is owed.
+>
+> **`E2-R25` is the half that page left open, and said so.** The entry stayed in
+> the map the Noise handshake admits on, so the machine the database was
+> restored from could still authenticate a session against it. Whether a restore
+> also shuts the transport to the machine it came from was recorded as a real
+> open question rather than answered by omission; this is the answer.
 >
 > **`E2-R18` through `E2-R21` are satisfied**, and `E2-R22` with them. The four
 > shipped on 2026-09-05 and were hardened the same day: the withheld count now
