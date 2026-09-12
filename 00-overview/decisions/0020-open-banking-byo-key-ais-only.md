@@ -56,8 +56,10 @@ Supporting constraints, each enforced rather than documented:
 - The consent callback carries a session-bound, single-use, short-lived state
   value compared in constant time.
 - Only booked transactions are consumed. Pending ones are dropped, because a
-  pending transaction that later books with different details would create a
-  duplicate the fingerprint cannot collapse.
+  pending figure is not an authority on what settled and a fetched row carries no
+  source reference to be found under. The duplicate this once named as the reason
+  is collapsible now: A3-R21 records a restated amount as a disagreement rather
+  than a second transaction.
 - Falsifiable egress and scope tests assert the constraints rather than
   describing them.
 

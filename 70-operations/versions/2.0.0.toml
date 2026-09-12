@@ -45,16 +45,13 @@
 #              is unmet. The iOS residual this entry used to point at closed in
 #              the re-audit below.
 #
-#   A3-R21     OPEN 2026-09-11. An incoming row carrying a stored row's source
-#              reference at a different amount is a restatement, and the product
-#              writes a second transaction instead of recording the
-#              disagreement. A6 already admitted the consequence in passing —
-#              "a pending transaction that later books with different details
-#              would create a duplicate the fingerprint cannot collapse" — while
-#              owning it nowhere. Named here because a goal nothing tracks is a
-#              note, not a commitment.
+# The list is EMPTY again as of 2026-09-12: A3-R21, which stood in it alone from
+# the 11th, closed on that date. An incoming row carrying a stored row's source
+# reference at a different amount now restates it — the disagreement recorded
+# for the reader and no second transaction written — and A6's passing admission
+# of the consequence is amended to the reason that is still live.
 #
-# The list was EMPTY between 2026-09-09 and 2026-09-11. E5-R10 was the last name
+# The list was also EMPTY between 2026-09-09 and 2026-09-11. E5-R10 was the last name
 # in it before that and closed on the 9th; it is named under CLOSED ON HARDWARE
 # below and not here, because a name in this list is read as a claim that the id
 # is unmet.
@@ -584,7 +581,7 @@ goals = [
   # ── A code nobody can answer is not offered (opened 2026-09-10) ────────────
   "E2-R23",
 
-  # ── A restated amount is a disagreement, not a second row (opened 2026-09-11) ─
+  # ── A restated amount is a disagreement, not a second row (landed 2026-09-12) ─
   "A3-R21",
 
   # ── Defined by this release, landed, and in no bucket until now ────────────

@@ -112,6 +112,8 @@ original migration — and the re-derivation is itself idempotent.
 | An enrichment that no longer outranks the stored reference at write time | Dropped as a no-op. |
 | A row with no usable counterparty name | The sentinel keeps the uniqueness constraint effective. |
 | A bank restating the amount of a row already imported | The reference the bank carried on both rows identifies the stored one; the disagreement is recorded for the reader to resolve, not written as a second transaction. |
+| A reference two stored rows of one account carry | Identifies neither, so nothing is restated. A reference two rows share is a constant the source fills in rather than a name for either of them. |
+| A reference arriving denominated in another currency | Restates no amount. The row records as its own. |
 | Fingerprint version bump | A forward migration re-derives every row; re-running it changes nothing. |
 
 ## Acceptance criteria
@@ -138,7 +140,7 @@ original migration — and the re-derivation is itself idempotent.
 | **A3-R17** | The fingerprint algorithm MUST carry an explicit version, and a version change MUST ship as a forward migration that re-derives every row. |
 | **A3-R18** | The re-derivation MUST be idempotent. |
 | **A3-R19** | Fingerprint lookup MUST filter explicitly by user rather than relying on an ambient scope, so a fingerprint owned by another user can never affect this user's verdict. |
-| **A3-R21** | *(Open)* An incoming row carrying the same source reference as a stored row of the same account, but a different amount, MUST be treated as a restatement of that row: the disagreement recorded for the reader to resolve, and no second transaction written. The source reference stays outside the fingerprint (A3-R2) — this is a lookup, not an identity. |
+| **A3-R21** | An incoming row carrying the same source reference as a stored row of the same account, but a different amount, MUST be treated as a restatement of that row: the disagreement recorded for the reader to resolve, and no second transaction written. The source reference stays outside the fingerprint (A3-R2) — this is a lookup, not an identity. |
 
 ## Related
 
