@@ -12,7 +12,7 @@ reconciliation all need an anchor.
 
 Some statement formats carry that anchor; some do not. This feature owns finding
 it where it exists, asking for it where it does not, and recording the
-statement-level metadata the row-by-row pipeline never sees.
+statement-level metadata no single transaction row carries.
 
 ## Behaviour
 
@@ -23,9 +23,19 @@ balance, period start and end — that no individual transaction row contains.
 After the rows are processed, the parser is asked for its statement metadata and
 the result is recorded as one row per statement period.
 
-CSV formats carry no period boundary and return nothing. Receipt formats are
-excluded entirely: each receipt is its own record with no opening or closing
-balance.
+**The side channel is the recording path, not the origin of the figures.** A
+format that ships no balance rows of its own may still answer that question, by
+summing the rows it just yielded — the PayPal export is the one that does. It is
+still asked once, after the rows, and still written once through the same path,
+which is what "separately from the row pipeline" was ever protecting. What a
+derived figure costs is a condition the read ones do not carry: it is only true
+if everything it summed was in one denomination and nothing was lost, so it is
+withheld entirely where either fails, and it is never offered to the reader as a
+starting balance.
+
+Bank CSV presets carry no period boundary and return nothing at all. Receipt
+formats are excluded entirely: each receipt is its own record with no opening or
+closing balance.
 
 Statement summaries are unique per user, account, and period, so re-importing
 the same statement updates rather than duplicates.
@@ -81,6 +91,8 @@ A starting-balance card is in one of:
 | Situation | Behaviour |
 |-----------|-----------|
 | A format that carries no period boundary | No statement summary written. |
+| A derived closing balance over rows in more than one currency | No balance recorded. The period and the entry count still are: a figure summed across two denominations is not money, and offering it as a reconcile target asks the reader to close a gap no row can close. |
+| A derived closing balance where a row of the source could not be read | The same. Summed over what was left, the total moves with the loss, and nothing on the screen would say by how much. |
 | Two statements for the same account and period | Unique constraint updates rather than duplicating. |
 | CAMT.053 and MT940 disagreeing on the same account | Earliest date wins; on a tie CAMT.053 wins; on a full tie both surface as a conflict. |
 | PayPal CSV | Always declines to supply a starting balance. |
@@ -92,7 +104,7 @@ A starting-balance card is in one of:
 
 | ID | Requirement |
 |----|-------------|
-| **A9-R1** | Statement-level metadata MUST be recorded once per statement period, separately from the row pipeline. |
+| **A9-R1** | Statement-level metadata MUST be recorded once per statement period, through a channel separate from the row pipeline: the parser is asked for it once the rows have been yielded, and it is written once rather than once per row. Where a format carries no balance rows of its own, the figures MAY be derived from the rows that format yielded, under A9-R16. |
 | **A9-R2** | Formats carrying no period boundary MUST record no statement summary. |
 | **A9-R3** | Receipt formats MUST be excluded from statement-summary recording. |
 | **A9-R4** | Statement summaries MUST be unique per user, account, and period. |
@@ -107,6 +119,7 @@ A starting-balance card is in one of:
 | **A9-R13** | Card-statement promotion MUST be idempotent and MUST NOT be gated on whether any transaction was inserted. |
 | **A9-R14** | A card account with neither a statement nor a user-entered balance MUST anchor at zero. |
 | **A9-R15** | Confirming a starting balance MUST be idempotent. |
+| **A9-R16** | Where a statement summary's balances are derived from the rows rather than read from the source, those balances MUST be withheld unless every row summed is denominated in one currency and every row of the source was readable; and a derived summary MUST NOT be offered as a starting-balance candidate. |
 
 ## Related
 

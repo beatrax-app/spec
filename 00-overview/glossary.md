@@ -42,7 +42,7 @@ narrow Beatrax meaning, the narrow one is what the spec means.
 | **NEW / DUPLICATE / ENRICHED / ERROR** | The four dispositions a preview row can carry. `ENRICHED` means a stronger source arrived for a row that already exists. |
 | **Enrichment** | An update to an existing row from a stronger later source. Appends provenance to `enriched_from`; never overwrites it. |
 | **Receipt matcher** | A parser that recognises a specific sender's email receipt (PayPal, ICS, Google Play) and extracts its per-line breakdown and chain hints. |
-| **Statement summary** | The statement-level metadata CAMT.053 and MT940 carry — opening balance, closing balance, period dates — that the per-row pipeline does not see. |
+| **Statement summary** | The statement-level metadata a statement carries — opening balance, closing balance, period dates — that no single transaction row carries. Read from the source where it states one, as CAMT.053 and MT940 do; summed from the rows where it does not, and withheld where that sum cannot be trusted (A9-R16). |
 
 ## Sync and cryptography
 

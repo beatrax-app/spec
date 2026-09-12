@@ -35,13 +35,19 @@ track is not a problem to report.
 
 - **An enrichment**, applied through the shared enrichment path
   ([A3](a3-idempotency.md)) rather than written directly to the ledger.
-- **A statement summary**, where the receipt carries statement-level totals,
-  written through the shared statement path rather than directly.
 - **Chain hints**, one event per hint extracted — a receipt naming both a
   funding card and a refund reference produces two.
 
+A match produces **no statement summary**. A receipt is its own record with no
+opening or closing balance and no statement period, and receipt formats are
+excluded from statement-summary recording altogether
+([A9-R3](a9-starting-balances.md#acceptance-criteria)).
+
 Direct writes to the ledger or to statement summaries from this layer are
-forbidden and enforced by architecture test.
+forbidden and enforced by architecture test. The second half of that stays a
+live constraint rather than a description: it is what a matcher would have to
+satisfy if a receipt format ever did carry statement-level totals, and it is
+what fails the build if one writes them anywhere but the shared path.
 
 ### Hints fire after the transaction exists
 
