@@ -11,3 +11,7 @@ exclude = [
 exclude_loopback = true
 max_retries = 2
 accept = ["200", "206", "429"]
+
+# A link whose file half resolves and whose #fragment does not is a broken link
+# too. Without this it passes: fragment checking is off by default.
+include_fragments = "full"
