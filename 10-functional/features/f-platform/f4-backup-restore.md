@@ -55,6 +55,53 @@ passphrase's entropy is the real floor.
 Restore additionally requires maintenance mode, or an explicit override, and an
 explicit confirmation in a non-interactive context.
 
+### A backup the running build cannot read
+
+A backup carries a database, and a database has a shape the code around it
+expects. Restoring one whose shape does not match the build reading it produces
+no error and no refusal: the swap succeeds, the verification passes, and the
+application then runs against a schema its own code does not match.
+
+The two directions are not symmetric, and only one of them is recoverable.
+
+**A backup from a newer build** names schema changes this one has never heard
+of. Migrations only move forward, so there is no path from that database to a
+shape this build can read. Nothing detects it either: a pending-migration check
+asks whether each migration the build *has* was recorded as run, which a newer
+database answers yes to for every one of them. The mismatch is invisible and
+permanent.
+
+**A backup from an older build** is missing schema changes this one has. Where
+migrations run before the first request that database is brought forward, and
+where they do not it is served against code that does not match it — a
+difference between shells rather than a property of the restore.
+
+So the restore compares before it swaps, and refuses both. The set of migrations
+already recorded in the backup is what it compares: that set is inside every
+backup ever taken, where a marker introduced now would be absent from all of
+them and could only judge the ones written afterwards.
+
+A refusal has to say which direction it is, because the two ask different things
+of the reader — one is answered by installing a newer build, the other is not
+answerable at all.
+
+**What this costs.** A backup taken before an update cannot be restored after
+one. That is the majority of backups a reader holds more than a few weeks, and
+on a mobile install it is the common case rather than a corner: the restore
+screen is reached from a fresh install, a fresh install is whatever version the
+store is serving, and the reader cannot choose an older one. The cost is
+accepted because the alternative on that path is a restore that reports success
+and leaves the reader's ledger being read by code that does not match it. It is
+recorded here rather than left to be discovered.
+
+### A refusal the reader never sees
+
+A restore that refuses has to refuse *to somebody*. A reason written to a
+surface the flow does not arrive at is not a refusal the reader received, and
+the same holds for the paths a successful restore reports — the location of the
+pre-restore snapshot is the only record the reader has of their undo, and it is
+worth nothing on a screen that never renders.
+
 ### Diagnostics
 
 A doctor command walks a set of probes and reports. Probes cover the runtime
@@ -107,6 +154,10 @@ maintenance command should refuse rather than confirm.
 | A zero-duration prune | Rejected. |
 | A restore in a non-interactive context without confirmation | Refused. |
 | The application key sentinel present but the key absent | Short-circuits by sentinel; documented as an operator-recovery path. |
+| A backup naming a schema change the build does not have | Refused before the live database is touched, naming the direction. |
+| A backup missing a schema change the build has run | Refused the same way, naming the other direction. |
+| A backup whose recorded schema changes match the build exactly | Restored. |
+| A backup recording no schema changes at all | Restored — it carries no claim to check, and refusing would strand a fixture. |
 
 ## Acceptance criteria
 
@@ -134,6 +185,9 @@ maintenance command should refuse rather than confirm.
 | **F4-R20** | Install MUST refuse to run where the database path lies inside a cloud-sync folder. |
 | **F4-R21** | The failed-job prune command MUST reject a zero duration. |
 | **F4-R22** | The prune duration grammar MUST reject ambiguous units. |
+| **F4-R23** | A restore MUST compare the schema changes recorded in the backup against those the running build carries, before the live database is touched, and MUST refuse a backup that names one the build does not have OR is missing one the build has run. The comparison MUST read the set already recorded in the backup rather than a marker added to new backups, which every backup a reader already holds would lack. A backup recording none MUST be restored rather than refused. |
+| **F4-R24** | A refusal MUST name which direction the mismatch is, because installing a newer build answers one and nothing answers the other. |
+| **F4-R25** | Every refusal a restore raises, and every path a successful restore reports, MUST reach a surface that renders it. A reason flashed to a screen the flow does not arrive at is not a refusal the reader received. |
 
 ## Related
 
