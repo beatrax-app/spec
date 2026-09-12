@@ -22,6 +22,27 @@ another device's private key.
 Key generation is gated behind the app-lock ([F3](../f-platform/f3-auth-and-app-lock.md)),
 and the key file is encrypted at rest.
 
+### A restored database is not a restored identity
+
+The private halves never leave, so a backup carries the database and not the key
+file. Restore one onto another machine and the device registry arrives naming a
+device this machine cannot be: a self entry whose signing key is somewhere else,
+or gone.
+
+That state is **not** sync being on, and it is **not** sync having never been
+enabled either. The reader is owed both halves of the truth: that this device
+cannot yet sign anything it writes, and that nothing it writes is being thrown
+away while it waits. Changes made in that state are held and sent once the
+device can sign them — a backfill cannot stand in for them, because the peer
+already holds these rows and a re-announcement of a row carries neither an edit
+nor a deletion.
+
+The way out is a deliberate action the reader takes, on the screen that named
+the state. It gives this device its own identity, which means the devices it was
+paired with before have to be paired with it again: the identity is new, so the
+trust is new. The entry the restore carried stops standing for this device and
+goes on standing for the one that wrote the history, which still has to verify.
+
 ### Pairing is a deliberate ceremony
 
 An existing device shows a QR code carrying its public identity and a
@@ -159,6 +180,7 @@ A pairing moves `pending` → `awaiting_confirm` → `confirmed`, falling to
 | An unconfirmed device's operations arriving | Quarantined, not applied. |
 | Two devices that cannot see each other | The handshake propagates over the relay. |
 | App-lock engaged during key generation | Generation is gated; it does not proceed without the unlock. |
+| A database restored onto a device holding no key file | The registry entry it carries does not make this device a peer. The state is named to the reader, local changes are held rather than discarded, and an explicit repair gives this device its own identity. |
 | A device removed and then re-paired | It is a new pairing, mutually confirmed afresh, and it receives the whole keyring — every epoch, the current one last. A device holding only the current epoch could neither read history nor rebuild from the log (E4-R2, E1-R6), and re-pairing is a new grant of trust rather than a partial restoration of the old one. |
 | Operations signed by a device the receiver cannot verify | Not sent, and the count withheld is reported to the receiver. |
 | An introduction the reader never confirms | Nothing verifies against it, and the operations it would have unlocked stay with the peer that holds them. |
@@ -193,6 +215,14 @@ A pairing moves `pending` → `awaiting_confirm` → `confirmed`, falling to
 | **E2-R21** | A catch-up cursor MUST NOT advance over an operation whose author the receiving device could not verify, so that confirming an introduction later still delivers it. |
 | **E2-R22** | Catch-up MUST serve operations for every author the answering device holds a signing key for — a device it paired with, in any state of that pairing, and a device it holds only through a confirmed introduction — narrowed by what the receiving device has declared it can verify (E2-R20). The answering device MUST NOT relay that author's identity onward: only a device it has itself paired with may be introduced. |
 | **E2-R23** | A device offering to show a pairing code MUST be answerable by the device that scans it: it MUST either accept a pairing frame directly or carry a relay in the payload. A device that can do neither MUST NOT offer to show a code, and MUST name the direction that can complete instead. |
+| **E2-R24** | A device registry entry naming this device, with no key file to answer for it, MUST NOT be presented as sync being enabled, MUST NOT cause local changes to be discarded, and MUST be repairable by an explicit reader action that mints a new identity for this device. The retired entry MUST go on verifying the history it signed. |
+
+> **`E2-R24` records a defect, not a behaviour the product already had.** A
+> database restored onto a device that could not carry its key file presented
+> itself as a synced device on its own settings screen while discarding every
+> local write at debug level, with both routes out of that state shut. The
+> requirement states what the state must mean; the implementation is in review in
+> `beatrax` alongside this page.
 
 > **`E2-R18` through `E2-R21` are satisfied**, and `E2-R22` with them. The four
 > shipped on 2026-09-05 and were hardened the same day: the withheld count now
