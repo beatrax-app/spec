@@ -82,6 +82,26 @@ alert never contains token material.
 
 Everything else is an error state that a retry can leave.
 
+### A credential this install cannot read
+
+The stored client secret and token blob are encrypted under the application key,
+which lives in configuration beside the database rather than inside it. A
+[restore](../f-platform/f4-backup-restore.md) therefore lands rows encrypted
+under a key that install does not have: consent at the provider is untouched,
+and the local copy of it is bytes nobody can open.
+
+Left alone, the first thing to notice is a scan, which is a background pass —
+so the reader meets a decryption failure at whatever hour the schedule runs
+rather than an answer they can act on. A row that cannot be read is not a
+connection, so the restore clears it and moves the inbox to the same
+re-authorisation state a revoked grant does. That state already carries the
+reconnect the reader needs; nothing new has to be built to receive it.
+
+Clearing means removing the row, not blanking its columns: the surfaces that
+ask whether a mailbox is connected ask whether a credential row exists, so one
+left behind holding unreadable bytes reads as connected and suppresses the
+prompt.
+
 ### Outbound requests are host-checked
 
 Every request the mail clients make is validated against an allow-list before
@@ -123,6 +143,7 @@ timeout so concurrent workers serialise rather than clobber.
 | A worker dies mid-scan | The failure hook only fires on final retry exhaustion, so a hard crash can leave the state as scanning. The next scheduled run recovers it. |
 | Token refresh fails once, then succeeds | No alert — the de-duplication guard sees no previously open alert. |
 | The user revokes consent at the provider | The next refresh raises a re-consent condition and the inbox moves to re-authorisation. |
+| A restore lands credentials encrypted under another install's application key | The row is cleared and the inbox moves to re-authorisation, at restore time rather than at the next scan. |
 | The same message is fetched twice | Idempotent: the provider message identifier is the deduplication key. |
 | An inbox is removed | Orphaned message blobs are reaped by a cleanup pass. |
 | A discovered sender is promoted while a scan is reading the list | The promotion runs in its own transaction. |
@@ -154,6 +175,7 @@ timeout so concurrent workers serialise rather than clobber.
 | **A4-R21** | Cross-user reads and writes of inboxes or secrets MUST return not-found, never forbidden. |
 | **A4-R22** | The authorisation flow MUST send a PKCE challenge derived by S256 and bound to the flow, and MUST present the matching verifier at the token exchange. |
 | **A4-R23** | Disconnecting an inbox MUST delete its stored tokens and best-effort revoke them with the provider; a revoke failure MUST NOT block the local disconnect. |
+| **A4-R24** | A stored credential the install cannot decrypt MUST be cleared and its inbox moved to the re-authorisation state of `A4-R15`, at the point the condition is created rather than at the next scan. Clearing MUST remove the credential row: a row left holding unreadable bytes reads as a live connection to every surface that asks whether one exists, and suppresses the prompt the reader needs. |
 
 ## Related
 
