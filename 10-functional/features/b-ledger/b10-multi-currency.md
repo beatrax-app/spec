@@ -70,6 +70,27 @@ An account whose currency has no available rate is **excluded** from the
 converted roll-up and the exclusion is flagged, with the affected accounts
 named. A silent zero or a one-to-one fallback would be a lie.
 
+### Where a rate cannot be named
+
+A figure can also be rebuilt from a stored result — a projection computed
+earlier and read back later — and it can disclose only what that result
+recorded. One written before its rates were kept has none to name.
+
+That is a third state rather than the absence of one. Rendered as silence it
+claims nothing was converted, which is a different statement, and one an
+incomplete record supports no better than its opposite. The figure says what is
+true instead: the rates behind it are not on record.
+
+Nothing is reconstructed to fill the gap, because nothing can be. What a pair is
+quoted at today is not what priced the stored result, so a rate supplied after
+the fact would attribute a conversion that was never made. Nor is the result
+discarded to avoid the question — what takes its place is a fallback the reader
+cannot tell apart from a real result that genuinely holds nothing.
+
+The zero-cost passthrough is the other case and must not read the same. A figure
+already in the reporting currency converted at no rate and correctly shows none;
+a figure rebuilt from an incomplete record converted at a rate nobody kept.
+
 ### Conversion is never a float
 
 Rates read from storage are handled as exact decimal values from the moment they
@@ -97,6 +118,7 @@ no query and no rate disclosure.
 | A cross-rate with one stale leg | Reported as stale, dated by the oldest leg. |
 | An account with no rate for its currency | Excluded from the roll-up and named in the exclusion. |
 | A figure already in the target currency | Zero-cost passthrough, no disclosure rendered. |
+| A stored result written before its rates were kept | The figure discloses that they cannot be named — neither left silent, nor given a rate after the fact, nor discarded. |
 | Online fetching disabled | The bundled snapshot is used; everything still works. |
 
 ## Acceptance criteria
@@ -123,6 +145,7 @@ no query and no rate disclosure.
 | **B10-R18** | Rate values MUST be handled as exact decimals from the point they leave storage; a rate MUST NOT be represented as a floating-point number. |
 | **B10-R19** | Current-snapshot and historical conversion MUST be distinct operations, and historical conversion MUST prefer the rate the transaction recorded. |
 | **B10-R20** | Conversion to the same currency MUST short-circuit with no query and no rate disclosure. |
+| **B10-R21** | A converted figure rebuilt from a stored result that did not record its rates MUST disclose that they cannot be named, distinguishably from a figure that converted nothing (B10-R20). A rate MUST NOT be supplied for it after the fact, and the stored result MUST NOT be discarded in place of saying so. |
 
 ## Related
 
