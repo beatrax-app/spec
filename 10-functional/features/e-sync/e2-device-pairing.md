@@ -223,7 +223,7 @@ A pairing moves `pending` → `awaiting_confirm` → `confirmed`, falling to
 > local write at debug level, with both routes out of that state shut. The
 > requirement states what the state must mean; the implementation is in review in
 > `beatrax` alongside this page.
-
+>
 > **`E2-R18` through `E2-R21` are satisfied**, and `E2-R22` with them. The four
 > shipped on 2026-09-05 and were hardened the same day: the withheld count now
 > reaches a reader whether or not an identity accompanies it, an introduction can
