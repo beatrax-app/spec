@@ -584,9 +584,7 @@ goals = [
   # ── A restated amount is a disagreement, not a second row (landed 2026-09-12) ─
   "A3-R21",
 
-  # ── A restatement the bank booked on another day (opened 2026-09-12) ────────
-  # The heading flips to landed with the change that satisfies them; they are
-  # named here rather than left out because a goal nothing tracks is a note.
+  # ── A restatement the bank booked on another day (landed 2026-09-12) ────────
   "A3-R22", "A3-R23", "A5-R18",
 
   # ── Defined by this release, landed, and in no bucket until now ────────────
