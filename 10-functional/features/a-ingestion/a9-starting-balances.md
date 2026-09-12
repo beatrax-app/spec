@@ -108,7 +108,7 @@ A starting-balance card is in one of:
 | A derived closing balance where a row of the source could not be read | The same. Summed over what was left, the total moves with the loss, and nothing on the screen would say by how much. |
 | Two statements for the same account and period | Unique constraint updates rather than duplicating. |
 | CAMT.053 and MT940 disagreeing on the same account | Earliest date wins; on a tie CAMT.053 wins; on a full tie both surface as a conflict. |
-| PayPal CSV | Always declines to supply a starting balance. |
+| PayPal CSV | Its starting-balance detector always declines, whatever the file contains. |
 | An override far from the statement-derived value | Warned, not blocked. |
 | A card statement record deleted by hand | Recovered on the next import even if every transaction is a duplicate. |
 | A card account with no statement and no user-entered balance | Anchored at zero, to avoid double-counting historical billing events. |
@@ -125,7 +125,7 @@ A starting-balance card is in one of:
 | **A9-R6** | Where detectors disagree for one account, the earliest opening-balance date MUST win. |
 | **A9-R7** | On a date tie, the ISO 20022 source MUST be preferred over the legacy one. |
 | **A9-R8** | Where both date and preference tie, both results MUST surface as a user-resolvable conflict. |
-| **A9-R9** | The PayPal source MUST always decline to supply a starting balance. |
+| **A9-R9** | The PayPal starting-balance detector MUST always decline to supply a candidate, whatever the file contains. Its running-balance column is read from the source rather than summed from the rows, so A9-R16 does not reach that figure; this requirement is what keeps it out of the wizard. |
 | **A9-R10** | An account with no detected starting balance MUST offer manual entry. |
 | **A9-R11** | Starting-balance cards MUST appear only for accounts the import touched. |
 | **A9-R12** | An override diverging materially from the statement-derived value MUST warn and MUST NOT block. |
