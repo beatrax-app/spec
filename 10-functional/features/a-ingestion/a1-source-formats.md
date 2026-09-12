@@ -80,10 +80,14 @@ transformation, which is what makes preview safe to re-run
   placeholders are scrubbed from the retained raw payload. Statement totals are
   persisted with the sign that means "owed to the issuer".
 - **PayPal CSV** detects the export language from a column that is stable across
-  languages, then rolls up the parent and child rows of a single logical payment
-  — the payment, its fee, its currency-conversion legs — into one transaction.
-  An unmapped event type is a typed error naming the type, because a genuinely
-  unknown event is a data condition the user can act on, not a bug.
+  languages, then folds a logical payment's currency-conversion legs into the
+  payment itself. Those legs restate one payment in two denominations, so
+  booking both would count it twice. A fee is not a restatement and not a child
+  row — the export states it as a column beside the amount — so it may be booked
+  as its own transaction, tied to the payment by the source reference they
+  share, which is what lets the reader categorise it. An unmapped event type is
+  a typed error naming the type, because a genuinely unknown event is a data
+  condition the user can act on, not a bug.
 
 ### Every failure is a typed error
 
@@ -125,7 +129,7 @@ header mismatch, and unsupported format are each distinct.
 | **A1-R14** | The credit-card PDF parser MUST scrub long digit runs and masked-card placeholders from any retained raw payload. |
 | **A1-R15** | A credit-card PDF from which no text can be extracted MUST raise a typed error. There MUST be no partial-parse fallback. |
 | **A1-R16** | The PayPal parser MUST detect export language from a language-stable field, and MUST raise a typed error for an unsupported language. |
-| **A1-R17** | The PayPal parser MUST roll up the parent, fee, and currency-conversion rows of one logical payment into a single transaction. |
+| **A1-R17** | The PayPal parser MUST emit one transaction per logical payment and MUST fold that payment's currency-conversion legs into it rather than booking them separately: the legs restate one payment in two denominations, so emitting both counts it twice. A fee the export carries as a column of the payment row MAY be booked as a transaction of its own, provided it carries that payment's source reference. |
 | **A1-R18** | An unmapped PayPal event type MUST raise a typed error naming the type. |
 | **A1-R19** | A CSV import MUST be refused unless a bank dialect is declared, enforced at the contract boundary rather than only in the UI. |
 | **A1-R20** | Parser output MUST be the canonical source-row shape; a parser MUST NOT emit a ledger-ready transaction directly. |
