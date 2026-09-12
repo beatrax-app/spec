@@ -37,8 +37,9 @@ codeowners repo:
 
 # Self-test the governance gate against a sample citation, e.g. `just check-gate "Spec: A1-R1"`.
 check-gate text:
-    echo "{{text}}" > /tmp/_beatrax_gate.txt && \
-        python3 scripts/spec_check.py --spec-dir . --text-file /tmp/_beatrax_gate.txt
+    @printf '%s\n' "{{text}}" > .check-gate.tmp; \
+        python3 scripts/spec_check.py --spec-dir . --text-file .check-gate.tmp; \
+        status=$?; rm -f .check-gate.tmp; exit $status
 
 # Check whether a version manifest is stageable, e.g. `just stageable 2.0.0`.
 stageable version:
