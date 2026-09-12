@@ -157,6 +157,32 @@ a second run.
 *In: [A9-R1, A9-R4](../10-functional/features/a-ingestion/a9-starting-balances.md#acceptance-criteria) ·
 [A9](../10-functional/features/a-ingestion/a9-starting-balances.md#open-questions)*
 
+### Should the specification require the check A9-R17 surfaces?
+
+[A9-R17](../10-functional/features/a-ingestion/a9-starting-balances.md#acceptance-criteria)
+binds wherever a statement summary **records** a difference between the balances
+a statement states and the rows it yielded. Nothing in the specification
+requires the check that produces one.
+
+[A1-R21](../10-functional/features/a-ingestion/a1-source-formats.md#acceptance-criteria)
+is the nearest rule, and it is anchored deliberately elsewhere: it asks that the
+transactions a parser emits from a **row** sum to the amount that row states, and
+it was put there rather than on a closing balance so that a format summing its
+own closing balance from its rows could not be compared against itself. That
+reasoning rules A1-R21 out as the statement-level rule; it does not say what the
+statement-level rule should be, or whether there should be one.
+
+Both formats that state an opening and a closing balance do perform the check
+today, so the product is ahead of the specification rather than behind it. What
+would settle it is a third format stating both balances: whether it is expected
+to check them and record what it finds, or free not to. Where the rule would
+belong is the same question asked once — beside the per-row arithmetic in A1, or
+beside the recording channel in [A9-R1](../10-functional/features/a-ingestion/a9-starting-balances.md#acceptance-criteria).
+
+*In: [A9-R17](../10-functional/features/a-ingestion/a9-starting-balances.md#acceptance-criteria) ·
+[A1-R21](../10-functional/features/a-ingestion/a1-source-formats.md#acceptance-criteria) ·
+[A9](../10-functional/features/a-ingestion/a9-starting-balances.md#open-questions)*
+
 ### Should the hand-built transport handshake be replaced?
 
 It is vector-validated, and it is the highest-risk component in the product. If

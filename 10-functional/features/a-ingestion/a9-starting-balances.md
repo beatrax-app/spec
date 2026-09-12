@@ -51,6 +51,40 @@ record with no opening or closing balance.
 Statement summaries are unique per user, account, and period, so re-importing
 the same statement updates rather than duplicates.
 
+### A statement that contradicts itself says so
+
+A statement stating both an opening and a closing balance is checkable against
+its own rows: the opening balance plus every entry has to reach the closing one.
+Where it does not, the difference is recorded on the summary beside the two
+balances, and it is **recorded rather than corrected**. The rows stay as the file
+wrote them and both balances stay as the file stated them; a parser that made a
+file agree with itself would be erasing the one signal that it had been misread.
+
+A recorded difference then has to reach somebody. It is a statement about an
+import the reader is about to make or has just made, so it belongs wherever the
+product offers that statement or a figure drawn from it: **before the import is
+committed**, where discarding the file and fetching it again is the whole
+remedy; on the **record of the import** afterwards, which is where a reader
+whose balance has stopped matching their bank comes looking; and beside a
+closing balance offered as a **reconcile target**, which is that statement's own
+figure and the number the reader is driving a difference to zero against. That
+target is still offered — a flagged figure a reader can see and question is
+worth more than an empty field — and the flag sits with it.
+
+**The direction is half of the disclosure.** The difference is
+`closing - (opening + every entry)`: positive where the opening balance plus the
+rows lands *below* the closing balance the file states, negative where it lands
+above. A reader told only that a statement is out by twelve euros has been told
+nothing they can act on. A reader told that its rows account for twelve euros
+less than its own balances do knows which end of the file to look at.
+
+**Silence is not a clean bill of health.** A difference is recorded only where
+there is one, and only where the arithmetic could be done at all: a file stating
+no opening or closing balance, two balances in different currencies, or an entry
+denominated in something the balances are not, leave nothing to check against.
+So nothing is said about a statement that balanced, nothing is said about one
+that could not be checked, and the product claims to have checked neither.
+
 ### Starting-balance detection, in preference order
 
 Detectors are consulted in a fixed order and the first non-empty result wins:
@@ -106,6 +140,8 @@ A starting-balance card is in one of:
 | A derived balance on any path to an account's starting balance | Not used. Declining to offer it is not enough on its own: a figure nobody read is not an anchor whichever seam reaches the account. |
 | A derived closing balance over rows in more than one currency | No balance recorded. The period and the entry count still are: a figure summed across two denominations is not money, and offering it as a reconcile target asks the reader to close a gap no row can close. |
 | A derived closing balance where a row of the source could not be read | The same. Summed over what was left, the total moves with the loss, and nothing on the screen would say by how much. |
+| A statement whose stated balances and yielded rows do not agree | The difference is recorded on the summary and shown to the reader wherever that statement is offered. Neither the rows nor either balance is changed. |
+| A statement that balances, or one there was nothing to check it against | Nothing recorded and nothing shown. The two are deliberately indistinguishable on screen, because neither is a claim that the statement was checked. |
 | Two statements for the same account and period | Unique constraint updates rather than duplicating. |
 | CAMT.053 and MT940 disagreeing on the same account | Earliest date wins; on a tie CAMT.053 wins; on a full tie both surface as a conflict. |
 | PayPal CSV | Its starting-balance detector always declines, whatever the file contains. |
@@ -133,6 +169,7 @@ A starting-balance card is in one of:
 | **A9-R14** | A card account with neither a statement nor a user-entered balance MUST anchor at zero. |
 | **A9-R15** | Confirming a starting balance MUST be idempotent. |
 | **A9-R16** | Where a statement summary's balances are derived from the rows rather than read from the source, those balances MUST be withheld unless every row summed is denominated in one currency and every row of the source was readable; and a derived balance MUST NOT anchor an account — neither offered to the reader as a starting-balance candidate, nor written as an account's starting balance by any other path. |
+| **A9-R17** | Where a statement summary records a difference between the balances a statement states and the rows it yielded, that difference MUST reach the reader on every surface where the product offers that statement or a figure drawn from it: before the import is committed, on the record of the import afterwards, and beside a closing balance offered as a reconcile target. It MUST state the direction, defined as `closing - (opening + every entry)`, and not a magnitude alone. It MUST NOT be corrected — neither the rows nor either stated balance may be altered to make the statement agree with itself. A summary recording no such difference MUST NOT be presented as a statement having been checked: one that balanced and one whose arithmetic could not be done are alike silent, and nothing here obliges any statement to be checkable. |
 
 ## Open questions
 
@@ -156,6 +193,18 @@ statement period leave two rows, and one run spanning two periods leaves one.
 Which of the two is right is a product question — re-importing the same
 statement under a new run is the case that decides it — and it is recorded in
 [90-appendix/open-questions.md](../../../90-appendix/open-questions.md#is-a-statement-summary-one-per-period-or-one-per-import-run).
+
+**Whether the check A9-R17 surfaces is itself required.** A9-R17 binds wherever a
+summary **records** a difference between a statement's stated balances and its
+rows. Nothing requires the check that produces one.
+[A1-R21](a1-source-formats.md#acceptance-criteria) is the nearest rule and is
+anchored deliberately elsewhere — on the amount a **row** states, not on a
+closing balance, so that a format summing its own closing balance from its rows
+could not be measured against itself. Both formats that state two balances do
+perform the statement-level check today. Whether that should be a requirement,
+and whether it would belong beside the per-row rule in A1 or beside the
+recording channel in A9-R1, is undecided, and the question is recorded in
+[90-appendix/open-questions.md](../../../90-appendix/open-questions.md#should-the-specification-require-the-check-a9-r17-surfaces).
 
 ## Related
 
