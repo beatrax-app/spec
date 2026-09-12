@@ -71,8 +71,11 @@ own signal.
 
 Detection is queued so it never slows an import. A one-time full-history
 backfill runs on first activation, claimed atomically so a crash mid-walk does
-not cause it to re-run. An hourly sweep is the durable safety net for anything
-the reactive path missed, and the same sweep revives expired snoozes.
+not cause it to re-run: the claim stands only while a walk is moving under it,
+and the next attempt takes it over and continues from where the last one
+reached. An hourly sweep re-evaluates recent charges the reactive path missed,
+revives expired snoozes, and picks up a first-activation walk whose attempts
+ran out — the history that walk covers is older than the sweep's own window.
 
 Concurrent evaluation paths for the same transaction collapse on a uniqueness
 key.
@@ -97,7 +100,7 @@ machine.
 | Thin history for both merchant and category | The detector declines; nothing fires. |
 | A duplicate pair inside an approved recurring series | Does not fire. |
 | Concurrent reactive, backfill, and sweep evaluation | Collapse on a uniqueness key. |
-| A backfill crash mid-walk | The claim is already stamped, so it does not re-run; the hourly sweep is the backstop. |
+| A backfill crash mid-walk | The claim is held; the completion is not written until the walk runs out of history. The next attempt resumes from the last point the walk reached, and the hourly sweep re-drives one whose attempts ran out. The sweep does not stand in for that walk: it only looks at recent charges. |
 | An alert with only duplicate or new-merchant reasons | The suppression band falls back to the alert transaction's own amount, since there is no per-merchant typical. |
 | Two reasons where one is suppressed | The alert is written with the surviving reason only. |
 | Every reason suppressed | No row is written. |
@@ -124,7 +127,7 @@ machine.
 | **C4-R16** | Acknowledged MUST be terminal, and the state machine MUST NOT provide a general escape hatch. |
 | **C4-R17** | Detection MUST run on the queue and MUST NOT slow an import. |
 | **C4-R18** | First activation MUST run a one-time full-history backfill, claimed atomically so a crash does not cause a re-run. |
-| **C4-R19** | An hourly sweep MUST act as the durable safety net and MUST revive expired snoozes. |
+| **C4-R19** | An hourly sweep MUST re-evaluate recent charges the reactive path missed, MUST revive expired snoozes, and MUST resume a first-activation backfill left unfinished. |
 | **C4-R20** | Concurrent evaluations of the same transaction MUST collapse on a uniqueness key. |
 | **C4-R21** | Every background query MUST filter by user explicitly. |
 | **C4-R22** | Alerts MUST share the alerts surface with drift, behind a type switch, and MUST show their reasons. |
