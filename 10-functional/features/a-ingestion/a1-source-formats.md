@@ -106,6 +106,8 @@ header mismatch, and unsupported format are each distinct.
 | Unsupported PayPal export language | Typed error naming the language. |
 | PDF from which no text can be extracted | Typed error. There is no "best-effort" partial parse — the user re-exports. |
 | PayPal row whose amount carries no sign | Sign inferred from the event type; an unmapped type is a typed error. |
+| A PayPal payment whose fee column is non-zero | The fee is booked as its own transaction carrying the payment's source reference; the two together sum to the amount the wallet moved by. |
+| A PayPal payment whose fee column reads zero | No fee transaction is emitted: a movement of nothing is not a movement. |
 | Unbalanced MT940 narrative | Rejected rather than partially parsed. |
 | A CSV import with no declared dialect | Refused at the contract boundary, so even a programmatic caller cannot skip it. |
 
@@ -133,6 +135,7 @@ header mismatch, and unsupported format are each distinct.
 | **A1-R18** | An unmapped PayPal event type MUST raise a typed error naming the type. |
 | **A1-R19** | A CSV import MUST be refused unless a bank dialect is declared, enforced at the contract boundary rather than only in the UI. |
 | **A1-R20** | Parser output MUST be the canonical source-row shape; a parser MUST NOT emit a ledger-ready transaction directly. |
+| **A1-R21** | Where a source states the amount an account moved by for a row, the transactions a parser emits from that row MUST sum to that amount. A gross figure MUST NOT be booked as the movement where the source states a net one beside it. |
 
 ## Related
 
