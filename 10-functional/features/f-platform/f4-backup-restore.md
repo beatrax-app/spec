@@ -76,23 +76,45 @@ migrations run before the first request that database is brought forward, and
 where they do not it is served against code that does not match it — a
 difference between shells rather than a property of the restore.
 
-So the restore compares before it swaps, and refuses both. The set of migrations
-already recorded in the backup is what it compares: that set is inside every
-backup ever taken, where a marker introduced now would be absent from all of
-them and could only judge the ones written afterwards.
+So the restore compares before it swaps. The set of migrations already recorded
+in the backup is what it compares: that set is inside every backup ever taken,
+where a marker introduced now would be absent from all of them and could only
+judge the ones written afterwards.
 
-A refusal has to say which direction it is, because the two ask different things
-of the reader — one is answered by installing a newer build, the other is not
-answerable at all.
+The two directions then get different answers, because only one of them has one.
 
-**What this costs.** A backup taken before an update cannot be restored after
-one. That is the majority of backups a reader holds more than a few weeks, and
-on a mobile install it is the common case rather than a corner: the restore
-screen is reached from a fresh install, a fresh install is whatever version the
-store is serving, and the reader cannot choose an older one. The cost is
-accepted because the alternative on that path is a restore that reports success
-and leaves the reader's ledger being read by code that does not match it. It is
-recorded here rather than left to be discovered.
+**A newer backup is refused.** There is no path from that database to a shape
+this build reads, so the only honest answer is to decline it and say which build
+would.
+
+**An older backup is brought forward.** It is the shape this build's own
+migrations were written to convert, and the desktop was already converting it —
+by accident, on the next request, through a gate the phone does not have.
+Refusing it instead would have stranded most backups a reader holds more than a
+few weeks, and on a mobile install nearly all of them: the restore screen is
+reached from a fresh install, a fresh install is whatever version the store is
+serving, and the reader cannot choose an older one.
+
+**So a restore is a schema-changing operation**, for that case, and says so
+before it runs. That is a change in what it promises and is not left implicit.
+
+### Where a forward run may fail, and what it may not take with it
+
+A migration that fails part way through is not recoverable on this store: the
+statements before it are applied and committed, the failing one is not recorded,
+and re-running meets the half of its own work that already landed. There is no
+schema transaction to unwind it.
+
+That is survivable on a copy and unsurvivable on the reader's ledger. So the
+forward run happens on the copy the restore has already staged — the same file
+the decryption and the integrity check produced — and the swap reads that copy
+only once every migration has run. A failure refuses, and the live database is
+the one thing the attempt cannot have touched, because it was never opened.
+
+The ordering that follows from it: the forward run comes **before** the
+pre-restore snapshot. A refused restore leaves no snapshot, because it leaves
+nothing at all. A restore that migrates and then swaps is not a refusal, and
+takes its snapshot like any other.
 
 ### A refusal the reader never sees
 
@@ -155,7 +177,8 @@ maintenance command should refuse rather than confirm.
 | A restore in a non-interactive context without confirmation | Refused. |
 | The application key sentinel present but the key absent | Short-circuits by sentinel; documented as an operator-recovery path. |
 | A backup naming a schema change the build does not have | Refused before the live database is touched, naming the direction. |
-| A backup missing a schema change the build has run | Refused the same way, naming the other direction. |
+| A backup missing a schema change the build has run | Brought forward to the running build's schema on the staged copy, then restored. |
+| A migration failing during that forward run | Refused, with the live database untouched and no pre-restore snapshot written. |
 | A backup whose recorded schema changes match the build exactly | Restored. |
 | A backup recording no schema changes at all | Restored — it carries no claim to check, and refusing would strand a fixture. |
 
@@ -185,8 +208,10 @@ maintenance command should refuse rather than confirm.
 | **F4-R20** | Install MUST refuse to run where the database path lies inside a cloud-sync folder. |
 | **F4-R21** | The failed-job prune command MUST reject a zero duration. |
 | **F4-R22** | The prune duration grammar MUST reject ambiguous units. |
-| **F4-R23** | A restore MUST compare the schema changes recorded in the backup against those the running build carries, before the live database is touched, and MUST refuse a backup that names one the build does not have OR is missing one the build has run. The comparison MUST read the set already recorded in the backup rather than a marker added to new backups, which every backup a reader already holds would lack. A backup recording none MUST be restored rather than refused. |
-| **F4-R24** | A refusal MUST name which direction the mismatch is, because installing a newer build answers one and nothing answers the other. |
+| **F4-R23** | A restore MUST compare the schema changes recorded in the backup against those the running build carries, before the live database is touched, and MUST refuse a backup that names one the build does not have. The comparison MUST read the set already recorded in the backup rather than a marker added to new backups, which every backup a reader already holds would lack. A backup recording none MUST be restored rather than refused. |
+| **F4-R24** | A refusal MUST name what it is refusing — a backup from a build ahead of this one, or a backup that could not be brought up to date — because those ask different things of the reader and only one of them is answered by installing something. |
+| **F4-R26** | A backup missing schema changes the running build has run MUST be brought forward to that build's schema as part of the restore, on every shell rather than as a consequence of one shell's startup gate. The reader MUST be told before it runs that restoring will update the backup. |
+| **F4-R27** | The forward run MUST NOT touch the live database. It MUST run against the copy the restore has already staged, and the swap MUST read that copy only once every migration has run. A migration that fails MUST refuse the restore with the live database unopened and no pre-restore snapshot written — this store has no schema transaction, so a partly-applied run is permanent wherever it lands. |
 | **F4-R25** | Every refusal a restore raises, and every path a successful restore reports, MUST reach a surface that renders it. A reason flashed to a screen the flow does not arrive at is not a refusal the reader received. |
 
 ## Related
