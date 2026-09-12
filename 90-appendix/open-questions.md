@@ -103,6 +103,60 @@ instead.
 *In: [E4](../10-functional/features/e-sync/e4-at-rest-encryption.md#the-one-key-that-never-rotates) ·
 [E2](../10-functional/features/e-sync/e2-device-pairing.md)*
 
+### Is a derived opening balance of zero a balance anybody measured?
+
+A format carrying no balance rows of its own may still answer for its statement
+figures by summing the rows it just yielded
+([A9-R16](../10-functional/features/a-ingestion/a9-starting-balances.md#acceptance-criteria)).
+Summing starts somewhere, and the start is nothing — so a PayPal export whose
+rows were all readable and all in one currency produces a summary whose
+**opening** balance is `0`, dated at the period start and in the account's own
+currency. Nothing in the record distinguishes that from a statement which
+genuinely opened at nothing, because nothing in the record says the figure was
+worked out rather than read.
+
+A9-R16's withholding rule does not catch it, and not by oversight: the rule
+withholds a balance the sum cannot be trusted to carry, and this sum is
+trustworthy. The zero is not the sum's result, it is the point the sum started
+from, which is a different thing from a measurement. What the requirement does
+settle is the harm — a derived balance may not anchor an account by any route,
+neither offered to the reader nor written behind the offer.
+
+What is unsettled is whether the figure should be recorded as a balance at all.
+Recording it keeps the summary complete and lets a later reader see what the
+import believed. Withholding it — the way a multi-currency sum already is
+withheld, with the period and the entry count still written — stops a zero
+nobody measured from ever being read as one. Nobody has weighed those against
+each other. The case that decides it is a reader importing a wallet export that
+holds real money, and asking what the product thinks the account held when the
+period opened.
+
+*In: [A9](../10-functional/features/a-ingestion/a9-starting-balances.md#open-questions) ·
+[A9-R16](../10-functional/features/a-ingestion/a9-starting-balances.md#acceptance-criteria)*
+
+### Is a statement summary one per period, or one per import run?
+
+[A9-R1](../10-functional/features/a-ingestion/a9-starting-balances.md#acceptance-criteria)
+records statement metadata once per statement **period**, and
+[A9-R4](../10-functional/features/a-ingestion/a9-starting-balances.md#acceptance-criteria)
+requires a summary unique per user, account and period. The product keys the row
+on the user and the **import run** instead, and writes at most one row per run.
+The two agree on the ordinary case and part on two others: two runs over the same
+statement period leave two rows where A9-R4 allows one, and a single run spanning
+two periods leaves one row where A9-R1 asks for two.
+
+Code and specification genuinely disagree, and neither side is obviously the
+defect. A9's own prose — that re-importing the same statement updates rather than
+duplicates — is the sentence that goes false if the run key is the right one, so
+this is not a wording slip that can be tidied from either end.
+
+What would settle it is re-importing the same statement under a new run: whether
+that should update the period's summary or stand beside it as a second record of
+a second run.
+
+*In: [A9-R1, A9-R4](../10-functional/features/a-ingestion/a9-starting-balances.md#acceptance-criteria) ·
+[A9](../10-functional/features/a-ingestion/a9-starting-balances.md#open-questions)*
+
 ### Should the hand-built transport handshake be replaced?
 
 It is vector-validated, and it is the highest-risk component in the product. If
