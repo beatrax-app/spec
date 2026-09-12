@@ -84,9 +84,13 @@ action.
 
 ### What is fetched, and how it lands
 
-Only **booked** transactions are consumed. Pending ones are dropped: a pending
-transaction that later books with different details would create a duplicate the
-fingerprint cannot collapse.
+Only **booked** transactions are consumed. Pending ones are dropped because a
+pending figure is not an authority on what settled, and because a fetched row
+carries no source reference to be found under. It is no longer true that such a
+pair would create a duplicate the fingerprint cannot collapse — a row restating
+one already stored under the same reference is recorded as a disagreement rather
+than written twice ([A3-R21](a3-idempotency.md)) — so consuming pending rows is a
+decision this feature has not taken, not a hazard it cannot survive.
 
 Fetched rows are shaped to match the file-import equivalent field for field,
 including the date normalisation, and land through the same preview pipeline and
