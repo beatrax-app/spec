@@ -64,6 +64,22 @@ If nobody is signed in, the intent is remembered and picked up after sign-in.
 Archive files containing several messages are iterated and each message is
 processed independently.
 
+### Which transaction a receipt belongs to
+
+A receipt is matched to the transaction it describes **by the reference it
+carries**, where that reference names a transaction of the same account the
+ledger already holds. Only where the reference names nothing stored does the
+match fall back to comparing totals, and that comparison is approximate within a
+bounded tolerance.
+
+The order is a decision, not an optimisation. A reference is an identifier the
+source assigned to one transaction; a total inside a tolerance is a resemblance.
+So a receipt whose total sits *outside* the tolerance but whose reference names a
+stored row is that row's receipt, and the disagreement about the total is
+recorded ([A3](a3-idempotency.md)) rather than written as a second transaction.
+The tolerance bounds how far an approximate match may reach; it does not bound a
+receipt that named its transaction outright.
+
 ### Conflicts
 
 Where a receipt disagrees with what the statement already recorded, the
@@ -78,6 +94,8 @@ user preference that governs them live in [A3](a3-idempotency.md).
 | An archive containing several receipts | Each is processed independently; one failure does not stop the others. |
 | A matcher throwing during matching | Not swallowed — it propagates, so a broken matcher is loud rather than silently skipping every message. |
 | An extracted total that disagrees with the matched transaction beyond tolerance | Recorded as a conflict for the user to resolve. |
+| A receipt whose total is outside the tolerance but whose reference names a stored transaction | Matched by the reference. The total disagreement is recorded as a conflict; no second transaction is written. |
+| A receipt whose reference names nothing stored and whose total is outside the tolerance | A transaction of its own. |
 | A receipt dropped before sign-in | The intent is remembered; the staging page picks it up afterwards. |
 | The same inbox message re-fetched | Idempotent; no duplicate enrichment. |
 | A chain hint naming a card the user does not own | Stored with an empty target; dismissible, or completed by a later resolver pass. |
@@ -104,6 +122,7 @@ user preference that governs them live in [A3](a3-idempotency.md).
 | **A5-R15** | Re-processing an already-processed message MUST produce no duplicate enrichment. |
 | **A5-R16** | Cross-user reads and writes MUST return not-found. |
 | **A5-R17** | Receipt de-duplication MUST key on a hash of the message content, never on a sender-supplied message identifier, so a forged identifier cannot suppress or displace a distinct receipt. |
+| **A5-R18** | A receipt carrying a source reference that a stored transaction of the same account already holds MUST be matched to that transaction by the reference; the total tolerance MUST apply only where the reference names nothing stored. |
 
 ## Related
 
