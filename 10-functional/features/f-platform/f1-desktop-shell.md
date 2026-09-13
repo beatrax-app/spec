@@ -155,6 +155,24 @@ exit bucket stays bounded. `beatrax#442`.
 "built, pinned by test, awaiting hardware" — and the hardware is where the
 defect was.
 
+### Nothing may ride along in the desktop bundle
+
+The packager does not build from a manifest of files it needs: it copies the
+working tree, filtering as it walks, then runs `composer install --no-dev` in
+the copy. Whatever the filter did not name is in the artefact. That is the same
+hazard [F8-R6](f8-app-store-distribution.md) states for a mobile bundle, and it
+has the same answer — the artefact is read, not the exclusion list, because a
+list is a claim and an artefact is the evidence.
+
+It had no answer on this side until 2026-09-13. Every published desktop release
+from `v1.0.1-beta` to `v1.3.0` carried a vendored package's documentation with a
+complete PEM private key in its usage example, and a second package's linting
+configuration. Neither is a secret of this product's — they are fixtures their
+authors publish openly — and neither is reachable from any autoloader. What
+made them worth a requirement is that nothing in the release pipeline read a
+desktop artefact at all, so the next file to ride along would have been just as
+invisible.
+
 ## Edge cases
 
 | Situation | Behaviour |
@@ -190,6 +208,8 @@ defect was.
 | **F1-R16** | Outside the bundle, the absence of the theme signal MUST be the documented fallback trigger. |
 | **F1-R17** | Storage paths MUST resolve through the single path authority, enforced by architecture test. |
 | **F1-R18** | Lock-on-window-close MUST act on the focused window's session, and MUST be verified to. |
+| **F1-R19** | No key material, build credential, or populated database may ship inside a desktop bundle, verified by inspecting the built artefact rather than the exclusion rules. |
+| **F1-R20** | Every job that builds a desktop bundle MUST read what it built, and MUST fail both when it finds something and when it finds no bundle to read. |
 
 ## Related
 
