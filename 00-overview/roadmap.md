@@ -217,17 +217,24 @@ Google Play — and where a sandboxed store build and a direct-download build ca
 both ship for a platform, both ship. Store distribution is **additive**, not a
 replacement ([ADR-0032](decisions/0032-all-four-stores-additive-to-direct-download.md)).
 
-One of the four is not a submission. The desktop bundle embeds a static
-interpreter and relies on two hardened-runtime relaxations to map it, and the
+One of the four was not a submission. The desktop bundle embeds a static
+interpreter and relied on two hardened-runtime relaxations to map it, and the
 sandbox a Mac App Store build must run under ignores one of them, so that
-listing needs a different runtime strategy before it needs a submission. It is
-the largest unknown in this release.
+listing needed a different runtime strategy before it needed a submission. This
+page called it the largest unknown in the release; it was measured on
+2026-09-07 and the interpreter runs sandboxed with every capability this product
+needs — PCRE JIT, a loopback listener, a multicast join on `224.0.0.251:5353`, a
+child process and a SQLite write — and the runtime change has since been made,
+so `F8-R28` is satisfied. The store lane is a `mas` target with its own
+entitlements pair and the interpreter relocated into `Contents/MacOS`. What is
+left on it is not code either: a provisioning profile and a Mac Installer
+Distribution certificate, which are artefacts of the Apple Developer portal.
 
 The other three are further along than this page has been saying. Re-audited
 2026-09-07, one identifier at a time: twenty-two of the twenty-eight
 requirements are satisfied, four are console records and listing copy that
-neither repository can decide, and two are open — the Mac App Store shape above,
-and nothing else. Play takes a store bundle now built beside the direct
+neither repository can decide, and the two that were open were the Mac App Store
+shape above, which has closed since. Play takes a store bundle now built beside the direct
 download; iOS has no direct-download shape to be additive with; the Microsoft
 Store is an EXE/MSI listing by decision, so the existing installer already is
 the store shape. What is left on those three is account and listing work rather
