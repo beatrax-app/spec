@@ -205,6 +205,48 @@ and no surface may describe one.
   money, holds no funds, lends nothing and files nothing.
 - An **application category**, which is not optional and cannot be blank.
 
+### A permission can be a lock rather than a key
+
+The permission rule above reads a request as an ask: the application wants a
+capability it does not have, so it must name what uses it. Android has a second
+kind, and the release job met one the first time that check ever ran to
+completion — every earlier attempt died at the key-material step that precedes
+it, so nothing had reached the permission comparison before.
+
+`androidx.core` both declares and requests
+`${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION`. After substitution
+the name lands inside Beatrax's own package namespace, declared at plain
+`signature` level, and its purpose is to stop a receiver registered at runtime
+from being reachable by other applications on API 33 and above. Only a build
+signed with the same key can hold it, and the only such build is this one. It
+asks the device for nothing. It puts a lock on a component the application
+already owns.
+
+Refusing that artefact would be refusing a **reduction** in exposure, so the
+rule is narrowed rather than the finding waved through — narrowed on what the
+permission grants, read out of the merged artefact, never on where it came from.
+Three conditions have to hold together, and each is legible in the merged
+manifest:
+
+| Condition | Why it is load-bearing |
+|-----------|------------------------|
+| The artefact **declares** the permission, not only requests it | A request with no declaration beside it is an ask against somebody else's definition, which is the ordinary case the rule already governs. |
+| The name lies inside the artefact's **own package namespace** | `signature` is measured against the signing key of the application that *declares* the permission. Keeping the name self-scoped is what makes that application this one, readable from the artefact instead of assumed. |
+| `protectionLevel` is **exactly plain `signature`** | That is the entire grant: same signing key, nothing else. Any modifier — `privileged`, `preinstalled`, `knownSigner` — widens who may hold it, and a wider holder is a consumer this product cannot name. |
+
+The refusal has a second half, and it matters more than the carve-out. A
+permission the artefact **declares** at any level other than plain `signature`
+is refused whether or not anything requests it — a declaration carrying no
+`protectionLevel` attribute included, because the platform reads an omitted
+attribute as `normal` and a `normal` permission is granted to any application
+that asks. A component protected by one is protected against nobody, and the
+declaration reads as a safeguard while being none.
+
+None of this exempts a dependency's permissions. A permission that arrives from
+a dependency's manifest and grants anything outward is exactly what the named-
+consumer rule is for, and its answer is still a named consumer or removal at
+merge. Provenance is not the test and never was.
+
 ### What review needs to see
 
 A reviewer installing the application gets an empty ledger, a signup screen that
@@ -232,7 +274,10 @@ it were not.
 | Enrolling with a newly generated upload key | Refused: existing installs could not upgrade, and the ledger is the only copy. |
 | A required-reason category the binary trips but the manifest omits | The submission is rejected; the manifest is derived from symbols, not from intent. |
 | A category the binary does not trip | Not declared; claiming a reason for an unused call is its own false statement. |
-| A permission arriving from a dependency's manifest | Given a named consumer, or removed at merge. |
+| A permission arriving from a dependency's manifest | Given a named consumer, or removed at merge. Where it came from changes nothing about the test. |
+| A permission the artefact declares over its own components, in its own namespace, at plain `signature` | Accepted with no named consumer. It grants nothing outward; only a build signed with the same key can hold it. |
+| A permission the artefact declares with no `protectionLevel` attribute | Refused. The platform reads the omission as `normal`, which any application may hold. |
+| A permission the artefact declares at `signature` with a modifier | Refused. The modifier widens who may hold it beyond this build, and that holder is a consumer this product cannot name. |
 | A purpose string inherited from a plugin | Replaced; it describes somebody else's product. |
 | The outbound-call catalogue changing | The store privacy declarations are re-derived before the next submission. |
 | A store build reaching an update-install path | A release blocker, not a defect. |
@@ -267,7 +312,8 @@ it were not.
 | **F8-R15** | Every store privacy declaration MUST be derived from the outbound-call catalogue, and MUST be re-derived before any submission that follows a change to it. |
 | **F8-R16** | The financial-features declaration MUST record that the application provides no financial feature, and any change to that answer MUST be a specification change first. |
 | **F8-R17** | The application MUST target the platform API level its store requires for a new submission, and that level MUST be pinned in this product rather than inherited from a dependency's default. |
-| **F8-R18** | Every permission the shipped artefact requests MUST have a named consumer in shipped code, verified against the merged artefact rather than the source manifest. |
+| **F8-R18** | Every permission the shipped artefact requests MUST have a named consumer in shipped code, verified against the merged artefact rather than the source manifest. The one exception is a permission the artefact declares to protect its own components, which grants nothing outward and which F8-R30 defines exhaustively. |
+| **F8-R30** | A permission the shipped artefact requests satisfies F8-R18 without a named consumer in shipped code only where all three hold in the merged artefact: the artefact **declares** the permission rather than only requesting it; the name lies within the artefact's own package namespace; and its declared `protectionLevel` is exactly plain `signature`, carrying no modifier. Such a permission grants nothing outward — only a build signed with the same key can hold it — so refusing it would refuse a reduction in exposure rather than a request for one. A permission the artefact declares at any other protection level MUST be refused whether or not anything requests it, a declaration omitting the attribute included: the platform reads an omitted `protectionLevel` as `normal`, which any application may hold. The test is what the permission grants and never where it came from — one that arrives from a dependency and grants anything outward is F8-R18's, unchanged. |
 | **F8-R19** | No permission a store restricts to a use Beatrax does not make may be requested. |
 | **F8-R20** | No store build may carry a reachable path that downloads or installs application code. |
 | **F8-R21** | A store build MUST name the store as its update channel, and MUST NOT present the desktop's self-update copy or controls on any surface. A surface that switches its sentence on the platform but renders the control unconditionally does not satisfy this. |
