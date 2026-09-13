@@ -76,6 +76,17 @@ simply answers it — so regeneration takes the account password as well, the sa
 proof in-app account deletion takes. The command on the machine stays exempt:
 access to the machine is its proof.
 
+**So does one minted for somebody else.** The owner can set a partner's password
+and mint a partner's sheet ([F3-R4](#acceptance-criteria)). Owner-only is an
+*authority*, not a proof: it is a property of the session, so a session in the
+wrong hands carries it whole. Both writes therefore cost the owner's own account
+password — the owner's and not the partner's, because the partner's credential is
+not available to the surface that replaces it (that the owner does not hold it is
+the reason the surface exists), and because what is being exercised is the owner's
+authority. Proof matches the authority being used, not the credential being
+rewritten. Neither write is retired by the partner's own later password change:
+one *set* that password, and the other issues the codes that reset it.
+
 ### The app-lock
 
 A numeric code, and optionally a device biometric, gating the application
@@ -203,6 +214,7 @@ needs the key that a locked session does not have.
 | **F3-R37** | Custody MUST NOT fail closed where the platform key store is absent, unreachable, or does not protect what it holds. An absent or unreachable store MUST degrade to session custody; a store that answers but does not protect MAY keep the key, and MUST be reported as providing no protection at rest. In every such case the custodian MUST report the custody it is actually providing, and nothing may claim a protection it is not being given. A store that is present and refuses a write is none of these: it MUST fail closed rather than let the raw key land in a persisted session. |
 | **F3-R38** | Sign-in with the account password MUST be rate-limited. The limit MUST be counted on the username as typed and normalised, so an unknown username is metered identically to a known one and the limiter reveals nothing about which it was; it MUST be enforced in the action rather than on the route, because the credential arrives on the Livewire update endpoint that route middleware does not cover; and a successful sign-in MUST clear it. The refusal MUST NOT distinguish a throttled known username from a throttled unknown one ([F3-R13](#acceptance-criteria), [F3-R34](#acceptance-criteria)). |
 | **F3-R39** | Regenerating a recovery sheet for one's own account from a signed-in session MUST require the account password, not a confirmation alone. A sheet outlives the session that minted it and is not retired by a later password change, so without the password a borrowed unlocked session becomes a credential the account holder cannot revoke. The command-line path stays exempt: access to the machine is its proof ([F3-R14](#acceptance-criteria)). |
+| **F3-R40** | An owner acting on a partner's credentials — setting the partner's password, or minting the partner's recovery sheet — MUST require the owner's own account password. Owner-only authority is a property of the session and is carried by a session in the wrong hands, so it cannot stand as proof of the actor. The proof MUST be the owner's rather than the partner's, because the partner's credential is not available to the surface that replaces it and because the authority being exercised is the owner's. Neither write is retired by the partner's own later password change ([F3-R4](#acceptance-criteria), [F3-R35](#acceptance-criteria)). |
 
 > **`F3-R33` landed on 2026-09-05**, the same day the deferral it was carried
 > under was reversed. "Registered but not yet wired" had been stale for months:
