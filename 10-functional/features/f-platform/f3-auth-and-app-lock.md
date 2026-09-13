@@ -78,7 +78,10 @@ so three paths exist:
 1. **Recovery codes.** Ten single-use codes generated at account creation and
    shown **once**, drawn from a phone-readable alphabet that excludes visually
    ambiguous characters, hashed with the same scheme as passwords. Each code is
-   matched and consumed atomically inside one transaction under a row lock. Every
+   matched and consumed atomically: a redemption spends exactly one code, and a
+   code already spent cannot be spent again however many attempts are in flight.
+   The comparison itself is deliberately outside that transaction — see
+   [below](#a-row-lock-the-shipped-database-does-not-take). Every
    attempt — success or failure — writes an audit record, and a failure against
    an unknown username records no user, so the audit trail cannot be used to
    enumerate accounts. The mismatch message is constant regardless of whether the
@@ -190,6 +193,28 @@ The lock screen, its verification endpoints, sign-out, and the mobile lock route
 are exempt from the lock. Biometric **enrolment** is deliberately not exempt: it
 needs the key that a locked session does not have.
 
+### A row lock the shipped database does not take
+
+`F3-R11` said "under a row lock" until 2026-09-13. SQLite has no row lock, and
+Laravel's SQLite grammar compiles `lockForUpdate()` to an empty string — asked
+for the SQL, the driver returns `select * from "user_recovery_codes" where …`
+and nothing more. The requirement named a mechanism the shipped database does
+not implement, and the call that appeared to satisfy it was decorative.
+
+What the redemption actually costs is the reason this matters. A fixed ten
+bcrypt comparisons run per attempt, so that response time cannot separate an
+unknown username from a wrong code (F3-R13) — **3.5 seconds, measured.** The
+connection runs `transaction_mode = IMMEDIATE`, which takes the database-wide
+write lock at `BEGIN`, and both shells serve one request at a time. Holding
+that transaction across the hashing therefore freezes the whole application for
+three and a half seconds, and this endpoint needs no credential to reach.
+
+So the requirement now states the property rather than a mechanism: spend
+exactly one code, never spend a spent one, and keep the hashing out of the
+transaction that spends it. Atomicity is carried by a compare-and-set — a
+single `UPDATE … WHERE id = ? AND used_at IS NULL`, whose affected-row count is
+the answer — which needs no row lock and cannot be interleaved.
+
 ## Edge cases
 
 | Situation | Behaviour |
@@ -222,7 +247,7 @@ needs the key that a locked session does not have.
 | **F3-R8** | Ten single-use recovery codes MUST be generated at account creation and shown exactly once. |
 | **F3-R9** | Recovery codes MUST be hashed with the same scheme as passwords and MUST be distinct within a batch. |
 | **F3-R10** | The recovery alphabet MUST exclude visually ambiguous characters. |
-| **F3-R11** | A recovery code MUST be matched and consumed atomically under a row lock. |
+| **F3-R11** | A recovery code MUST be matched and consumed atomically: a redemption MUST spend exactly one code, and a code already spent MUST NOT be spendable again however many attempts are in flight. The hashing that decides the match MUST NOT be held inside the consuming transaction. |
 | **F3-R12** | Every recovery attempt MUST write an audit record, and a failure against an unknown username MUST record no user. |
 | **F3-R13** | The recovery mismatch message MUST be constant regardless of whether the username existed. |
 | **F3-R14** | A command-line reset path MUST exist as the last resort and MUST require access to the machine. |
