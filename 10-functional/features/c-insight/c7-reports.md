@@ -42,8 +42,11 @@ period grouped two different ways must produce the same total.
 
 **Net worth over time** is sampled on demand rather than stored as history. Its
 most recent point is not guaranteed to be byte-identical to the dashboard's
-net-worth card, which resolves through a different anchor path — a documented
-limitation rather than a bug to be surprised by.
+net-worth card, because the two ask about different days: the card asks about
+today, a series point about its bucket's last day, which for the bucket the
+current period is still inside is a date in the future. Both read the same
+balance as of that day and count the same rows, so asked about one day they
+agree — a documented limitation rather than a bug to be surprised by.
 
 ### Time buckets widen rather than truncate
 
