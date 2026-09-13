@@ -44,6 +44,45 @@ change  ──▶  cites GOV-R12  ──▶  review  ──▶  merge
 Dependency bumps, formatting, pipeline mechanics, documentation corrections.
 Straight through.
 
+## The requirement exists before the work merges
+
+[GOV-R4](README.md#the-gov-r-namespace) orders a **behavioural change**: its
+specification change merges first. That left a gap, and the gap has been walked
+through. A requirement written to *describe* work — not to change behaviour,
+only to write down what the product already does — is not a behavioural change,
+so nothing above ordered it, and it was routinely minted after the work it
+describes had merged. Eleven of the requirements locked into the v2.0 manifest
+are in that state, two of them measurable to the second: one implementation
+merged thirty minutes before its identifier existed, and another merged
+twenty-six seconds after the specification change that created it.
+
+The consequence is not cosmetic. A change cannot cite an identifier that does
+not yet exist, so those eleven are cited by nothing — and a reader asking *"what
+implements this?"* gets the same silence an unimplemented requirement gives.
+
+So the rule is stated about the requirement rather than about the change, and it
+is wider than GOV-R4:
+
+> **A requirement exists on the default branch before the work it describes
+> merges**, so that the implementing change can cite it
+> ([GOV-R27](README.md#the-gov-r-namespace)).
+
+There is one legitimate way to arrive late, and it is the founding one: this
+specification was written for a product that already existed, so a requirement
+describing behaviour older than the specification itself was always going to
+postdate its work. That case is **recorded** rather than ordered
+([GOV-R26](README.md#the-gov-r-namespace),
+[40-quality/definition-of-done.md](../40-quality/definition-of-done.md#when-the-requirement-postdates-the-work)).
+Nothing else is: a requirement minted from work that merged while this
+specification already covered its area is an inversion, and the record is not
+its excuse.
+
+**Neither rule is machine-checked.** The gate verifies that a cited identifier
+exists, not when it came to exist. Ordering is read in review, as it always was
+([canonical-spec.md](canonical-spec.md#ordering)). A rule enforced by vigilance
+alone decays, and this one says so about itself rather than implying a guarantee
+it does not have.
+
 ## Discussion first, for anything large
 
 Open a discussion, or ask in [the Discord](https://discord.nightworks.io), before

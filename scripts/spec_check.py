@@ -7,6 +7,9 @@ reusable workflow (.github/workflows/spec-check.yml). See 50-governance/.
 Enforces:
   GOV-R2  a citation is present
   GOV-R3  every cited identifier exists on spec@main
+  GOV-R28 a citation is read from a `Spec:` trailer and from nowhere else, and
+          an identifier named anywhere else is reported as named-but-not-cited
+          rather than as absent
 
 Ordering (GOV-R4) — that a behavioural change's spec PR merged first — is not
 machine-checked here yet; it is verified in review. Hardening this is tracked in
@@ -48,6 +51,22 @@ def cited_ids(text: str) -> set[str]:
     return ids
 
 
+def named_ids(text: str) -> set[str]:
+    """Identifiers the text names anywhere other than on a `Spec:` line.
+
+    A sentence is not a citation and this does not make it one: the trailer
+    stays the only form that passes, because it is a parseable and deliberate
+    act where "unlike A3-R23" and "superseded by A3-R23" are neither.
+
+    This exists so the gate can tell *cites nothing* apart from *names it three
+    lines above and never put it in a trailer*. It could not draw that
+    distinction before, and both read as uncited — which is how four v2
+    identifiers were graded uncited for being documented in the wrong shape
+    (GOV-R28).
+    """
+    return set(CITE_ANY.findall(SPEC_TRAILER.sub("", text)))
+
+
 GUIDANCE = """
 This change does not cite a spec identifier that exists on spec@main.
 
@@ -61,6 +80,7 @@ Add a `Spec:` trailer to a commit AND the PR body, for example:
   - Implementing something specified?  Cite the requirement.
   - Changing behaviour?  Open a spec PR first, then cite the new ID.
   - Routine maintenance (deps, formatting, CI)?  Cite GOV-R12.
+  - Named it in a sentence already?  Only the `Spec:` line is read.
 
 Guide: https://github.com/beatrax-app/spec/blob/main/50-governance/contributing.md
 """
@@ -89,8 +109,23 @@ def main() -> int:
         return 2
 
     cited = cited_ids(text)
+    # Reported, never counted. An identifier that does not resolve is not a
+    # citation under any reading, so naming one in prose says nothing worth
+    # printing; one that does resolve is the ambiguous case worth naming.
+    named = ", ".join(sorted({i for i in named_ids(text) if i in defined} - cited))
+
     if not cited:
-        print("::error::no `Spec:` citation found")
+        if named:
+            print(f"::error::no `Spec:` trailer found; the text names {named} outside one")
+            print(f"""
+A citation is read from a line beginning `Spec:` and from nowhere else, so this
+text cites nothing. What it does name, in prose, the specification defines:
+{named}. If this change implements that, the fix is the trailer — on a commit
+and in the pull-request body:
+
+    Spec: {named}""")
+        else:
+            print("::error::no `Spec:` citation found")
         print(GUIDANCE)
         return 1
 
@@ -101,6 +136,10 @@ def main() -> int:
         return 1
 
     print(f"spec-check: OK — cites {', '.join(sorted(cited))}")
+    if named:
+        print(f"::warning::named but not cited: {named} — named outside a `Spec:` "
+              "line, so this change does not cite it. Add it to the trailer if "
+              "this change implements it.")
     return 0
 
 

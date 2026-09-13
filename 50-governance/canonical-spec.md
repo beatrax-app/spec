@@ -39,6 +39,17 @@ Several identifiers are fine:
 Spec: E1-R9, E1-R13, ADR-0014
 ```
 
+**Only the trailer counts.** The gate reads identifiers from lines beginning
+`Spec:` and from nowhere else, so a body that says *"this implements B5-R13"*
+cites nothing. That is deliberate: a trailer is a parseable, deliberate act and
+a sentence is not — *"unlike B5-R13"* and *"superseded by B5-R13"* name an
+identifier while citing none of it, and a gate that accepted them would grade a
+change as cited on a reading no reviewer agreed to. What the gate does instead
+is **say so**. An identifier it finds outside a trailer is reported as
+named-but-not-cited, never as absent
+([GOV-R28](README.md#the-gov-r-namespace)) — so a body naming four identifiers
+on a `Spec:` line that a squash trimmed to one no longer passes in silence.
+
 ## What is citable
 
 | Kind | Example | Defined in |
@@ -79,7 +90,10 @@ diff.
 ## Ordering
 
 A behavioural change's specification change **merges first**
-([GOV-R4](README.md#the-gov-r-namespace)).
+([GOV-R4](README.md#the-gov-r-namespace)), and more widely: a requirement exists
+before the work it describes merges, so the implementing change can cite it
+([GOV-R27](README.md#the-gov-r-namespace),
+[change-lifecycle.md](change-lifecycle.md#the-requirement-exists-before-the-work-merges)).
 
 **Ordering is not machine-checked** — the gate verifies existence, not sequence.
 It is verified in review, and hardening it is tracked work. Recorded plainly so
@@ -121,6 +135,8 @@ tree under review instead.
 - It does not check that the citation is **apt**. Citing an unrelated identifier
   passes the gate and fails review.
 - It does not check **ordering**, as above.
+- It does not accept an identifier named in prose. It **names** one, distinctly,
+  and passing still needs the trailer ([GOV-R28](README.md#the-gov-r-namespace)).
 - It does not check that the implementation actually **satisfies** the
   requirement. That is the reviewer's job, and the test's.
 

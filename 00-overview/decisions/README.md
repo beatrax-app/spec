@@ -65,6 +65,7 @@ of them invent a decision that was not already made.
 | [0031](0031-a-signed-wrap-is-independent-of-its-channel.md) | A signed epoch wrap is trusted on its signature, not on its channel | Accepted | Supersedes part of [0016](0016-noise-transport-zero-knowledge-relay.md) |
 | [0032](0032-all-four-stores-additive-to-direct-download.md) | All four stores, and direct download is not retired | Accepted | Supersedes part of [0006](0006-nativephp-desktop-shell.md) and [0019](0019-asymmetric-release-publish.md) |
 | [0033](0033-the-relay-carries-pairing-not-the-ledger.md) | The relay carries pairing material, not the ledger, and "zero-knowledge" is retired | Accepted | Supersedes part of [0016](0016-noise-transport-zero-knowledge-relay.md) and [0004](0004-local-only-hosting.md) |
+| [0034](0034-a-requirement-that-postdates-its-work-is-recorded.md) | A requirement that postdates its work is recorded, not cited | Accepted | New |
 
 > **Not here:** the spec's own governance rules. Those are not architectural —
 > no component's design depends on them. They live in
