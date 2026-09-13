@@ -67,6 +67,15 @@ so three paths exist:
 
 Codes within a batch are distinct, ensured by the generator before the write.
 
+**A fresh sheet costs the account password.** A signed-in reader can retire their
+standing sheet and mint ten new ones from settings. What comes out is a bearer
+credential that outlives the session that asked for it: a later password change
+ends every other session ([F3-R35](#acceptance-criteria)) and does not retire a
+sheet. A confirmation is therefore not proof here — whoever holds the session
+simply answers it — so regeneration takes the account password as well, the same
+proof in-app account deletion takes. The command on the machine stays exempt:
+access to the machine is its proof.
+
 ### The app-lock
 
 A numeric code, and optionally a device biometric, gating the application
@@ -193,6 +202,7 @@ needs the key that a locked session does not have.
 | **F3-R36** | The app-lock wraps of the data key MUST use a memory-hard KDF at MODERATE limits, and the PIN MUST be six to ten digits, so a stolen database file resists offline brute-force of the wrap key. Operating-system key custody (F3-R33) now stands beside it on macOS, Windows, iOS, Android and keyring-backed Linux; where the platform offers no store that protects, this is the whole defence. |
 | **F3-R37** | Custody MUST NOT fail closed where the platform key store is absent, unreachable, or does not protect what it holds. An absent or unreachable store MUST degrade to session custody; a store that answers but does not protect MAY keep the key, and MUST be reported as providing no protection at rest. In every such case the custodian MUST report the custody it is actually providing, and nothing may claim a protection it is not being given. A store that is present and refuses a write is none of these: it MUST fail closed rather than let the raw key land in a persisted session. |
 | **F3-R38** | Sign-in with the account password MUST be rate-limited. The limit MUST be counted on the username as typed and normalised, so an unknown username is metered identically to a known one and the limiter reveals nothing about which it was; it MUST be enforced in the action rather than on the route, because the credential arrives on the Livewire update endpoint that route middleware does not cover; and a successful sign-in MUST clear it. The refusal MUST NOT distinguish a throttled known username from a throttled unknown one ([F3-R13](#acceptance-criteria), [F3-R34](#acceptance-criteria)). |
+| **F3-R39** | Regenerating a recovery sheet for one's own account from a signed-in session MUST require the account password, not a confirmation alone. A sheet outlives the session that minted it and is not retired by a later password change, so without the password a borrowed unlocked session becomes a credential the account holder cannot revoke. The command-line path stays exempt: access to the machine is its proof ([F3-R14](#acceptance-criteria)). |
 
 > **`F3-R33` landed on 2026-09-05**, the same day the deferral it was carried
 > under was reversed. "Registered but not yet wired" had been stale for months:
