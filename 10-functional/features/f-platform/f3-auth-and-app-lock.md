@@ -87,6 +87,19 @@ authority. Proof matches the authority being used, not the credential being
 rewritten. Neither write is retired by the partner's own later password change:
 one *set* that password, and the other issues the codes that reset it.
 
+**And so does an account minted for a reader who does not exist yet.** The owner
+can add a household member, choosing that member's first password
+([F3-R3](#acceptance-criteria)). Creating is not rewriting: there is no standing
+credential to prove knowledge of, and the reader who will hold the account cannot
+consent, because they do not exist. What is left is the owner's authority — which
+is what the rule has been the whole way down — so the owner's own password is the
+proof here too. What it produces is durable in the same way the sheet is: the
+owner changing their own password afterwards does not revoke the account, and no
+partner is signed out and puzzled, because there is nobody yet to notice. The
+**first** account on an install is a different act and stays exempt: there is no
+owner then, so there is no authority to prove and nothing to prove it with
+([F3-R1](#acceptance-criteria)).
+
 ### The app-lock
 
 A numeric code, and optionally a device biometric, gating the application
@@ -215,6 +228,7 @@ needs the key that a locked session does not have.
 | **F3-R38** | Sign-in with the account password MUST be rate-limited. The limit MUST be counted on the username as typed and normalised, so an unknown username is metered identically to a known one and the limiter reveals nothing about which it was; it MUST be enforced in the action rather than on the route, because the credential arrives on the Livewire update endpoint that route middleware does not cover; and a successful sign-in MUST clear it. The refusal MUST NOT distinguish a throttled known username from a throttled unknown one ([F3-R13](#acceptance-criteria), [F3-R34](#acceptance-criteria)). |
 | **F3-R39** | Regenerating a recovery sheet for one's own account from a signed-in session MUST require the account password, not a confirmation alone. A sheet outlives the session that minted it and is not retired by a later password change, so without the password a borrowed unlocked session becomes a credential the account holder cannot revoke. The command-line path stays exempt: access to the machine is its proof ([F3-R14](#acceptance-criteria)). |
 | **F3-R40** | An owner acting on a partner's credentials — setting the partner's password, or minting the partner's recovery sheet — MUST require the owner's own account password. Owner-only authority is a property of the session and is carried by a session in the wrong hands, so it cannot stand as proof of the actor. The proof MUST be the owner's rather than the partner's, because the partner's credential is not available to the surface that replaces it and because the authority being exercised is the owner's. Neither write is retired by the partner's own later password change ([F3-R4](#acceptance-criteria), [F3-R35](#acceptance-criteria)). |
+| **F3-R41** | Creating an additional account from a signed-in session MUST require the creating owner's own account password. There is no credential of the new account to prove knowledge of and nobody able to consent, because the reader does not exist yet; what is being exercised is the owner's authority, so the owner is who must be proved present. The account that results is durable access the owner's own later password change does not revoke. Creating the **first** account on an install MUST stay exempt: there is no owner then, so there is no authority to prove and nothing to prove it with ([F3-R1](#acceptance-criteria), [F3-R3](#acceptance-criteria)). |
 
 > **`F3-R33` landed on 2026-09-05**, the same day the deferral it was carried
 > under was reversed. "Registered but not yet wired" had been stale for months:
