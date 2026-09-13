@@ -52,7 +52,7 @@ requirements ([ARCH-R15](README.md#the-arch-r-namespace)).
 |-------|------|
 | **The household** | One or two people. There is no operator/user split — the person who installs it is the person who uses it. The only distinction is owner versus partner, and it exists only for account administration ([F3](../10-functional/features/f-platform/f3-auth-and-app-lock.md)). |
 | **A paired device** | Another copy, equal in the merge, trusted because the user paired it ([E2](../10-functional/features/e-sync/e2-device-pairing.md)). |
-| **A relay** | Optional, user-configured, ciphertext-only. It is not part of the system in any meaningful sense — it moves opaque bytes ([E3](../10-functional/features/e-sync/e3-transport.md)). |
+| **A relay** | Optional, user-configured, and used for pairing frames and sealed key epochs only — no operation crosses it. It can read the pairing frames it forwards; it cannot open the key epochs ([E3](../10-functional/features/e-sync/e3-transport.md), [ADR-0033](../00-overview/decisions/0033-the-relay-carries-pairing-not-the-ledger.md)). |
 
 There is no maintainer actor at runtime. Nothing the maintainer operates is in
 any data path.

@@ -84,15 +84,19 @@ be mapped is reported rather than dropped silently.
 ### How does sync work without a server?
 
 Your devices talk directly to each other. Each holds a full encrypted copy and
-they reconcile through a signed log of changes. When both are on the same
-network they sync directly; when one is asleep, changes wait in a relay that
-only ever holds encrypted data it cannot read.
+they reconcile through a signed log of changes. That happens only when both are
+on the same network; when one is asleep, the changes wait on the device that
+made them until the two meet again. A relay is optional and exists only to
+finish pairing and exchange keys — a transaction never passes through one.
 
 ### Can you read my data when it syncs?
 
 No. Sync is end-to-end encrypted between devices you have paired and verified
-yourself. The relay holds ciphertext with no key, and there is no Beatrax
-account or server that ever sees your ledger.
+yourself, and there is no Beatrax account or server that ever sees your ledger.
+Your transactions never pass through a relay either. What does pass through one
+is the key handover at pairing, sealed to the receiving device, and the pairing
+messages themselves, which are not encrypted: two device identifiers, the
+devices' public keys, and the name a device goes by.
 
 ### Can two people share a ledger?
 

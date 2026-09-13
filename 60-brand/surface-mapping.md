@@ -42,7 +42,8 @@ Its obligations are requirements rather than guidance
 
 - Source-available, **not** open source.
 - Local-first, with the outbound surface **named** rather than merely claimed.
-- Sync described accurately, including what a relay can observe.
+- Sync described accurately, including that no transaction crosses a relay and
+  what one can read of what does.
 - Which installers are signed and which are not, accurately in both directions.
 - No analytics, no tracking, no third-party embeds.
 

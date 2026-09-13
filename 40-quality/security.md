@@ -17,7 +17,7 @@ that follow.
 | **A lost or stolen device** | The app-lock, plus revocation that rotates the group key ([E2](../10-functional/features/e-sync/e2-device-pairing.md)) |
 | **An observer on the network** | Mutually authenticated, forward-secret sessions ([E3](../10-functional/features/e-sync/e3-transport.md)) |
 | **A machine-in-the-middle during pairing** | The mandatory safety-number confirmation on both screens |
-| **A hostile relay operator** | The relay holds ciphertext and performs no cryptography, asserted by test |
+| **A hostile relay operator** | No operation crosses a relay, so running one grants no access to the ledger. The key epochs it does carry are sealed to the receiving device, and it cannot put itself between two devices — the safety number both readers compare covers the sealing keys. It can read the pairing frames it forwards, which is stated rather than implied ([ADR-0033](../00-overview/decisions/0033-the-relay-carries-pairing-not-the-ledger.md)) |
 | **A hostile input file** | Typed parse failures, disabled external-entity resolution, size and line caps, archive-bomb and traversal guards, and pattern-length caps on user-supplied match expressions ([C9-R23](../10-functional/features/c-insight/c9-community-corpus.md#acceptance-criteria)) |
 | **A hostile aggregator response** | Host allow-list before credentials, HTTPS only, no redirects, private-address rejection |
 | **A tampered update** | Signature verification before anything is read from a manifest, hash verification before any install |
@@ -38,7 +38,7 @@ that follow.
 | **A compromised operating system** | A user-space application cannot defend against it. |
 | **A maliciously-paired device** | A paired device legitimately holds the group key. The safety-number confirmation is the defence, and it is the user's to perform. |
 | **A household member escalating to operator access** | Every user added to an instance is a co-equal, fully-trusted operator: any of them may enable developer mode (the SQL console and all-user visibility) and back up or restore the whole database. Partner accounts are a convenience, not a privilege boundary. Ordinary per-user data scoping ([ARCH-R6](../20-architecture/README.md#the-arch-r-namespace)) still applies to routine reads and writes. |
-| **Traffic analysis against a relay** | Sizes, timing, and recipient identifiers are observable. Documented, not defended. |
+| **Traffic analysis against a relay** | Sizes, timing and both device identifiers are observable, as is the content of a pairing frame. Documented, not defended. |
 | **An attacker with the database file, the time, and the motivation** | The plaintext set is too informative. See below. |
 
 ## The honest statement about at-rest encryption
@@ -125,6 +125,6 @@ Recorded rather than described as solved:
 
 ## Related
 
-- [ADR-0015](../00-overview/decisions/0015-multi-master-p2p-sync.md) · [ADR-0016](../00-overview/decisions/0016-noise-transport-zero-knowledge-relay.md) · [ADR-0018](../00-overview/decisions/0018-amounts-plaintext-at-rest.md) · [ADR-0020](../00-overview/decisions/0020-open-banking-byo-key-ais-only.md)
+- [ADR-0015](../00-overview/decisions/0015-multi-master-p2p-sync.md) · [ADR-0016](../00-overview/decisions/0016-noise-transport-zero-knowledge-relay.md) · [ADR-0018](../00-overview/decisions/0018-amounts-plaintext-at-rest.md) · [ADR-0020](../00-overview/decisions/0020-open-banking-byo-key-ais-only.md) · [ADR-0033](../00-overview/decisions/0033-the-relay-carries-pairing-not-the-ledger.md)
 - [G1 Privacy stance](../10-functional/features/g-ux/g1-privacy.md)
 - [ci-cd.md](ci-cd.md) · [code-standards.md](code-standards.md)

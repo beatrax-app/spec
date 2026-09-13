@@ -64,13 +64,20 @@ Full rationale: [ADR-0004](decisions/0004-local-only-hosting.md).
 
 Multi-device sync is the one place where the local-only promise is under
 genuine pressure, and it is where most products quietly give up. Beatrax does
-not. Devices sync peer-to-peer over the LAN; when a peer is offline the fallback
-is a store-and-forward relay that only ever holds ciphertext it cannot decrypt.
+not. Devices sync peer-to-peer over the local network, end-to-end encrypted, and
+that is the only road the ledger travels. When a peer is asleep its changes wait
+on the device that made them; nothing else is holding a copy on their behalf.
 
-"Encrypted at rest on our servers" is not the bar. The bar is that the relay
-operator — including the maintainer — learns nothing but message sizes and
-timing. See [ADR-0016](decisions/0016-noise-transport-zero-knowledge-relay.md)
-and [E3](../10-functional/features/e-sync/e3-transport.md).
+"Encrypted at rest on our servers" is not the bar, and neither is a promise
+about what an intermediary chooses not to read. The bar is that no operation
+reaches an intermediary at all. A relay is optional, nominated by the reader,
+and has one job: letting two devices finish pairing and hand over key epochs
+when they cannot reach each other. What it holds is worth stating in full —
+sealed key handovers it cannot open, pairing frames it can read, and the sizes,
+timing and device identifiers of both. See
+[ADR-0033](decisions/0033-the-relay-carries-pairing-not-the-ledger.md),
+[ADR-0016](decisions/0016-noise-transport-zero-knowledge-relay.md) and
+[E3](../10-functional/features/e-sync/e3-transport.md).
 
 ### P3 — Imports are idempotent, history is permanent
 
@@ -144,7 +151,7 @@ the reasoning, not an issue.
 
 | Non-goal | Why |
 |----------|-----|
-| **Cloud sync that can read the data** | Contradicts P1 and P2 outright. Sync is end-to-end encrypted and zero-knowledge or it does not ship. |
+| **Cloud sync that can read the data** | Contradicts P1 and P2 outright. Sync is end-to-end encrypted, device to device, or it does not ship — and no intermediary carries an operation at all. |
 | **Telemetry, even opt-in** | The presence of the SDK is the leak. See [ADR-0004](decisions/0004-local-only-hosting.md). |
 | **A remote error reporter** | Stack traces carry local variable contents — balances, merchant names, IBAN fragments. Scrubbing leaves too much residual risk. |
 | **Acting on the user's behalf** | Auto-cancel, auto-switch, payment initiation. Violates P7. |

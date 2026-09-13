@@ -44,14 +44,30 @@ delivers.
    identifier.
 2. **A manually entered host and port**, for networks where discovery is blocked
    — guest networks and client-isolated wireless are common.
-3. **The relay.**
+3. **A relay**, for pairing frames and key material only — never for an
+   operation.
 
-### The relay knows nothing
+### A relay carries pairing, not the ledger
 
-The relay stores and forwards opaque blobs addressed to a recipient device
-identifier. It performs **no cryptography at all** — the invariant is that its
-code path contains no cryptographic call, and that is asserted by test rather
-than described in a comment.
+A relay is optional, off until the reader nominates one, and exists for a single
+job: letting two devices finish the pairing ceremony ([E2](e2-device-pairing.md))
+and hand over group-key epochs ([E4](e4-at-rest-encryption.md)) when they cannot
+reach each other directly.
+
+**No operation crosses a relay.** Op-log entries travel only inside a
+mutually-authenticated session between two paired devices. Where neither device
+can reach the other, the changes wait on the device that made them until both
+are awake on the same network. There is no second road, and the product's own
+copy says so rather than leaving a reader to assume there is
+([ADR-0033](../../../00-overview/decisions/0033-the-relay-carries-pairing-not-the-ledger.md)).
+
+It stores and forwards blobs addressed to a recipient device identifier, and
+performs **no cryptographic operation on a blob and never looks inside one** —
+no libsodium call and no decode of a blob's contents anywhere in its code path,
+asserted by test rather than described in a comment. The digest and
+constant-time comparison that authorise a drain touch the credential, never the
+payload
+([ADR-0031](../../../00-overview/decisions/0031-a-signed-wrap-is-independent-of-its-channel.md)).
 
 - Draining a mailbox requires a credential derived **per device**. A credential
   scoped to one device cannot drain or delete another's mailbox. A single
@@ -72,11 +88,27 @@ than described in a comment.
   configures one, and its address is a setting rather than a constant. Its
   credential is stored with owner-only file permissions.
 
-### What the relay can still see
+### What a relay can read
 
-Message sizes, timing, and which device identifiers exchange traffic. Traffic
-analysis is **not** defended against, and that is documented rather than
-implied.
+Not looking is a discipline, not a guarantee — and only half of what a relay
+holds would resist looking.
+
+| What it holds | Opaque to it? |
+|---------------|---------------|
+| A group-key epoch wrap | The key is sealed to the receiving device and cannot be opened. Its envelope is not: it names both device identifiers and the epoch, and carries the sender's signature. |
+| A pairing frame | No. It is JSON as written — the pairing token's hash, the responder's Ed25519 and X25519 public keys, and the name its device goes by. The accepting frame names the responder and is **not** signed; the confirming frame names both devices and is. |
+| Every row's addressing | Both device identifiers, whatever the frame inside says. |
+| Sizes and timing | Observable on all of it. Traffic analysis is **not** defended against, and that is documented rather than implied. |
+
+None of this is a defect. A pairing frame is public-key material exchanged
+before any shared secret exists, and the safety number both readers compare is
+what makes a swapped key fail. Describing it as ciphertext would be
+([ADR-0033](../../../00-overview/decisions/0033-the-relay-carries-pairing-not-the-ledger.md)).
+
+The device name is the platform's own — a neutral label such as "Mac" or "PC" on
+a desktop, and on a phone the name the operating system reports, which is often
+one a person chose and can carry their name. It is deliberately never the
+machine's hostname.
 
 ### Key material over the transport
 
@@ -115,7 +147,8 @@ client never listens — it dials out only ([E5](e5-mobile-peer.md)).
 | A blob nobody collects | Expires after the undelivered window. |
 | A forged or relay-delivered epoch wrap | Adopted only if its signature verifies against the sender's confirmed device key; otherwise refused, logged, not thrown. |
 | A failed unseal | Strictly checked and rejected; logged, not thrown. |
-| No relay configured | Sync works on the local network only. |
+| No relay configured | Sync works on the local network only, and two devices that cannot see each other cannot complete pairing. |
+| A peer that cannot be reached at all | The changes wait on the device that made them. Nothing is handed to a relay to hold on the peer's behalf. |
 | The app locked when key material arrives | Logged and returned; never thrown. |
 
 ## Acceptance criteria
@@ -145,10 +178,11 @@ client never listens — it dials out only ([E5](e5-mobile-peer.md)).
 | **E3-R21** | The relay's deliver endpoint MUST rate-limit per source and reject a burst, so no participant can flood a mailbox. |
 | **E3-R22** | A drain credential MUST be bound to the device identifier it drains in a way the relay can verify without prior state, so a credential that is not about that identifier is refused even for a mailbox that has never been drained. |
 | **E3-R23** | A drain credential MUST NOT be shared between the local users of one install. |
+| **E3-R24** | An op-log entry MUST NOT be delivered over a relay; a relay MUST carry only pairing frames and sealed key-epoch wraps. What a relay holds MUST be documented in both halves — the wraps, sealed to the receiving device, and the pairing frames, which are not sealed and expose the device identifiers, the public keys and the device name they carry. |
 
 ## Related
 
-- [ADR-0016](../../../00-overview/decisions/0016-noise-transport-zero-knowledge-relay.md)
+- [ADR-0016](../../../00-overview/decisions/0016-noise-transport-zero-knowledge-relay.md) · [ADR-0031](../../../00-overview/decisions/0031-a-signed-wrap-is-independent-of-its-channel.md) · [ADR-0033](../../../00-overview/decisions/0033-the-relay-carries-pairing-not-the-ledger.md)
 - [E1 Change capture](e1-change-capture.md) — what travels
 - [E2 Device pairing](e2-device-pairing.md) — the identities
 - [E4 At-rest encryption](e4-at-rest-encryption.md) — the key material

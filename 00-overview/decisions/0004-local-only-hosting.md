@@ -1,8 +1,17 @@
 # ADR-0004: Local-only hosting; no cloud, telemetry, or remote logging
 
-**Status:** Accepted
+**Status:** Accepted; the relay's "ciphertext only" claim superseded by
+[ADR-0033](0033-the-relay-carries-pairing-not-the-ledger.md)
 **Date:** 2026-05-27
 **Graduated from:** product-repo Phase 17, decision D-32
+
+> **One claim in this record no longer holds.** "The optional relay holds
+> ciphertext only and can decrypt nothing" is true of the key handovers and
+> false of the pairing frames, which are not sealed — and no operation crosses a
+> relay at all
+> ([ADR-0033](0033-the-relay-carries-pairing-not-the-ledger.md)). What this
+> record decides is unaffected: there is still no cloud, no telemetry and no
+> remote logging, and a relay is still off until the reader nominates one.
 
 ## Context
 

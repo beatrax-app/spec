@@ -143,7 +143,7 @@ against.
   capture listener  ──▶ op-log entry, signed, clock-ordered
       │                        │
       │                        ▼
-      │                   transport  ── LAN-direct, or relay
+      │                   transport  ── the LAN-direct session only
       │                        │
       │                        ▼
       ▼                    peer device
@@ -159,6 +159,10 @@ against.
                                │
                                └─ applied ──▶ peer's DB + search index
 ```
+
+An operation crosses only the direct session between two paired devices. A
+relay carries pairing frames and sealed key epochs, never an op-log entry
+([ADR-0033](../00-overview/decisions/0033-the-relay-carries-pairing-not-the-ledger.md)).
 
 The database is a materialised view: replaying the merged log from scratch
 reproduces it ([ARCH-R11](README.md#the-arch-r-namespace)).

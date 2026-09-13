@@ -111,7 +111,7 @@ outbound calls the user enabled, enumerated in
 | Open banking | The user's own aggregator account, machine-to-aggregator. |
 | Exchange rates | A rate source. No user data is sent — only a request for rates. |
 | Update check | The release host. No user-identifying data beyond what any request carries. |
-| Sync | The user's own devices, end-to-end encrypted. A relay, if configured, holds ciphertext it cannot read. |
+| Sync | The user's own devices, end-to-end encrypted. A relay, if configured, carries pairing frames and sealed key epochs — never a transaction. It can read the frames; it cannot open the epochs. |
 
 With all of them off, **the application makes no outbound call**.
 

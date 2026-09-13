@@ -39,7 +39,9 @@ Where the honest answer is uncomfortable, the copy says the uncomfortable thing:
 
 - At-rest encryption does **not** encrypt everything; amounts and the search
   index are readable ([ADR-0018](../../../00-overview/decisions/0018-amounts-plaintext-at-rest.md)).
-- A relay sees **metadata** even though it cannot read content.
+- A relay **reads the pairing frames** it forwards — device identifiers, public
+  keys, a device name — and sees sizes and timing on everything. It cannot open
+  the sealed key handovers, and **no transaction crosses one at all**.
 - A paired device is **trusted**, and removing it later does not un-share what it
   already saw.
 - Uninstalling does **not** delete your data.
