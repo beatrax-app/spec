@@ -45,6 +45,28 @@ on a machine's rate, not a lockout — the window is short enough that a reader
 who has mistyped their own password waits seconds, and the whole of it is
 released by a successful sign-in.
 
+**A meter counted on a typed username can be spent by anybody who can type it.**
+That is the price of counting an unknown name exactly like a known one, and it
+is worth paying; what it must not cost is a household held off its own ledger by
+a stranger. The correct password is not the way out. The meter is read before
+the credential precisely so that a right password and a wrong one cost the same
+under it, and reordering the two would answer in timing what the constant
+message refuses to answer in words — so the order stands, and a second
+credential opens the meter instead. A **recovery code** presented at the
+sign-in screen clears that username's meter and is consumed doing it: it is the
+credential the stranger does not hold. It is audited like any other recovery
+attempt, it answers the same constant mismatch message, and it is counted on the
+recovery sheet's own limiter rather than given a second allowance over the same
+ten secrets.
+
+The escape is shown on the refusal itself, which is what keeps it from becoming
+an oracle: the refusal is decided before any account is looked up, so a username
+nobody has is offered the escape exactly as one somebody has. The response to a
+run of wrong codes differs from the app-lock's on purpose. There a hard cap ends
+the session, because a guesser at a settings panel is already holding an
+unlocked one; at the sign-in screen there is no session to end, so further
+attempts are all there is to withhold.
+
 The forced-change guard exempts the change-password page and sign-out, so a
 flagged user can always either comply or leave.
 
@@ -178,6 +200,8 @@ needs the key that a locked session does not have.
 | Probing for a partner that does not exist | Not-found, identical to the not-owner response. |
 | A corrupted key wrap | Non-counting failure, plus an alert. |
 | A wrong password repeatedly | Metered per username; further attempts are refused for the rest of the window. |
+| A wrong password repeatedly, then a recovery code | The code clears that username's meter and is consumed; the recovery sheet's own cap bounds the guessing. |
+| A stranger spending somebody else's sign-in meter | Refused for the window, and the account holder's recovery sheet opens it without waiting. |
 | A wrong code repeatedly | Escalating backoff, then sign-out and an alert. |
 | A biometric failing repeatedly | That credential disarms until the next code unlock. |
 | A locked session receiving a biometric enrolment request | Refused — enrolment is not exempt. |
@@ -229,6 +253,7 @@ needs the key that a locked session does not have.
 | **F3-R39** | Regenerating a recovery sheet for one's own account from a signed-in session MUST require the account password, not a confirmation alone. A sheet outlives the session that minted it and is not retired by a later password change, so without the password a borrowed unlocked session becomes a credential the account holder cannot revoke. The command-line path stays exempt: access to the machine is its proof ([F3-R14](#acceptance-criteria)). |
 | **F3-R40** | An owner acting on a partner's credentials — setting the partner's password, or minting the partner's recovery sheet — MUST require the owner's own account password. Owner-only authority is a property of the session and is carried by a session in the wrong hands, so it cannot stand as proof of the actor. The proof MUST be the owner's rather than the partner's, because the partner's credential is not available to the surface that replaces it and because the authority being exercised is the owner's. Neither write is retired by the partner's own later password change ([F3-R4](#acceptance-criteria), [F3-R35](#acceptance-criteria)). |
 | **F3-R41** | Creating an additional account from a signed-in session MUST require the creating owner's own account password. There is no credential of the new account to prove knowledge of and nobody able to consent, because the reader does not exist yet; what is being exercised is the owner's authority, so the owner is who must be proved present. The account that results is durable access the owner's own later password change does not revoke. Creating the **first** account on an install MUST stay exempt: there is no owner then, so there is no authority to prove and nothing to prove it with ([F3-R1](#acceptance-criteria), [F3-R3](#acceptance-criteria)). |
+| **F3-R42** | A valid recovery code presented at sign-in MUST clear that username's sign-in meter and MUST be consumed doing so. The order in [F3-R38](#acceptance-criteria) MUST NOT change: the meter is still read before the account password, so the escape MUST be judged on the code alone and MUST NOT be reached by checking the password first. The attempt MUST be audited as a recovery attempt ([F3-R12](#acceptance-criteria)) and MUST answer the constant mismatch message ([F3-R13](#acceptance-criteria)). It MUST be counted on the recovery sheet's own limiter rather than given a second allowance over the same ten secrets, and it MUST NOT end the session at a cap the way [F3-R19](#acceptance-criteria) does, because the caller holds none. Whatever the sign-in screen shows about the escape MUST be shown for a throttled unknown username exactly as for a throttled known one, so the refusal stays indistinguishable ([F3-R13](#acceptance-criteria), [F3-R34](#acceptance-criteria)). |
 
 > **`F3-R33` landed on 2026-09-05**, the same day the deferral it was carried
 > under was reversed. "Registered but not yet wired" had been stale for months:
