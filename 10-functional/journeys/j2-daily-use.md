@@ -108,8 +108,8 @@ shows the same data as a curve with confidence bands and the dips marked.
 ### On the phone, later
 
 The same surfaces at phone width, from the installed application, holding their
-own encrypted copy and syncing peer-to-peer over the local network — or through
-a relay that cannot read anything if the desktop is asleep.
+own encrypted copy and syncing peer-to-peer over the local network. If the
+desktop is asleep, the phone's changes wait on the phone until it is awake.
 
 *Exercises: [G4](../features/g-ux/g4-pwa.md), [E5](../features/e-sync/e5-mobile-peer.md), [E3](../features/e-sync/e3-transport.md), [E6](../features/e-sync/e6-sync-status.md).*
 

@@ -44,7 +44,8 @@ The new device scans the code — camera-first on a phone — or the user types 
 word code.
 
 Where the two devices cannot see each other directly, the handshake propagates
-over the relay, which carries the frames without being able to read them.
+over a relay. It carries the frames and can read them — they are not sealed —
+which is why the safety number in the next step is what the ceremony rests on.
 
 *Exercises: [E2](../features/e-sync/e2-device-pairing.md), [E3](../features/e-sync/e3-transport.md), [E5](../features/e-sync/e5-mobile-peer.md).*
 
@@ -86,9 +87,10 @@ and the operation log was re-projected.
 
 ### 7. Ongoing
 
-Both devices sync directly over the local network when both are awake, and
-through the relay when one is not. The phone dials out and never listens; that
-is a platform constraint, not a demotion — in the merge it is an equal peer.
+Both devices sync directly over the local network when both are awake. When one
+is not, its changes wait on it until they are: no operation travels any other
+road. The phone dials out and never listens; that is a platform constraint, not
+a demotion — in the merge it is an equal peer.
 
 Concurrent edits to different fields of one row both survive. Concurrent edits to
 the same field resolve by clock. Deletes win over concurrent edits.
@@ -125,7 +127,8 @@ protects going forward. The copy says so.
 | Private key material leaves a device | The whole model collapses. |
 | Initial sync can be dismissed | The user acts on a half-synced ledger believing it complete. |
 | Sync silently does nothing | Weeks of divergence discovered by accident. Worse than a visible failure. |
-| The relay can read a blob | The zero-knowledge claim is false and the product's promise with it. |
+| A relay is described as holding only ciphertext | Half of what it holds is not, and a reader nominating one decides on a false premise ([ADR-0033](../../00-overview/decisions/0033-the-relay-carries-pairing-not-the-ledger.md)). |
+| An operation is delivered over a relay | The ledger would travel a road nobody verified, and every page saying it does not would become false. |
 | Concurrent edits to different fields lose one | Users learn not to trust two devices. |
 | Revocation is described as retroactive | The user makes a security decision on a false premise. |
 | A phone joining mints its own key epoch | Divergent keyrings; content one device cannot read. |

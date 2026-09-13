@@ -26,7 +26,7 @@ and if the enumeration is maintained as a requirement rather than as marketing.
 | **Exchange-rate fetch** | Off | Refreshes rates; a bundled snapshot works offline ([B10](../b-ledger/b10-multi-currency.md)). | Yes — it is off until enabled |
 | **Open-banking aggregator** | Off | Fetches booked transactions from the user's own aggregator account ([A6](../a-ingestion/a6-open-banking.md)). | Yes — it is off until enabled |
 | **Sync peers** | Off | Peer-to-peer exchange with the user's own devices ([E3](../e-sync/e3-transport.md)). | Yes — no peers until paired |
-| **Sync relay** | Off | Ciphertext-only store-and-forward, to a relay the user configures. | Yes — none until configured |
+| **Sync relay** | Off | Pairing frames and sealed key epochs, to a relay the user configures. No operation crosses it ([E3](../e-sync/e3-transport.md)). | Yes — none until configured |
 | **External-link opening** | On demand | Opens a link the user clicked, gated by an allow-list ([C9](../c-insight/c9-community-corpus.md)). | Only by not clicking |
 
 **With every optional feature off, the only outbound call is the update check —
@@ -68,8 +68,13 @@ Three things must be stated plainly in the product's own copy, not only here:
    ([ADR-0018](../../../00-overview/decisions/0018-amounts-plaintext-at-rest.md)).
    An attacker with the file but not the key sees a complete dated amount
    distribution and a plaintext shadow of descriptions.
-2. **The relay sees metadata.** Sizes, timing, and which device identifiers
-   exchange traffic. Traffic analysis is not defended against.
+2. **A relay reads the pairing frames, and sees metadata on everything else.**
+   No transaction crosses a relay at all. The key epochs that do are sealed to
+   the receiving device and it cannot open them. The pairing frames are not
+   sealed: they carry both device identifiers, the devices' public keys and the
+   name a device goes by. On all of it, it sees sizes, timing and which device
+   identifiers exchange traffic; traffic analysis is not defended against
+   ([ADR-0033](../../../00-overview/decisions/0033-the-relay-carries-pairing-not-the-ledger.md)).
 3. **A paired device is trusted.** Revocation rotates the key going forward; it
    does not un-see what was already synced
    ([ADR-0015](../../../00-overview/decisions/0015-multi-master-p2p-sync.md)).
@@ -118,10 +123,11 @@ Data locations, export, and deletion are first-class and documented in
 | **G1-R17** | The release gate MUST check that no forbidden dependency has been introduced, including transitively. |
 | **G1-R18** | The data a user's machine sends to a third party MUST be limited to what the enabled feature's own protocol requires. |
 | **G1-R19** | Data locations, export, and deletion MUST be discoverable from within the application. |
+| **G1-R22** | The product's own copy MUST state that no transaction crosses a relay, and MUST describe what a relay holds in both halves — the sealed key epochs and the unsealed pairing frames — rather than only the sealed one. |
 
 ## Related
 
-- [ADR-0004](../../../00-overview/decisions/0004-local-only-hosting.md) · [ADR-0015](../../../00-overview/decisions/0015-multi-master-p2p-sync.md) · [ADR-0018](../../../00-overview/decisions/0018-amounts-plaintext-at-rest.md) · [ADR-0020](../../../00-overview/decisions/0020-open-banking-byo-key-ais-only.md)
+- [ADR-0004](../../../00-overview/decisions/0004-local-only-hosting.md) · [ADR-0015](../../../00-overview/decisions/0015-multi-master-p2p-sync.md) · [ADR-0018](../../../00-overview/decisions/0018-amounts-plaintext-at-rest.md) · [ADR-0020](../../../00-overview/decisions/0020-open-banking-byo-key-ais-only.md) · [ADR-0033](../../../00-overview/decisions/0033-the-relay-carries-pairing-not-the-ledger.md)
 - [F7 Data locations, export and deletion](../f-platform/f7-data-locations.md)
 - [40-quality/security.md](../../../40-quality/security.md)
 - [90-appendix/data-retention.md](../../../90-appendix/data-retention.md)

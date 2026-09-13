@@ -59,7 +59,7 @@ narrow Beatrax meaning, the narrow one is what the spec means.
 | **Safety number** | A short human-verifiable fingerprint derived from two devices' public identities, shown on both screens during pairing. |
 | **Word code** | The BIP39-wordlist typed fallback when a QR code cannot be scanned. |
 | **Noise XX / Noise IK** | The two handshake patterns used for the mutually-authenticated, forward-secret transport session. |
-| **Zero-knowledge relay** | The store-and-forward fallback for offline peers. Holds opaque ciphertext blobs, performs no cryptography, and can address a mailbox but never read one. |
+| **Pairing relay** | The optional hop two devices use to finish pairing and hand over key epochs when they cannot reach each other directly. No operation crosses it. It performs no cryptography on a blob and never looks inside one — but only half of what it holds would resist looking: an epoch wrap is sealed to its recipient, a pairing frame is not ([ADR-0033](decisions/0033-the-relay-carries-pairing-not-the-ledger.md)). |
 | **GDK** | Group Data Key. The per-user symmetric key that encrypts sensitive columns at rest. Wrapped per device; released by the app-lock. |
 | **Epoch** | One generation of the GDK. Rotation mints a new epoch; the keyring is append-only so older ciphertext stays readable. |
 | **Rekey / revocation** | Removing a device: revoke its trust, mint a fresh epoch, and re-wrap that epoch to every remaining confirmed device. |
@@ -83,6 +83,7 @@ narrow Beatrax meaning, the narrow one is what the spec means.
 |-------|-------------|-----|
 | "open source" | "source-available" | The Hippocratic License 3.0 is not OSI-approved. Saying otherwise sets a false expectation. See [the rationale](../90-appendix/license-rationale.md). |
 | "cloud sync" | "peer-to-peer device sync" | There is no cloud that can read anything. |
-| "server" (for the relay) | "relay" | It stores and forwards ciphertext; calling it a server implies it holds state it can use. |
+| "server" (for the relay) | "relay" | It stores and forwards on a reader's behalf; calling it a server implies it holds state it can use. |
+| "zero-knowledge relay", "zero-knowledge sync" | "pairing relay", "end-to-end encrypted sync" | Whatever a reader takes zero-knowledge to mean, a plaintext pairing frame is not it. The property that is true is narrower and checkable: no cryptography on a blob, and never looking inside one ([ADR-0033](decisions/0033-the-relay-carries-pairing-not-the-ledger.md)). |
 | "AI categorisation" | "rule and memory categorisation" | There is no model. The matchers are deterministic. |
 | "diederik" | "Beatrax" | The internal codename appears in some historical artefacts and command names. The product is Beatrax. |

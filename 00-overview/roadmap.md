@@ -137,7 +137,7 @@ downstream committed.
 | Op-log / CRDT merge-layer spike validated against the live schema | — | [ADR-0014](decisions/0014-op-log-crdt-merge-engine.md) |
 | Change capture + CRDT merge engine: signed append-only op-log, HLC ordering, SQLite as a deterministic materialised view | [E1](../10-functional/features/e-sync/e1-change-capture.md) | [ADR-0014](decisions/0014-op-log-crdt-merge-engine.md), [ADR-0015](decisions/0015-multi-master-p2p-sync.md) |
 | Device identity + pairing: Ed25519 / X25519, QR and word-code, safety numbers | [E2](../10-functional/features/e-sync/e2-device-pairing.md) | [ADR-0015](decisions/0015-multi-master-p2p-sync.md) |
-| Encrypted transport: Noise XX/IK, mDNS LAN-direct, zero-knowledge relay fallback | [E3](../10-functional/features/e-sync/e3-transport.md) | [ADR-0016](decisions/0016-noise-transport-zero-knowledge-relay.md) |
+| Encrypted transport: Noise XX/IK, mDNS LAN-direct, a pairing relay for devices that cannot reach each other | [E3](../10-functional/features/e-sync/e3-transport.md) | [ADR-0016](decisions/0016-noise-transport-zero-knowledge-relay.md), [ADR-0033](decisions/0033-the-relay-carries-pairing-not-the-ledger.md) |
 | At-rest encryption per device, device revocation, group-key rotation and re-wrap | [E4](../10-functional/features/e-sync/e4-at-rest-encryption.md) | [ADR-0018](decisions/0018-amounts-plaintext-at-rest.md) |
 | Sync status and health surfaces | [E6](../10-functional/features/e-sync/e6-sync-status.md) | — |
 
@@ -188,9 +188,10 @@ done" — was true of the phases and false of the requirements.
 ### 1 — Mobile client as a fully synced peer
 
 Ten of eleven plans are complete. The mobile client already holds its own
-encrypted on-device copy, dials out over LAN with relay fallback, unlocks
-biometrically, pairs camera-first with a word-code fallback, runs a blocking
-resumable initial sync, and shows sync status.
+encrypted on-device copy, dials out over the local network and reaches a relay
+for pairing and key material, unlocks biometrically, pairs camera-first with a
+word-code fallback, runs a blocking resumable initial sync, and shows sync
+status.
 
 **Outstanding:** the final plan — full surface-parity smoke test, the as-is
 invariant, and real-device UAT on iPhone and Android.

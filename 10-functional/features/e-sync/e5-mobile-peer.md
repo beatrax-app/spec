@@ -101,9 +101,10 @@ arrive, not a gate nobody can pass.
 
 ### Ongoing sync
 
-A sync attempt tries the local network first with one bounded retry, then falls
-back to the relay. By default it syncs on any network; the user can opt into
-pausing on mobile data.
+A sync attempt tries the local network first with one bounded retry, then
+reaches a relay if one is configured — for key material and pairing frames, not
+for operations, which cross only the direct session ([E3](e3-transport.md)). By
+default it syncs on any network; the user can opt into pausing on mobile data.
 
 A background pull runs on the platform's own scheduler, fanning out over the
 users on the device, and **skips cleanly when no identity is unlocked** rather

@@ -22,7 +22,7 @@ only surface where overstating things is tempting.
 |----------|---------|
 | Source-available, **not** open source | The licence is not OSI-approved, and the distinction has real consequences ([90-appendix/license-rationale.md](../90-appendix/license-rationale.md)) |
 | Local-first, with the outbound surface named | The claim is checkable and should be presented as checkable ([G1](../10-functional/features/g-ux/g1-privacy.md)) |
-| That sync is peer-to-peer and end-to-end encrypted, and what the relay can see | Overstating it would be the worst kind of dishonesty for this product |
+| That sync is peer-to-peer and end-to-end encrypted, that no transaction crosses a relay, and what a relay can read of what does | Overstating it would be the worst kind of dishonesty for this product |
 | Which installers carry a signing identity and which do not | Only Linux ships unsigned now ([20-architecture/platform-matrix.md](../20-architecture/platform-matrix.md)); a site still saying all of them are unsigned tells a macOS reader something false about the thing they are about to download |
 | Which platforms are supported, including the Intel exception | [20-architecture/platform-matrix.md](../20-architecture/platform-matrix.md) |
 

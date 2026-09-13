@@ -154,9 +154,13 @@ re-wraps that epoch to every remaining confirmed device — see
 ### Pairing across a relay
 
 Where the two devices cannot see each other directly, the pre-confirmation
-handshake propagates over the zero-knowledge relay ([E3](e3-transport.md)) so
-two devices with separate databases can still complete the ceremony. The relay
-carries the frames; it cannot read them.
+handshake propagates over a relay ([E3](e3-transport.md)) so two devices with
+separate databases can still complete the ceremony. The relay carries the
+frames, and it can read them: they are not sealed, and they expose both device
+identifiers, the responder's public keys and the name its device goes by. What
+they do not give it is anything to act on — a swapped sealing key fails the
+safety number both readers compare, and the confirming frame's signature commits
+to both sealing keys.
 
 ### Where the guarantee ends
 

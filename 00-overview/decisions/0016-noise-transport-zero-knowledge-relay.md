@@ -2,7 +2,9 @@
 
 **Status:** Accepted; the sealed-epoch channel precondition and the relay's
 "no cryptography at all" claim superseded by
-[ADR-0031](0031-a-signed-wrap-is-independent-of-its-channel.md)
+[ADR-0031](0031-a-signed-wrap-is-independent-of-its-channel.md); its
+store-and-forward role and its "opaque ciphertext blobs" claim superseded by
+[ADR-0033](0033-the-relay-carries-pairing-not-the-ledger.md)
 **Date:** 2026-06-15
 
 > **Two claims in this record no longer hold.** A sealed epoch wrap now carries a
@@ -15,6 +17,17 @@
 > ([ADR-0031](0031-a-signed-wrap-is-independent-of-its-channel.md)). Everything
 > else below stands: the Noise IK/XX transport and its framing, the discovery
 > ladder, blob opacity, expiry and caps, and the relay being off by default.
+>
+> **Two more do not either, and one of them is in the note above.** The relay
+> never carried op-log entries. Operations cross only a mutually-authenticated
+> session between two paired devices; where neither can reach the other, the
+> changes wait on the device that made them. And blob opacity is the half of the
+> note above that does not stand: a group-key epoch is sealed to its recipient,
+> but a pairing frame is plaintext JSON naming both device identifiers, the
+> responder's public keys and the name its device goes by. The discovery
+> ladder's third rung is a road to a peer for pairing and key material, not a
+> road for the ledger
+> ([ADR-0033](0033-the-relay-carries-pairing-not-the-ledger.md)).
 
 ## Context
 

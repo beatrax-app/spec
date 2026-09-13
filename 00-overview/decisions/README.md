@@ -64,6 +64,7 @@ of them invent a decision that was not already made.
 | [0030](0030-the-tag-governs-the-workflow-not-what-it-reads.md) | The major tag governs the workflow definition, not what the workflow reads | Accepted | New |
 | [0031](0031-a-signed-wrap-is-independent-of-its-channel.md) | A signed epoch wrap is trusted on its signature, not on its channel | Accepted | Supersedes part of [0016](0016-noise-transport-zero-knowledge-relay.md) |
 | [0032](0032-all-four-stores-additive-to-direct-download.md) | All four stores, and direct download is not retired | Accepted | Supersedes part of [0006](0006-nativephp-desktop-shell.md) and [0019](0019-asymmetric-release-publish.md) |
+| [0033](0033-the-relay-carries-pairing-not-the-ledger.md) | The relay carries pairing material, not the ledger, and "zero-knowledge" is retired | Accepted | Supersedes part of [0016](0016-noise-transport-zero-knowledge-relay.md) and [0004](0004-local-only-hosting.md) |
 
 > **Not here:** the spec's own governance rules. Those are not architectural —
 > no component's design depends on them. They live in
@@ -117,7 +118,7 @@ Then the sync stack, which is the largest single body of design in the project:
 
 8. [ADR-0015 — Multi-master peer-to-peer sync](0015-multi-master-p2p-sync.md)
 9. [ADR-0014 — Op-log and CRDT merge engine](0014-op-log-crdt-merge-engine.md)
-10. [ADR-0016 — Noise transport and zero-knowledge relay](0016-noise-transport-zero-knowledge-relay.md)
+10. [ADR-0016 — Noise transport and the relay fallback](0016-noise-transport-zero-knowledge-relay.md)
 11. [ADR-0018 — Amounts plaintext at rest](0018-amounts-plaintext-at-rest.md)
 
 Then the domain-specific calls and the org-level ones as you need them.
