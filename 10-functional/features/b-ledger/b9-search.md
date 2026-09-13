@@ -35,6 +35,9 @@ indexing.
 - A text query long enough to tokenise uses the index. A shorter one falls back
   to a **bounded** scan that decrypts and substring-matches, so short queries
   still work without an unbounded table walk.
+- Matching ignores case over the whole of Unicode, and by the same rule in both
+  arms, so the length of a word never changes which rows it reaches. Accents are
+  part of the letter: `o` does not find `ö`, but `ö` finds `Ö`.
 - Typed tokens narrow by account, category, amount, and date bounds. The same
   filters are available as controls, so the tokens are a shortcut rather than a
   requirement.
@@ -71,7 +74,8 @@ with token autocompletion and recent searches.
 
 | Situation | Behaviour |
 |-----------|-----------|
-| A query too short to tokenise | Bounded decrypt-and-scan fallback. |
+| A query too short to tokenise | Bounded decrypt-and-scan fallback, folding case the same way the index does. |
+| A merchant name the reader types in a case the statement does not use | Found, accents included, at every query length. |
 | Zero results | A single spelling suggestion, where the query is long enough to make one meaningful. |
 | A merchant name containing markup characters | Escaped before highlighting; no injection. |
 | An index write failure during import | The import chunk rolls back. Loud, not silent. |
@@ -103,6 +107,7 @@ with token autocompletion and recent searches.
 | **B9-R15** | Amount matching MUST read the stored minor-unit amounts directly. |
 | **B9-R16** | The command palette MUST be backed by the same search service and MUST separate transaction and entity results. |
 | **B9-R17** | Every search MUST be scoped to the requesting user. |
+| **B9-R19** | Case-insensitive matching MUST fold over the whole of Unicode rather than ASCII alone, and MUST apply the same fold in every search arm, so that a query's length never changes which rows a word reaches. Folding case MUST NOT strip diacritics. |
 
 ## Related
 
