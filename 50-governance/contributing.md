@@ -59,7 +59,9 @@ These are enforced. Fighting them is a slower path than following them.
   Spec: B5-R13
   ```
 
-  Routine maintenance cites `GOV-R12`.
+  Routine maintenance cites `GOV-R12`. A sentence naming an identifier is not a
+  citation — only the trailer is read — and the gate will tell you which
+  identifiers it found outside one.
 
 - Branch names follow a type-and-slug shape.
 - The default branch requires **signed** commits; configure signing before you

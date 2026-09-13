@@ -48,6 +48,9 @@ from.
 | **GOV-R23** | An issue that describes a behaviour the specification does not cover MUST become a specification change before implementation. |
 | **GOV-R24** | The project lead holds override authority; every override MUST be recorded ([overrides.md](overrides.md)). |
 | **GOV-R25** | Where a decision is genuinely unmade, the document MUST say so under an explicit open-question heading rather than inventing an answer. |
+| **GOV-R26** | Where a requirement did not exist on the canonical specification's default branch at the time the work it describes merged, the implementing repository MUST carry a record naming that identifier, the seam that implements it, and the commit that merged it. That record satisfies the definition of done's citation box for that requirement; it does not make the implementing change cited, and it MUST NOT be used where a trailer could have carried the identifier ([40-quality/definition-of-done.md](../40-quality/definition-of-done.md#when-the-requirement-postdates-the-work)). |
+| **GOV-R27** | A requirement MUST exist on the canonical specification's default branch before the work it describes merges, so that the implementing change can cite it. Minting a requirement from work that has already merged is permitted only where that work predates this specification, and MUST be recorded under GOV-R26. |
+| **GOV-R28** | The governance gate MUST read a citation only from a `Spec:` trailer, and MUST report an identifier the text names anywhere else as named-but-not-cited rather than as absent. |
 
 ## Where to ask
 

@@ -8,7 +8,9 @@ A change is done when every box below is ticked. Not most of them.
 
 - [ ] **It cites a requirement identifier that already exists on the canonical
       spec**, in a commit trailer and in the pull-request body
-      ([Q-R23](README.md#the-q-r-namespace)).
+      ([Q-R23](README.md#the-q-r-namespace)). One narrow exception, for a
+      requirement that did not exist when the work merged:
+      [below](#when-the-requirement-postdates-the-work).
 - [ ] The commit subject is conventional, and every commit carries a sign-off
       matching its author.
 - [ ] Formatting, static analysis, and the full test suite pass.
@@ -28,6 +30,68 @@ A change is done when every box below is ticked. Not most of them.
 - [ ] The commit subject reads as release-note copy, in the user's language,
       saying what changed for them — it is what the release body will carry.
 - [ ] The behaviour was walked in a browser, on both desktop and phone widths.
+
+## When the requirement postdates the work
+
+One exception to the citation box above, and it is narrow.
+
+A requirement minted to *describe* code that has already merged cannot be cited
+by the change that implemented it. There was no identifier to put in the trailer
+when that commit was written, and no later pull request repairs it: the gate
+runs per pull request against that pull request's own text, so a citation added
+afterwards passes for the later change and leaves the original exactly as
+uncited as it was. Amending the merged commit is not the way out either —
+published history is not traded for one word.
+
+For that case, the box is ticked by a **record** in the implementing repository
+naming, for each such identifier, the seam that implements it and the commit
+that merged it
+([GOV-R26](../50-governance/README.md#the-gov-r-namespace)).
+
+**Why a record is enough here.** An identifier that appears nowhere in the
+implementation repository cannot be told apart from an identifier nobody
+implemented. Both answer a search with nothing, and the second is a release
+blocker while the first is bookkeeping. The record separates them, and it
+separates them once — the alternative is that every future audit re-derives the
+same seams by hand from the same diffs and has to be believed. That cost is not
+hypothetical: of the eleven v2.0 requirements this rule was written for, two
+re-derivations came back different from the audit that had attributed them.
+
+**What the record is not.** It is not a citation. The implementing change stays
+uncited, the gate's answer about it does not change, and this section is not a
+second way to satisfy
+[GOV-R2](../50-governance/README.md#the-gov-r-namespace). It ticks one box, for
+one requirement, on the stated ground that the box was unreachable.
+
+### What does not qualify
+
+- **A trailer that could have carried the identifier.** Where the identifier
+  stood on the canonical specification's default branch for the life of the
+  implementing pull request and the trailer left it out, that is a missing
+  trailer, not a missing opportunity. The box stays unticked. It closes when a
+  later change on that same seam carries the trailer, or by a recorded override
+  ([overrides.md](../50-governance/overrides.md)) — not here.
+- **Work that has not merged yet.** If the code is still in flight, the
+  specification change goes first and the trailer names it
+  ([GOV-R27](../50-governance/README.md#the-gov-r-namespace)). A record written
+  for work that could still have cited its requirement is the failure this
+  exception exists to survive, wearing the exception's clothes.
+- **The record and the work in the same pull request.** The same thing said
+  another way: two changes in flight at once are ordered, not recorded.
+- **An entry that cannot be checked.** An entry naming no commit, or naming a
+  commit that does not implement the requirement, is worse than no entry — it
+  answers the audit's question wrongly and stops anyone asking again. The
+  implementing commit is derived against the seam the requirement is about, not
+  taken from whichever pull request touched the file last.
+- **An entry standing in for the requirement.** The requirement still lives on
+  the canonical specification, written and reviewed as prose. The record lives
+  in the implementing repository and points at it.
+
+Where the two merge timestamps are close enough that the judgement is genuinely
+arguable — the narrowest case on record is twenty-six seconds — the record says
+which pull request was already open and waiting, and a reviewer rules on it. A
+call that could honestly go either way is an override to record, not a box to
+tick quietly.
 
 ## For a new user-scoped surface
 
@@ -111,6 +175,9 @@ A change is done when every box below is ticked. Not most of them.
 - Not "I'll add the test after". A requirement without a test is a claim.
 - Not "the documentation can follow". For a behavioural change the specification
   goes **first**, not after.
+- Not "a record instead of a citation". The record above exists because the
+  citation was impossible, never because it was inconvenient
+  ([GOV-R27](../50-governance/README.md#the-gov-r-namespace)).
 
 ## Related
 

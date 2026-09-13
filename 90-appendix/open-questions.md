@@ -199,7 +199,14 @@ The governance gate verifies that a cited identifier **exists**, not that the
 specification change **merged first**. Ordering is verified in review. Hardening
 it is tracked and unscheduled.
 
-*In: [50-governance/canonical-spec.md](../50-governance/canonical-spec.md#ordering)*
+[GOV-R27](../50-governance/README.md#the-gov-r-namespace) widened what is
+unchecked rather than narrowing it: the ordering rule now covers every
+requirement and not only a behavioural change's, and nothing mechanical reads
+either. Eleven requirements in the v2.0 manifest are the evidence that review
+alone did not catch it ([ADR-0034](../00-overview/decisions/0034-a-requirement-that-postdates-its-work-is-recorded.md)).
+
+*In: [50-governance/canonical-spec.md](../50-governance/canonical-spec.md#ordering) ·
+[50-governance/change-lifecycle.md](../50-governance/change-lifecycle.md#the-requirement-exists-before-the-work-merges)*
 
 ### Should a decision record whose consequences have expired say so?
 
