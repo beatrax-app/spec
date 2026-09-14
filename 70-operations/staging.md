@@ -100,12 +100,26 @@ and the bulk of its goals are already satisfied by work that has landed and not
 yet been released — see the
 [roadmap](../00-overview/roadmap.md#landed-but-unreleased--the-body-of-v20).
 
-Every goal was audited against the product on 2026-09-05, one identifier at a
-time, and the manifest's header records the result per goal rather than per
-block. The largest outstanding block is app-store distribution, which is
-[now scoped](../00-overview/roadmap.md#2--app-store-publishing-and-distribution)
-— all four stores, with direct download retained wherever it remains possible
+Goals were audited against the product on 2026-09-05, one identifier at a time,
+and the manifest's header records the result per goal rather than per block.
+That pass covered **339** identifiers. The manifest now carries **373**, and
+none has been removed, so 34 entered it after the only pass that had ever
+checked one against the code — eleven of them named nowhere in the file at all.
+Those 34 were audited on 2026-09-14, and the re-audits of 09-06, 09-07, 09-09
+and 09-12 are recorded in the same header. A list of unmet goals goes stale in
+the direction of being wrong about the product, which is why each pass is dated
+rather than folded into the one before it.
+
+App-store distribution is the largest block, and it is
+[scoped](../00-overview/roadmap.md#2--app-store-publishing-and-distribution) —
+all four stores, with direct download retained wherever it remains possible
 ([ADR-0032](../00-overview/decisions/0032-all-four-stores-additive-to-direct-download.md)).
+It is no longer outstanding as engineering. Re-audited one identifier at a time
+on 2026-09-07: twenty-two of the twenty-eight are satisfied, four are console
+records and listing copy that neither repository can decide, and the two that
+were open are engineering-complete and wait on a provisioning profile and an
+installer certificate rather than on a change.
+
 The manifest also carries the three latent risks and the four relayed-identity
 requirements that were reclassified into v2.0 scope on 2026-09-05.
 
