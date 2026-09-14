@@ -94,13 +94,21 @@ there is nothing to move by hand.
 ### What the pipeline does
 
 1. **Quality gate**, fail-fast across the runtime matrix.
-2. **Three platform builds in parallel**, each installing or extracting its
-   bundle, launching it, asking its health endpoint, and comparing the reported
-   versions before upload.
-3. **Publish**, only if all three succeeded: generate the release notes from
+2. **Four platform builds in parallel** — macOS, Windows, Linux and Android —
+   each interrogating the artifact it produced rather than trusting the build's
+   exit code: that it is signed by the identity expected, that it carries
+   nothing it must not, and that the update manifest written beside it names it.
+3. **One self-host smoke test**, launching the shipped self-host recipe and
+   asking its health endpoint. A hosted runner cannot launch the other four — an
+   Electron bundle needs a session and a display, and the Android package needs
+   a device — so this is the one shape CI can start and probe end to end.
+4. **Publish**, only if all five succeeded: generate the release notes from
    the commits since the previous tag, generate the update manifests with
    binary hashes, sign each manifest, and create the release with every binary
    and manifest attached — as a draft for stable, published for a preview.
+5. **Verify what was published**, re-reading the manifests and the checksum file
+   back off the release page and re-checking every signature against the
+   publisher key, so that what the page serves is what the pipeline signed.
 
 ### After the tag
 
@@ -113,8 +121,10 @@ there is nothing to move by hand.
 
 ## If something goes wrong
 
-**A build fails.** Nothing is published — the publish step requires all three.
-Fix and re-tag with a new patch version; do not move a tag.
+**A build fails.** Nothing is published — the publish step requires all five,
+the smoke test among them, so four green platform builds are not on their own a
+reason for it to have run. Fix and re-tag with a new patch version; do not move
+a tag.
 
 **A bad release is already published.** Publish a fixed version. A yanked
 manifest stops the updater offering it, but users who already installed it have
