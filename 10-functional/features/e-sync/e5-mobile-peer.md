@@ -143,11 +143,21 @@ independently reported that store's `database.sqlite` at 2,637,824 bytes, which
 is what rules out the empty 4 KB stub under Application Support that the
 earlier check may have read.
 
-**Android device acceptance is not recorded.** All three gates were taken on one
-handset, an iPhone 12 mini. Nothing here records the same passes on Android, and
-the final plan still names device acceptance on both. The requirements ask for
-real hardware rather than for each platform, so they are met as written; whether
-v2.0 ships without an Android pass is a release call, and nobody has made it.
+**Android device acceptance is partly recorded, and not here.** All three gates
+above were taken on one handset, an iPhone 12 mini, and the final plan still
+names device acceptance on both. Two Android hardware runs have happened since
+and are recorded in the product repository rather than on this page: `E5-R10`'s
+asynchronous cold-start recovery signal was closed on a Galaxy A51 (Android 13)
+with a fingerprint enrolled on 2026-09-09, and `E2-R23` and `E5-R28` were walked
+on the same handset alongside an iPhone 12 mini on 2026-09-13, in that repo's
+walk ledger.
+
+Neither is the same thing as the three gates. What is still unrecorded on
+Android is the local-notification banner and the two-device pairing UAT; the
+backup exclusion is app-wide there and reaches every release build by
+construction rather than by a device run. The requirements ask for real hardware
+rather than for each platform, so they are met as written; whether v2.0 ships
+without an Android pass of those two is a release call, and nobody has made it.
 
 ## Edge cases
 

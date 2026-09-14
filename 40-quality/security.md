@@ -121,7 +121,19 @@ Recorded rather than described as solved:
 | Item | Status |
 |------|--------|
 | A Linux desktop with no keyring | Custody is wired on every platform ([F3-R33](../10-functional/features/f-platform/f3-auth-and-app-lock.md#acceptance-criteria)). Where no keyring is reachable the shell falls back to a store whose key is public, so that machine is **reported as unprotected** rather than credited with custody, and biometric enrolment refuses there ([F3-R37](../10-functional/features/f-platform/f3-auth-and-app-lock.md#acceptance-criteria)). The reader has no passive surface telling them; they learn it by attempting an enrolment. |
-| Mobile backup exclusion | A bridge exists and the mobile build applies it. Android is covered app-wide and reaches every release build. On iOS no pipeline builds an artefact, and whether the exclusion covers the file the app actually opens is [an open question](../10-functional/features/e-sync/e5-mobile-peer.md#open-questions-and-known-gaps) ([E4-R25](../10-functional/features/e-sync/e4-at-rest-encryption.md#acceptance-criteria)). |
+
+**Mobile backup exclusion was in this table and is not outstanding.** It said
+that whether the iOS exclusion covers the file the app actually opens was an
+open question, and linked to the E5 section that had **settled it on
+2026-09-06** — by a re-check naming the path, reading the flag back per node
+rather than trusting the write, and reporting `flagged=7 unflagged=0` against
+`Documents/persisted_data` on an iPhone 12 mini
+([E4-R25](../10-functional/features/e-sync/e4-at-rest-encryption.md#acceptance-criteria),
+[E5](../10-functional/features/e-sync/e5-mobile-peer.md#open-questions-and-known-gaps)).
+The row pointed at its own answer for eight days. Removed here rather than
+quietly, because a security page that overstates a gap is read exactly as
+carefully as one that understates one, and this is the second record on this
+page to have lagged the feature page it cites.
 
 ## Related
 
