@@ -466,6 +466,67 @@
 # watchdog's rolling counter does not survive the request that writes it — and
 # it is in the roadmap's outstanding bucket rather than here.
 
+# AUDITED 2026-09-14 — the goals that outran the audit above.
+#
+# The audit of 2026-09-05 covered 339 identifiers. The list below now carries
+# 373, and none has been removed, so 34 goals entered this manifest after the
+# only pass that has ever checked one against the code. Twenty-three of them are
+# accounted for somewhere in the notes above — the thirteen resolved on 09-06,
+# the E6/E5 block built in #406 and #407, B8-R16 and C7-R21 on 09-09, F1-R18 and
+# A8-R27. Eleven were named nowhere in this file at all:
+#
+#   C1-R15  C1-R16  C1-R17  G7-R16  G7-R17  G7-R18
+#   E5-R28  E2-R23  A3-R22  A3-R23  A5-R18
+#
+# All eleven were audited against beatrax@origin/main on 2026-09-14. NINE are
+# satisfied, and what each was read against is worth keeping, because two of
+# them turn on a detail a summary would lose:
+#
+#   C1-R15    NetWorth carries excludedAccountNames(), hasExcludedAccounts and
+#             balancesWithoutRate, surfaced through accountExclusion().
+#   C1-R16    NetWorthQuery excludes AccountKind::mirrorValues() — PaypalFunding
+#             and GooglePlay, the two kinds that mirror another account.
+#   C1-R17    SafeDate::dayOrNull() is createFromFormat('!Y-m-d') AND a
+#             round-trip back to the same string; an arch rule holds every
+#             supplied date to it. The `?period=` preset half of this
+#             requirement was NOT satisfied and was fixed in beatrax#826 — it
+#             was coerced to the default rather than refused.
+#   G7-R16    HostTimezone resolves the machine's zone, InstallTimezone holds a
+#             stored choice, and .env.example leaves APP_TIMEZONE unset with the
+#             requirement's own reasoning written beside it.
+#   G7-R17    `timezone` is a synced field in MergeRulesRegistry: one answer per
+#             installation, and it travels.
+#   G7-R18    InstallTimezone::THIS_MACHINE is the deferring option and stores
+#             null, so returning to it is a real state rather than a re-pick.
+#   A3-R22    RestatedRowMatch bounds the window with STRICT `>` and `<` on
+#             ±7 days, so the widest gap it will match is six — shorter than
+#             weekly, which C2-R20 makes the shortest cadence there is. The
+#             exclusive comparison is the whole of the bound.
+#   A3-R23    TransactionBooking carries the four booking terms as a set and
+#             NearTotalMatch::CONFLICT_COLUMNS — the fields put to the reader —
+#             holds only source_ref, source_format, counterparty_name,
+#             description, currency and amount_minor. No date, no ordinal.
+#   A5-R18    FingerprintStage asks the reference first and reaches the receipt
+#             band only where it matched nothing.
+#
+# TWO were not satisfied, and neither could have been settled by reading the
+# code: both were already recorded `walked — defect` in the product's walk
+# ledger on 2026-09-13, from a Galaxy A51 and an iPhone 12 mini.
+#
+#   E2-R23    The refusal was there and the OFFER was not withdrawn: Show my
+#             code drew as an enabled card and refused on press.
+#   E5-R28    The platform check, the cause recording and the fail-closed
+#             behaviour were all present, and a view overwrote the answer — the
+#             row's WebAuthn probe raised capability on a WKWebView whose
+#             enclave had already said none_enrolled.
+#
+# Both are closed by beatrax#846.
+#
+# What this pass does NOT establish: the 339 were audited against main as it
+# stood on 2026-09-05, and this pass did not re-read them. Five of the
+# twenty-three accounted-for goals were spot-checked — C8-R22, D1-R29, A8-R27,
+# F3-R37 and C1-R18 — and all five hold.
+
 version = "2.0.0"
 status  = "staged"
 repos   = ["beatrax"]
