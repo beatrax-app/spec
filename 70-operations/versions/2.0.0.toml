@@ -454,9 +454,13 @@
 # built on 2026-09-05 in beatrax#406 and #407, hours after this note and both
 # feature pages were last read. They are goals now, and the markers are cleared.
 #
-# F1-R18 (lock on window close) was the one carry-over release-readiness item
-# that is NOT a goal of v2.0. It is satisfied as of 2026-09-05, and the claim
-# that it "cannot be verified outside a real bundle build" was wrong: the suite
+# F1-R18 (lock on window close) is the one carry-over release-readiness item,
+# and it IS a goal of this release — it is in the list below, under the desktop
+# shell's own heading. This note said the opposite until 2026-09-14, having been
+# written before the goal was added and never re-read against the list it sits
+# above; the list is what scripts/manifest_check.py reads, so the prose was the
+# half that was wrong. It is satisfied as of 2026-09-05, and the claim that it
+# "cannot be verified outside a real bundle build" was wrong too: the suite
 # persists the window's session, drives the real shell event POST and reloads
 # that session from the handler. F1-R15 took its place as F1's open item — the
 # watchdog's rolling counter does not survive the request that writes it — and
