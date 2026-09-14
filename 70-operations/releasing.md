@@ -98,10 +98,34 @@ there is nothing to move by hand.
    each interrogating the artifact it produced rather than trusting the build's
    exit code: that it is signed by the identity expected, that it carries
    nothing it must not, and that the update manifest written beside it names it.
-3. **One self-host smoke test**, launching the shipped self-host recipe and
-   asking its health endpoint. A hosted runner cannot launch the other four — an
-   Electron bundle needs a session and a display, and the Android package needs
-   a device — so this is the one shape CI can start and probe end to end.
+3. **Smoke tests, on the shapes a runner can start.** The Linux and Windows
+   bundles are launched and asked for their health endpoint before they are
+   uploaded, and the shipped self-host recipe is launched and probed beside them.
+   The answer is compared against the tag, so a bundle that runs but reports
+   another version fails too.
+
+   This page previously said a hosted runner could not launch any of the four.
+   That was written from the probes removed in May 2026, and it was right about
+   the outcome and wrong about the reason, which mattered because each recorded
+   cause had an escape nobody had tried. The Linux runner has no display, so
+   `xvfb-run` supplies one. `open -a` on macOS goes through Gatekeeper, so the
+   bundle's own binary is executed instead, named by `CFBundleExecutable`. The
+   Windows installer-to-launch race is avoided by launching the unpacked tree
+   rather than installing it. Two of the three then worked.
+
+   **macOS and Android are not launched, and the reasons are different.** An
+   `.apk` is installed onto a device or an emulator and has no process a runner
+   can ask — that was always true. macOS was tried and measured: on
+   `v2.0.0-rc.3` the bundle's binary executed and cleared every signing gate,
+   and Electron died with `Fatal process out of memory: Failed to reserve
+   virtual memory for CodeRange`. V8 cannot reserve its code range on a
+   `macos-14` runner. That is a property of the runner, not the bundle, and the
+   signing friction this page used to blame was never reached.
+
+   **What covers those two is a person.** Installing a release on a real machine
+   and using it is manual, local, and owed before a stable tag. A runner proves
+   a bundle starts and answers; it does not prove the application works, and it
+   never did.
 4. **Publish**, only if all five succeeded: generate the release notes from
    the commits since the previous tag, generate the update manifests with
    binary hashes, sign each manifest, and create the release with every binary
