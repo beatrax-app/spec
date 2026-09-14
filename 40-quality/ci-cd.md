@@ -46,16 +46,25 @@ tag push
    │      (a broken build must not spend forty minutes producing
    │       installers it cannot publish)
    ▼
-2  three platform builds, in parallel
-   │      each: install → build → smoke-test → upload
-   │      smoke test = install or extract, launch, ask the health
-   │      endpoint, compare the reported versions
+2  four platform builds, in parallel
+   │      each: install → build → interrogate the artifact → upload
+   │      the check is on what was produced, never the exit code:
+   │      signed by the identity expected, carrying nothing it must
+   │      not, named by the manifest written beside it
+   │
+   │  one self-host smoke test, beside them
+   │      launch the shipped self-host recipe, ask its health
+   │      endpoint — a hosted runner cannot launch the other four
    ▼
-3  publish — only when all three succeeded
+3  publish — only when all five succeeded
           generate the update manifests with binary hashes
           sign each manifest
           create the release with every binary and manifest attached
           stable → DRAFT · prerelease tag → published prerelease
+   ▼
+4  verify what was published
+          re-read the manifests and the checksum file off the page
+          re-check every signature against the publisher key
 ```
 
 The asymmetric publish is
