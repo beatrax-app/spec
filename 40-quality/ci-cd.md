@@ -52,9 +52,13 @@ tag push
    │      signed by the identity expected, carrying nothing it must
    │      not, named by the manifest written beside it
    │
+   │      and, on Linux and Windows, launched and asked for the
+   │      health endpoint, with the answer compared to the tag
+   │
    │  one self-host smoke test, beside them
    │      launch the shipped self-host recipe, ask its health
-   │      endpoint — a hosted runner cannot launch the other four
+   │      endpoint — macOS and Android are interrogated only, and
+   │      a person installs a release on a real machine
    ▼
 3  publish — only when all five succeeded
           generate the update manifests with binary hashes

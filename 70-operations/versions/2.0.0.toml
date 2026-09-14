@@ -28,6 +28,13 @@
 # is the status that carries unmet goals and `releasable` is the one that does
 # not (OPS-R16). No goal was added or removed here — only the claims about them.
 #
+# RELEASABLE as of 2026-09-15. The last block standing was F8's app-store
+# distribution, and what it waited on was never code: four console records and
+# two Apple portal artefacts, closed where they are noted below. Every goal in
+# the list is satisfied, which is what this status asserts and the only thing it
+# asserts. The entries below stay as they are — a version that reaches
+# `releasable` by deleting the record of what was once unmet has not reached it.
+#
 # NOT SATISFIED — or, for two of them, withdrawn. What the re-audit below left standing:
 #   E4-R23     WITHDRAWN 2026-09-05. The requirement documented an absence that
 #              has gone: custody is wired on both shells. The residual it leaves
@@ -279,7 +286,8 @@
 # reads every node back, and re-asserts on backgrounding for the one case an
 # excluded ancestor does not cover.
 #
-# OUTSTANDING — scoped work, not yet on the development line:
+# WAS OUTSTANDING — scoped work, closed 2026-09-15. Kept in place rather than
+# rewritten, because the reasoning is what makes the closure checkable:
 #   F8-R1 .. F8-R28         — app-store distribution, scoped in F8 and a goal of
 #                             this release. Scope is ALL FOUR stores, with
 #                             direct download retained wherever it remains
@@ -330,10 +338,19 @@
 #                             and the keyring with it, and says a paired device
 #                             keeps its own copy).
 #
-#                             Four neither repository can decide, unchanged:
-#                             R4, R15, R16 and R26 are console records and
-#                             listing copy, settled in App Store Connect, the
-#                             Play Console and Partner Centre.
+#                             Four neither repository can decide: R4, R15, R16
+#                             and R26 are console records and listing copy,
+#                             settled in App Store Connect, the Play Console and
+#                             Partner Centre.
+#
+#                             CLOSED 2026-09-15 on the maintainer's confirmation
+#                             that all four are entered. Recorded on that basis
+#                             and no other, because there is no artefact in
+#                             either repository a check could read: a console
+#                             record exists in a portal, and the only evidence of
+#                             it is the person who entered it. That is the same
+#                             reason they were carved out of the audit in the
+#                             first place rather than counted as unread.
 #
 #                             TWO WERE OPEN. Both are engineering-complete as
 #                             of 2026-09-07; what each waits on is an account or
@@ -368,11 +385,26 @@
 #                             the interpreter is statically linked, which is
 #                             what library validation checks.
 #
-#                             What remains for the Mac App Store is not code: a
-#                             provisioning profile and a Mac Installer
+#                             What remained for the Mac App Store was not code:
+#                             a provisioning profile and a Mac Installer
 #                             Distribution certificate, both artefacts of the
 #                             Apple Developer portal. The lane refuses to build
 #                             without them, which is the correct failure.
+#
+#                             CLOSED 2026-09-15. The provisioning profile is in
+#                             the register as MAS_PROVISIONING_PROFILE_BASE64,
+#                             which is checkable; the installer certificate is
+#                             held in the portal and recorded on the maintainer's
+#                             confirmation, the same basis as the console records
+#                             above.
+#
+#                             Neither was ever a bar to THIS release. R27 is
+#                             satisfied by the lane existing and R28 by the build
+#                             mapping its interpreter under the sandbox — both
+#                             true since 2026-09-07. The artefacts are what
+#                             SUBMITTING needs, and the lane is dispatch-only on
+#                             purpose so that portal paperwork cannot stop a
+#                             direct-download release.
 #
 #                             THE FINDING IS CLOSED. It was a Microsoft Store
 #                             certification prerequisite the runbook listed and
@@ -528,7 +560,7 @@
 # F3-R37 and C1-R18 — and all five hold.
 
 version = "2.0.0"
-status  = "staged"
+status  = "releasable"
 repos   = ["beatrax"]
 
 goals = [
