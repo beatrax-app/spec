@@ -28,7 +28,14 @@
 # is the status that carries unmet goals and `releasable` is the one that does
 # not (OPS-R16). No goal was added or removed here — only the claims about them.
 #
-# RELEASABLE as of 2026-09-15. The last block standing was F8's app-store
+# RELEASED 2026-09-15, tag v2.0.0. Twenty-seven assets: eight bundles (both
+# AppImage architectures, the arm64 dmg, the Windows installer, both .deb
+# architectures and the Android apk/aab), eight publisher manifests, nine
+# detached signatures, the signed checksum file and the build-provenance
+# attestation. Every signature was re-verified against the key an installed
+# bundle checks, and each signed checksum matched the published bytes.
+#
+# Was RELEASABLE as of 2026-09-15. The last block standing was F8's app-store
 # distribution, and what it waited on was never code: four console records and
 # two Apple portal artefacts, closed where they are noted below. Every goal in
 # the list is satisfied, which is what this status asserts and the only thing it
@@ -560,7 +567,7 @@
 # F3-R37 and C1-R18 — and all five hold.
 
 version = "2.0.0"
-status  = "releasable"
+status  = "released"
 repos   = ["beatrax"]
 
 goals = [
